@@ -1,6 +1,42 @@
 <template>
-  <router-view />
+<div class="posicion" v-if='inVisible'>
+  <div class="caja">
+  <!-- SIDEBAR -->
+    <nav id="menu">
+      <NavegacionPrincipal/>
+    </nav>
+    <section id="contenido">
+      <div class="navegacion">
+        <EncabezadoPrincipal/>
+      </div>
+      <div>
+        <AboutView/>
+        <router-view/>
+      </div>  
+    </section>
+  </div>
+</div>
+<router-view v-if='outVisible'/>  
 </template>
+
+<script>
+import NavegacionPrincipal from './components/NavegacionPrincipal.vue';
+import EncabezadoPrincipal from './components/EncabezadoPrincipal.vue';
+import AboutView from './views/AboutView.vue';
+import { mapGetters } from 'vuex';
+
+
+export default{
+  components:{
+    NavegacionPrincipal,
+    EncabezadoPrincipal,
+    AboutView
+  },
+  computed:{
+    ...mapGetters(['inVisible','outVisible'])
+  }
+}
+</script>
 
 <style>
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons+Sharp');
@@ -21,8 +57,6 @@ body{
   margin: 0%;
 }
 
-
-
 /** INICIO DE SESION Y COMUN */
 .inicio{
   display: grid;
@@ -32,7 +66,7 @@ body{
 .login{
   zoom:85%;
   border-radius: 15px;
-  box-shadow: 0 0px 10px rgb(15, 18, 28);
+  box-shadow: 0 0px 10px rgb(196, 196, 196);
   background-color: #faf6fa;
   padding: 3rem 1rem 3.75rem 1rem;
   width: 29.5rem;
@@ -57,7 +91,6 @@ body{
 }
 
 input[type="password"],input[type="text"],input[type=email],input[type="number"]{
-  background-color: purple;
   margin-top: 8px;
   padding: 5px 15px 5px 15px;
   width: 364px;
@@ -197,10 +230,20 @@ button:hover{
   cursor: pointer;
   color: var(--color-blanco);
 }
+/*cambia al unisono el color del fondo y letra*/
+#menu .items li:hover span,
+#menu .items li:hover a,
+#menu .fondo li:hover span,
+#menu .fondo li:hover a  {
+    color: var(--color-blanco);
+}
 a{
-  text-decoration: none;
   color: var(--color-negro);
+  text-decoration: none;
   padding-left: 14px;
+}
+a:hover{
+  color: var(--color-blanco);
 }
 .separador {
   border-bottom:solid 1px var(--color-gris-medio);
@@ -303,6 +346,7 @@ section{
 
 #formbutton{
   margin-top: 48px;
+  margin-left: 80px;
   display: flex;
   width:250px;
   padding: 0;
@@ -418,7 +462,7 @@ tr:hover td:nth-of-type(1n+1) {
  #cerrar3{
   margin: 4px 0px 0 8px;
   padding: 0 8px;
-  height: 32px;
+  height: 25px;
   transition: 0.3s ease;
   cursor: pointer;
 }

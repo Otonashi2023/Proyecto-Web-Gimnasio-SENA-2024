@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import FormTipoDocumento from '@/components/FormTipoDocumento.vue'
-import TablaTipoDocumento from '@/components/TablaTipoDocumento.vue'
+import FormTipoDocumento from '@/components/formularios/FormTipoDocumento.vue'
+import TablaTipoDocumento from '@/components/tablas/TablaTipoDocumento.vue'
 
 export default{
     name:'TipoDocumentoView',

@@ -17,7 +17,7 @@
         <br>
         <div class="form-group">
           <div id="fila"><label for="password">Contraseña</label>
-          <router-link to="/recuperarPass">¿Olvidaste tu contraseña?</router-link></div>
+          <router-link to="/recuperarPass" style="color:black">¿Olvidaste tu contraseña?</router-link></div>
           <input type="password" id="password" required v-model="password" placeholder="Ingrese la contraseña">
         </div>
         <div class="form-group">
@@ -37,6 +37,7 @@
 </template>
 <script>
   import axios from 'axios';
+import { mapActions } from 'vuex';
 
   export default {
     data(){
@@ -54,6 +55,7 @@
   },
   // metodo para el servicio (logear)
   methods: {
+    ...mapActions(['updateVisibleIn','updateVisibleOut']),
     handleLogin() {
       if (this.remember) {
         this.saveCredentials();
@@ -79,8 +81,10 @@
 
           setTimeout(() => {
             this.$router.push(this.$route.query.redirect || '/');
+            this.updateVisibleIn(true);
+            this.updateVisibleOut(false);
           }, 1500); // 1500 milisegundos = 1.5 segundos
-          console.log("Bienvenido");          
+          console.log("Bienvenido");       
         }
         else{
           this.error = true;
@@ -119,9 +123,13 @@
       localStorage.removeItem('password');
       localStorage.removeItem('remember');
     },
+    redireccionar(){
+      this.$router.push(this.$route.query.redirect || '/');
+    },
   },
   mounted() {
     this.$refs.myInput.focus();
+    this.redireccionar();
   }
 }
 </script>

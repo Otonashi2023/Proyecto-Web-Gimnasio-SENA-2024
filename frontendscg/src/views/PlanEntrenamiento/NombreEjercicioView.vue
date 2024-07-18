@@ -1,16 +1,16 @@
 <template>
     <div class="view1">
         <div class="components">
-            <FormNombreEjercicio @escucharForm="puente" ref="componenteForm"/>
-            <TablaNombreEjercicio ref="componente" @ById="idcodigo" @change="update" @escuchartable="tabla"/>
+            <FormNombreEjercicio @escucharForm="puente" ref="componenteForm" @clearId="jumper"/>
+            <TablaNombreEjercicio ref="componente" @ById="read" @change="update" @escuchartable="tabla"/>
         </div>
     </div>
 
 </template>
 
 <script>
-import FormNombreEjercicio from '@/components/FormNombreEjercicio.vue'
-import TablaNombreEjercicio from '@/components/TablaNombreEjercicio.vue'
+import FormNombreEjercicio from '@/components/formularios/FormNombreEjercicio.vue'
+import TablaNombreEjercicio from '@/components/tablas/TablaNombreEjercicio.vue'
 
 export default{
     name:'NombreEjercicioView',
@@ -22,14 +22,17 @@ export default{
         puente(){
             this.$refs.componente.obtenerNombreEjercicios();
         },
-        idcodigo(value){
-            this.$refs.componenteForm.consultar(value);
+        read(value){
+            this.$refs.componenteForm.read(value);
         },
         update(value){
-            this.$refs.componenteForm.consultarT(value);
+            this.$refs.componenteForm.update(value);
         },
         tabla(){
             this.$refs.componenteForm.cerrar();
+        },
+        jumper(){
+            this.$refs.componente.limpiarId();
         }
     }
 }

@@ -17,14 +17,14 @@
           </tr>
         </thead>
         <tbody>
-          <tr id="fila2" v-for="ejercicio in ejercicios" :key="ejercicio.codigo" click="consultarbyId(ejercicio.codigo)">
+          <tr id="fila2" v-for="ejercicio in ejercicios" :key="ejercicio.codigo" @click="consultarbyId(ejercicio.codigo)">
             <td>Pendiente</td>
             <td>{{ ejercicio.nombre.nombre }}</td>
             <td>{{ ejercicio.tipoEjercicio.nombre }}</td>
             <td>{{ ejercicio.musculo.nombre }}</td>
             <td>{{ ejercicio.series }}</td>
             <td>{{ ejercicio.repeticiones }}</td>
-            <td>{{ ejercicio.descanso }}</td>
+            <td>{{ ejercicio.descanso }} min</td>
             <td id="alibutton">
                 <font-awesome-icon icon="edit" id="editar" @click="actualizar(ejercicio.codigo)"/>
                 <font-awesome-icon icon="trash" id="eliminar" @click="eliminar(ejercicio.codigo)"/>
@@ -35,28 +35,24 @@
       </div>      
     </div>
 </template>
+
 <script>
-import {mapGetters, mapActions } from 'vuex';
 import axios from "axios";
   //contructor de las variables 
   export default {
     data(){
       return{
         ejercicios:[],
-        codigo: "",
+        codigo:null,
       }
     },
-    computed:{
-      ...mapGetters(['obtenerVariableGlobal'])
-    },
     methods: {
-      ...mapActions(['actualizarVariableGlobal']),
-
       obtenerEjercicios(){
         // Método para obtener los campos de la lista
         axios.get("http://localhost:8080/api/ejercicio/listar")
         .then((response)=>{
           this.ejercicios= response.data;
+          this.codigo=null;
         })
         .catch((error)=>{
           console.error("Error al obtener ejercicios: ", error);
@@ -68,24 +64,26 @@ import axios from "axios";
         .delete('http://localhost:8080/api/ejercicio/'+this.codigo)
         .then(()=>{
           console.log("Ejercicio eliminado con exito");
-          //Limpiar los campos del formulario despues de eliminar          
-          this.codigo = "";
-          this.obtenerEjercicios();          
-          
+          this.codigo=null;
+          this.$emit('escuchartable');
+          this.obtenerEjercicios();                   
         })
         .catch((error)=>{
           console.log("Error al eliminar ejercicio", error);
         });
       },
       consultarbyId(value){
-        this.codigo=value;
-        alert("consultar")
-        this.$emit('ById',this.codigo);
+        if(this.codigo==null){
+          this.$emit('ById',value);
+        }
       },
       actualizar(value){
-        this.$emit('change');
-        this.actualizarVariableGlobal(value);
+        this.codigo=value;
+        this.$emit('change',this.codigo);
       },
+      limpiarId(){
+        this.codigo=null;
+      }
     },
     mounted(){
       this.obtenerEjercicios();

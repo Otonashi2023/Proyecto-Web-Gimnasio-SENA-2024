@@ -1,7 +1,7 @@
 <template>
     <div class="view">
         <div class="components">
-            <FormTipoEjercicio @escucharForm="puente" ref="componenteForm"/>
+            <FormTipoEjercicio @escucharForm="puente" ref="componenteForm" @clearId="jumper"/>
             <TablaTipoEjercicio ref="componente" @ById="idcodigo" @change="update" @escuchartable="tabla"/>
         </div>
     </div>
@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import FormTipoEjercicio from '@/components/FormTipoEjercicio.vue'
-import TablaTipoEjercicio from '@/components/TablaTipoEjercicio.vue'
+import FormTipoEjercicio from '@/components/formularios/FormTipoEjercicio.vue'
+import TablaTipoEjercicio from '@/components/tablas/TablaTipoEjercicio.vue'
 
 export default{
     name:'TipoEjercicioView',
@@ -23,13 +23,16 @@ export default{
             this.$refs.componente.obtenerTipoEjercicios();
         },
         idcodigo(value){
-            this.$refs.componenteForm.consultar(value);
+            this.$refs.componenteForm.read(value);
         },
         update(value){
-            this.$refs.componenteForm.consultarT(value);
+            this.$refs.componenteForm.update(value);
         },
         tabla(){
             this.$refs.componenteForm.cerrar();
+        },
+        jumper(){
+            this.$refs.componente.limpiarId();
         }
     }
 }

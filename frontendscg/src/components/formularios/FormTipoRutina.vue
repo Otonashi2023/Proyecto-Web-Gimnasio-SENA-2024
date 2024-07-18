@@ -1,10 +1,10 @@
 <template>
     <div class="container" id="form">
-      <h1>Formulario nombre de Musculo</h1>
+      <h1>Formulario tipo de rutina</h1>
       <form id="simple-form" @submit.prevent="servicio()" >
         <div class="form-group">
           <label for="nombre">Nombre: </label>
-          <input type="text" ref="myInput" name="nombre" id="nombre" required v-model="nombre" placeholder="ingrese el nombre del musculo">
+          <input type="text" ref="myInput" name="nombre" id="nombre" required v-model="nombre" placeholder="ingrese el tipo de rutina">
         </div>
         <div id="flex">
             <button id="guardar" type="submit" name="guardar" v-if="salvar">Guardar</button>
@@ -35,77 +35,72 @@ export default {
         this.actualizar();
       }
     },
-    guardar(){
 
+    guardar(){
       axios
-      .post('http://localhost:8080/api/musculo',{
+      .post('http://localhost:8080/api/tiporutina',{
         nombre: this.nombre,
       })
       .then((response)=>{
-        console.log("Nombre del musculo registrado con exito", response.data);
-        alert("El nombe del musculo es registrado con exito");
+        console.log("Tipo rutina registrado con exito", response.data);
+        alert("El Tipo rutina es registrado con exito");
         this.nombre = '';
         this.$emit('escucharForm');
       })
       .catch((error)=>{
-        console.error("Error al registrar nombre del musculo:", error);
+        console.error("Error al registrar tipo de rutina:", error);
       });
     },
 
     consultar(value){
       this.codigo=value;
       axios
-        .get('http://localhost:8080/api/musculo/'+this.codigo)
+        .get('http://localhost:8080/api/tiporutina/'+this.codigo)
         .then((response)=>{
           //actualiza los campos del formulario con los datos consultados
           this.nombre = response.data.nombre;
           this.focusInput();
         })
         .catch((error) =>{
-          console.error("Error al consultar nombre del musculo: ", error);
-        });
-    },
-
-    consultarT(value){
-      this.codigo=value;
-      axios
-        .get('http://localhost:8080/api/musculo/'+this.codigo)
-        .then((response)=>{
-          //actualiza los campos del formulario con los datos consultados
-          this.nombre= response.data.nombre;
-          this.salvar=false;
-          this.modificar=true;
-        })
-        .catch((error) =>{
-          console.error("Error al consultar nombre del musculo: ", error);
+          console.error("Error al consultar tipo de rutina: ", error);
         });
     },
 
     actualizar(){
       axios
-        .put('http://localhost:8080/api/musculo/actualizar/'+this.codigo,{
+        .put('http://localhost:8080/api/tiporutina/actualizar/'+this.codigo,{
           nombre: this.nombre,
       })
       .then((response)=>{
-        console.log("nombre del musculo actualizado con exito", response.data);
+        console.log("Tipo de rutina actualizado con exito", response.data);
         this.nombre = '';
         this.$emit('escucharForm');
         this.modificar= false;
         this.salvar= true;
       })
       .catch((error)=>{
-        console.error("Error al actualizar el nombre del musculo", error);
+        console.error("Error al actualizar el tipo de rutina", error);
       });
+    },
+
+    read(value){
+      this.consultar(value);
+    },
+    update(value){
+      this.consultar(value);
+      this.salvar=false;
+      this.modificar=true;
     },
     cerrar(){
       this.modificar= false;
       this.salvar= true;
       this.nombre= "";
       this.focusInput();
+      this.$emit('clearId');
     },
     focusInput(){
-    this.$refs.myInput.focus();
-  }
+      this.$refs.myInput.focus();
+    }
   },
   mounted() {
     this.focusInput();

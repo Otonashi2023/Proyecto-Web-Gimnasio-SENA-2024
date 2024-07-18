@@ -1,16 +1,16 @@
 <template>
     <div class="view">
         <div class="components">
-            <FormTipoRutina @escucharForm="puente" ref="componenteForm"/>
-            <TablaTipoRutina ref="componente" @ById="idcodigo" @change="update" @escuchartable="tabla"/>
+            <FormTipoRutina @escucharForm="puente" ref="componenteForm" @clearId="jumper"/>
+            <TablaTipoRutina ref="componente" @ById="read" @change="update" @escuchartable="tabla"/>
         </div>
     </div>
 
 </template>
 
 <script>
-import FormTipoRutina from '@/components/FormTipoRutina.vue'
-import TablaTipoRutina from '@/components/TablaTipoRutina.vue'
+import FormTipoRutina from '@/components/formularios/FormTipoRutina.vue'
+import TablaTipoRutina from '@/components/tablas/TablaTipoRutina.vue'
 
 export default{
     name:'TipoRutinaView',
@@ -22,14 +22,17 @@ export default{
         puente(){
             this.$refs.componente.obtenerTipoRutinas();
         },
-        idcodigo(value){
-            this.$refs.componenteForm.consultar(value);
+        read(value){
+            this.$refs.componenteForm.read(value);
         },
         update(value){
-            this.$refs.componenteForm.consultarT(value);
+            this.$refs.componenteForm.update(value);
         },
         tabla(){
             this.$refs.componenteForm.cerrar();
+        },
+        jumper(){
+            this.$refs.componente.limpiarId();
         }
     }
 }

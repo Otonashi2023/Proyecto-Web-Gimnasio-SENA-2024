@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import FormGenero from '@/components/FormGenero.vue'
-import TablaGenero from '@/components/TablaGenero.vue'
+import FormGenero from '@/components/formularios/FormGenero.vue'
+import TablaGenero from '@/components/tablas/TablaGenero.vue'
 
 export default{
     name:'GeneroView',

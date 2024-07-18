@@ -10,7 +10,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr id="fila2" v-for="nombre in nombres" :key="nombre.codigo" @click="consultarbyId(nombre.codigo)">
+          <tr id="fila2" v-for="nombre in nombres" :key="nombre.codigo" @click="() => {callMetodoT(); consultarbyId(nombre.codigo); consultarbyName(nombre.nombre)}">
             <td>{{ nombre.nombre }}</td>
             <td id="alibutton">
                 <font-awesome-icon icon="edit" id="editar" @click="actualizar(nombre.codigo)"/>
@@ -23,25 +23,31 @@
 </template>
 <script>
 import axios from "axios";
+import { mapActions, mapState } from "vuex";
   //contructor de las variables 
   export default {
     data(){
       return{
         nombres:[],
-        codigo: "",
+        codigo: null,
       }
     },
+    computed:{...mapState(['retorno'])},
     methods: {
+      ...mapActions(['showPantalla','actualizarDato2', 'registrarTipoEjercicio', 'registrarEntidad', 'callMetodo','callMetodo2']),
+
       obtenerTipoEjercicios(){
         // Método para obtener los campos de la lista
         axios.get("http://localhost:8080/api/tipoejercicio/listar")
         .then((response)=>{
           this.nombres= response.data;
+          this.codigo=null;
         })
         .catch((error)=>{
           console.error("Error al obtener tipos de ejercicio: ", error);
         })
       },
+
       eliminar(value){
         this.codigo= value;
       axios
@@ -49,21 +55,42 @@ import axios from "axios";
         .then(()=>{
           console.log("Tipo de ejercicio eliminado con exito");
           //Limpiar los campos del formulario despues de eliminar          
-          this.codigo = "";
+          this.codigo = null;
           this.$emit('escuchartable');          
           this.obtenerTipoEjercicios();
         })
         .catch((error)=>{
           console.log("Error al eliminar el tipo de ejercicio", error);
+          alert("No se puede borrar, este dato esta siendo usado.");
+          this.codigo=null;
         });
       },
+
       consultarbyId(value){
-        this.codigo=value;
-        this.$emit('ById',this.codigo);
+        if(this.codigo==null){
+          this.actualizarDato2(value);
+          this.$emit('ById',value);
+        }
       },
       actualizar(value){
         this.codigo=value;
         this.$emit('change',this.codigo);
+      },
+      consultarbyName(value){
+        this.registrarTipoEjercicio(value);
+      },
+      callMetodoT(){
+        if(this.retorno=='retorno'){
+          if(this.codigo==null){
+            this.registrarEntidad('');
+            this.callMetodo();
+            this.showPantalla(true);
+            this.callMetodo2();
+          }
+        }     
+      },
+      limpiarId(){
+        this.codigo=null;
       }
     },
     mounted(){

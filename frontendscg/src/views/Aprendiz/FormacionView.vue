@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import FormFormacion from '@/components/FormFormacion.vue'
-import TablaFormacion from '@/components/TablaFormacion.vue'
+import FormFormacion from '@/components/formularios/FormFormacion.vue'
+import TablaFormacion from '@/components/tablas/TablaFormacion.vue'
 
 export default{
     name:'NombreEjercicioView',

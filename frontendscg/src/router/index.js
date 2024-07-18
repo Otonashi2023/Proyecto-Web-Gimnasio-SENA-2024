@@ -10,10 +10,12 @@ import TipoEjercicioView from '@/views/PlanEntrenamiento/TipoEjercicioView.vue';
 import MusculoView from '@/views/PlanEntrenamiento/MusculoView.vue';
 import TipoRutinaView from '@/views/PlanEntrenamiento/TipoRutinaView.vue';
 import CargoView from '@/views/Personal/CargoView.vue';
-import TipodocumentoView from '@/views/Persona/TipoDocumentoView';
+import TipoDocumentoView from '@/views/Persona/TipoDocumentoView';
 import GeneroView from '@/views/FichaAntropometrica/GeneroView.vue';
 import FormacionView from '@/views/Aprendiz/FormacionView.vue';
 import EjercicioView from '@/views/PlanEntrenamiento/EjercicioView.vue'
+import RutinaView from '@/views/PlanEntrenamiento/RutinaView.vue'
+import RutinaEjercicioView from '@/views/PlanEntrenamiento/RutinaEjercicioView.vue';
 
 const routes = [
   {
@@ -70,9 +72,9 @@ const routes = [
     component: CargoView,
   },
   {
-    path: '/tipodocumento',
-    name: 'tipodocumento',
-    component: TipodocumentoView,
+    path: '/tipoDocumento',
+    name: 'tipoDocumento',
+    component: TipoDocumentoView,
   },
   {
     path: '/genero',
@@ -90,8 +92,21 @@ const routes = [
     component: EjercicioView,
   },
   {
+    path: '/rutina',
+    name: 'rutina',
+    component: RutinaView,
+  },
+  {
+    path: '/rutinaEjercicio',
+    name: 'rutinaEjercicio',
+    component: RutinaEjercicioView,
+  },
+  {
     path: '/about',
     name: 'about',
+    meta: {
+      requiresAuth: true,
+    },
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.

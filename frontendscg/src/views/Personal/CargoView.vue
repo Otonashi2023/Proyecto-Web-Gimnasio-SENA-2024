@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import FormCargo from '@/components/FormCargo.vue'
-import TablaCargo from '@/components/TablaCargo.vue'
+import FormCargo from '@/components/formularios/FormCargo.vue'
+import TablaCargo from '@/components/tablas/TablaCargo.vue'
 
 export default{
     name:'CargoView',
