@@ -16,6 +16,9 @@ import FormacionView from '@/views/Aprendiz/FormacionView.vue';
 import EjercicioView from '@/views/PlanEntrenamiento/EjercicioView.vue'
 import RutinaView from '@/views/PlanEntrenamiento/RutinaView.vue'
 import RutinaEjercicioView from '@/views/PlanEntrenamiento/RutinaEjercicioView.vue';
+import TipoPlanView from '@/views/PlanEntrenamiento/TipoPlanView.vue';
+import PlanView from '@/views/PlanEntrenamiento/PlanView.vue';
+import PlanRutinaView from '@/views/PlanEntrenamiento/PlanRutinaView.vue';
 
 const routes = [
   {
@@ -50,56 +53,113 @@ const routes = [
     path: '/nombreEjercicio',
     name: 'nombreEjercicio',
     component: NombreEjercicioView,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/tipoEjercicio',
     name: 'tipoEjercicio',
     component: TipoEjercicioView,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/musculo',
     name: 'musculo',
     component: MusculoView,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/tipoRutina',
     name: 'tipoRutina',
     component: TipoRutinaView,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/cargo',
     name: 'cargo',
     component: CargoView,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/tipoDocumento',
     name: 'tipoDocumento',
     component: TipoDocumentoView,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/genero',
     name: 'genero',
     component: GeneroView,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/formacion',
     name: 'formacion',
     component: FormacionView,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/ejercicio',
     name: 'ejercicio',
     component: EjercicioView,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/rutina',
     name: 'rutina',
     component: RutinaView,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/rutinaEjercicio',
     name: 'rutinaEjercicio',
     component: RutinaEjercicioView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/tipoPlan',
+    name: 'tipoPlan',
+    component: TipoPlanView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/plan',
+    name: 'plan',
+    component: PlanView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/planRutina',
+    name: 'planRutina',
+    component: PlanRutinaView,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/about',

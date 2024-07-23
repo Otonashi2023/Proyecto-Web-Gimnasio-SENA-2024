@@ -1,6 +1,6 @@
 <template>
     <div class="container" id="form">
-      <h1>Formulario de Rutina</h1>
+      <h1>Formulario de Plan</h1>
       <form @submit.prevent="servicio()" >
         <div class="comp-form-group">
           <div class="form-group">
@@ -8,8 +8,8 @@
             <input type="text" @click="callMetodoN"  name="nombre" id="input2" v-model="nombre" placeholder="haz click para ingresar el nombre" readonly>
           </div>
           <div class="form-group">
-            <label for="version">Version: </label>
-            <input type="number" name="version" id="input2" v-model="numero" placeholder="haz click para ingresar la version" required> 
+            <label for="Meses">Meses: </label>
+            <input type="number" name="Meses" id="input2" v-model="numero" placeholder="haz click para ingresar los meses de duaracion" required> 
           </div>
           <div class="form-group">
             <div id="formbutton">
@@ -37,7 +37,7 @@ export default {
   },
 
   computed:{
-    ...mapState(['dato6','nombre','dato8','dato4','datoact1','datoact2','retorno']),...mapGetters(['getNombre'])
+    ...mapState(['dato5','nombre','dato9','dato4','datoact1','datoact2','retorno']),...mapGetters(['getNombre'])
   },
   created(){
     if(this.datoact2!=null){
@@ -47,8 +47,8 @@ export default {
   },
 //metodos CRUD
   methods:{
-    ...mapActions(["showPantalla",'actualizarRetorno2','actualizarDato6','registrarNombre','actualizarDato8','registrarEntidad',
-    'callMetodo','limpiarDatoact2','actualizarDatoact2','actualizarDato4','limpiarDato6', 'registrarRutina']),
+    ...mapActions(["showPantalla",'actualizarRetorno2','actualizarDato5','registrarNombre','actualizarDato9','registrarEntidad',
+    'callMetodo','limpiarDatoact2','actualizarDatoact2','actualizarDato4','limpiarDato5', 'registrarPlan']),
     
     servicio(){
       if(this.salvar==true){
@@ -66,63 +66,63 @@ export default {
 
     guardar(){
       axios
-      .post('http://localhost:8080/api/rutina',{
-        tipoRutina: this.dato4,
-        numero:this.numero,
+      .post('http://localhost:8080/api/plan',{
+        tipoPlan: this.dato4,
+        meses:this.numero,
       })
       .then((response)=>{
-        console.log("Rutina registrado con exito", response.data);
-        alert("La rutina es registrado con exito");
+        console.log("Plan registrado con exito", response.data);
+        alert("El plan es registrado con exito");
         this.$emit('leave');
         if(this.retorno=='retorno'){
-          this.actualizarDato6(response.data.codigo);
+          this.actualizarDato5(response.data.codigo);
           this.antesderoutear();
-          this.$router.push('rutinaEjercicio');
+          this.$router.push('planRutina');
         }     
       })
       .catch((error)=>{
-        console.error("Error al registrar rutina:", error);
+        console.error("Error al registrar plan:", error);
       });
     },
 
     consultar(value){
       this.codigo=value;
       axios
-        .get('http://localhost:8080/api/rutina/'+this.codigo)
+        .get('http://localhost:8080/api/plan/'+this.codigo)
         .then((response)=>{
           //actualiza los campos del formulario con los datos consultados
-          this.nombre=response.data.tipoRutina.nombre;
-          this.numero=response.data.numero;
-          this.actualizarDato4(response.data.tipoRutina.codigo);
+          this.nombre=response.data.tipoPlan.nombre;
+          this.numero=response.data.meses;
+          this.actualizarDato4(response.data.tipoPlan.codigo);
           if(this.habilitar==1){
-            this.registrarRutina(response.data.tipoRutina.nombre);
-            this.actualizarDato8(response.data.numero);
+            this.registrarPlan(response.data.tipoPlan.nombre);
+            this.actualizarDato9(response.data.meses);
           }
         })
         .catch((error) =>{
-          console.error("Error al consultar rutina: ", error);
+          console.error("Error al consultar plan: ", error);
         });
     },
 
     actualizar(){
       this.codigo=this.datoact2;
       axios
-        .put('http://localhost:8080/api/rutina/actualizar/'+this.codigo,{
-          tipoRutina: this.dato4,
-          numero: this.numero,      
+        .put('http://localhost:8080/api/plan/actualizar/'+this.codigo,{
+          tipoPlan: this.dato4,
+          meses: this.numero,      
       })
       .then((response)=>{
-        console.log("Rutina actualizado con exito", response.data);
+        console.log("Plan actualizado con exito", response.data);
         this.$emit('leave');
         if(this.retorno=='retorno'){
-          this.actualizarDato6(this.codigo);
+          this.actualizarDato5(this.codigo);
           this.antesderoutear();
-          this.$router.push('rutinaEjercicio');
+          this.$router.push('planRutina');
         }
         this.limpiarDatoact2();
       })
       .catch((error)=>{
-        console.error("Error al actualizar la rutina", error);
+        console.error("Error al actualizar el plan", error);
       });
     },
     
@@ -158,12 +158,12 @@ export default {
     },
     antesderoutear(){
       this.habilitar=1;
-      this.consultar(this.dato6);
+      this.consultar(this.dato5);
     },
 
     callMetodoN(){
       this.actualizarRetorno2('retorno');
-      this.$router.push('tipoRutina');
+      this.$router.push('tipoPlan');
     },
   },
 }

@@ -26,7 +26,7 @@ public class Rutina {
 	private int numero;
 	
 	@ManyToOne
-	@JoinColumn (name="tipo_rutina")
+	@JoinColumn (name="tipo_rutina", nullable = false)
 	private TipoRutina tipoRutina;
 	
 	@OneToMany(orphanRemoval = true)

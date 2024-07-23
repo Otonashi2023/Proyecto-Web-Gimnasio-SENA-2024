@@ -11,18 +11,21 @@ export default createStore({
     metodo5:null,
     
     pantalla:false,
-    retorno:'retorno',
-    retorno2:'retorno2',
+    retorno:'',
+    retorno2:'',
+    retorno3:"",
 
+    datoact1:null,
+    datoact2:null,
     dato:null,
     dato2:null,
     dato3:null,
-    
     dato4: null,
     dato5:null,
     dato6:null,
     dato7:null,
     dato8:null,
+    dato9:null,
     nombreE:null,
 
     nombre:"",
@@ -30,6 +33,7 @@ export default createStore({
     musculo:"",
     rutina:"",
     ejercicio:"",
+    plan:"",
 
     entidad:null,
     entidad2:null,
@@ -51,16 +55,19 @@ export default createStore({
     getPantalla: (state)=> state.pantalla,
     getRetorno: (state)=> state.retorno,
     getRetorno2: (state)=> state.retorno2,
+    getRetorno3: (state)=> state.retorno3,
 
+    obtenerDatoact1: (state)=> state.datoact1,
+    obtenerDatoact2: (state)=> state.datoact2,
     obtenerDato: (state)=> state.dato,
-    obtenerDato2: (state) => state.dato2,
+    obtenerDato2: (state)=> state.dato2,
     obtenerDato3: (state)=> state.dato3,
-
-    nombre: (state) => state.dato4,
+    obtenerDato4: (state)=> state.dato4,
     obtenerDato5: (state)=> state.dato5,
-    tipoEjercicio: (state)=> state.dato6,
+    obtenerDato6: (state)=> state.dato6,
     obtenerDato7: (state)=> state.dato7,
-    musculo: (state)=> state.dato8,
+    obtenerDato8: (state)=> state.dato8,
+    obtenerDato9: (state)=> state.dato9,
     obtenerNombreE:(state)=>state.nombreE,
 
     getNombre: (state)=> state.nombre,
@@ -68,6 +75,7 @@ export default createStore({
     getMusculo: (state)=> state.musculo,
     getRutina: (state)=> state.rutina,
     getEjercicio: (state)=> state.ejercicio,
+    getPlan: (state)=> state.plan,
 
     getEntidad: (state)=> state.entidad,
     getEntidad2: (state)=> state.entidad2,
@@ -128,8 +136,26 @@ export default createStore({
     clearRetorno2(state){
       state.retorno2 = null;
     },
+    setRetorno3(state, nuevodato){
+      state.retorno3 =nuevodato;
+    },
+    clearRetorno3(state){
+      state.retorno3 = null;
+    },
 
 
+    setDatoact1(state, nuevodato){
+      state.datoact1 = nuevodato;
+    },
+    clearDatoact1(state){
+      state.datoact1 = null;
+    },
+    setDatoact2(state, nuevodato){
+      state.datoact2 = nuevodato;
+    },
+    clearDatoact2(state){
+      state.datoact2 = null;
+    },
     setDato(state, nuevodato){
       state.dato = nuevodato;
     },
@@ -148,8 +174,6 @@ export default createStore({
     clearDato3(state){
       state.dato3 = null;
     },
-
-
     setDato4(state, nuevodato){
       state.dato4 = nuevodato;
     },
@@ -179,6 +203,12 @@ export default createStore({
     },
     clearDato8(state){
       state.dato8 = null;
+    },
+    setDato9(state, nuevodato){
+      state.dato9 = nuevodato;
+    },
+    clearDato9(state){
+      state.dato9 = null;
     },
     setNombreE(state, nombre){
       state.nombreE = nombre;
@@ -218,7 +248,13 @@ export default createStore({
     clearEjercicio(state){
       state.ejercicio = "";
     },
-    
+    setPlan(state, nuevodato){
+      state.plan = nuevodato;
+    },
+    clearPlan(state){
+      state.plan = "";
+    },
+
 
     setEntidad(state, nuevodato){
       state.entidad = nuevodato;
@@ -347,8 +383,26 @@ export default createStore({
     limpiarRetorno2({commit}){
       commit('clearRetorno2');
     },
+    actualizarRetorno3({commit},nuevodato){
+      commit('setRetorno3', nuevodato);
+    },
+    limpiarRetorno3({commit}){
+      commit('clearRetorno3');
+    },
     
 
+    actualizarDatoact1({commit},nuevodato){
+      commit('setDatoact1', nuevodato);
+    },
+    limpiarDatoact1({commit}){
+      commit('clearDatoact1');
+    },
+    actualizarDatoact2({commit},nuevodato){
+      commit('setDatoact2', nuevodato);
+    },
+    limpiarDatoact2({commit}){
+      commit('clearDatoact2');
+    },
     actualizarDato({commit},nuevodato){
       commit('setDato', nuevodato);
     },
@@ -367,8 +421,6 @@ export default createStore({
     limpiarDato3({commit}){
       commit('clearDato3');
     },
-
-
     actualizarDato4({commit},nuevodato){
       commit('setDato4', nuevodato);
     },
@@ -398,6 +450,12 @@ export default createStore({
     },
     limpiarDato8({commit}){
       commit('clearDato8');
+    },
+    actualizarDato9({commit},nuevodato){
+      commit('setDato9', nuevodato);
+    },
+    limpiarDato9({commit}){
+      commit('clearDato9');
     },
     registrarNombreE({commit}, nombre){
       commit('setNombreE',nombre);
@@ -436,6 +494,12 @@ export default createStore({
     },
     limpiarEjercicio({commit}){
       commit('clearEjercicio');
+    },
+    registrarPlan({commit}, nombre){
+      commit('setPlan',nombre);
+    },
+    limpiarPlan({commit}){
+      commit('clearPlan');
     },
 
 

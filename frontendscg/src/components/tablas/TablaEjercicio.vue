@@ -17,7 +17,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr id="fila2" v-for="ejercicio in ejercicios" :key="ejercicio.codigo" @click="consultarbyId(ejercicio.codigo)">
+          <tr id="fila2" v-for="ejercicio in ejercicios" :key="ejercicio.codigo" @click="() => {callMetodoE(ejercicio.codigo); consultarbyId(ejercicio.codigo); registrarEjercicio(ejercicio.nombre.nombre)}">
             <td>Pendiente</td>
             <td>{{ ejercicio.nombre.nombre }}</td>
             <td>{{ ejercicio.tipoEjercicio.nombre }}</td>
@@ -38,6 +38,7 @@
 
 <script>
 import axios from "axios";
+import { mapActions, mapState } from "vuex";
   //contructor de las variables 
   export default {
     data(){
@@ -46,7 +47,10 @@ import axios from "axios";
         codigo:null,
       }
     },
+    computed:{...mapState(['retorno'])},
+
     methods: {
+      ...mapActions(['actualizarDato7','registrarEjercicio']),
       obtenerEjercicios(){
         // Método para obtener los campos de la lista
         axios.get("http://localhost:8080/api/ejercicio/listar")
@@ -83,7 +87,15 @@ import axios from "axios";
       },
       limpiarId(){
         this.codigo=null;
-      }
+      },
+      callMetodoE(value){
+        if(this.retorno=='retorno'){
+          if(this.codigo==null){
+            this.$router.push('rutinaEjercicio');
+            this.actualizarDato7(value);
+          }
+        }
+      },
     },
     mounted(){
       this.obtenerEjercicios();

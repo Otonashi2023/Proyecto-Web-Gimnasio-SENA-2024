@@ -13,7 +13,7 @@
       </thead>
       <tbody>
         <tr id="fila2" v-for="rutina_ejercicio in rutina_ejercicios" :key="rutina_ejercicio.codigo" @click="consultarbyId(rutina_ejercicio.codigo)">
-          <td>{{ rutina_ejercicio.rutina.tipoRutina.nombre }} {{ rutina_ejercicio.rutina.numero }}</td>
+          <td>{{ rutina_ejercicio.rutina.tipoRutina.nombre}} {{ rutina_ejercicio.rutina.numero }}</td>
           <td>{{ rutina_ejercicio.ejercicio.nombre.nombre }}</td>
           <td id="alibutton">
               <font-awesome-icon icon="edit" id="editar" @click="actualizar(rutina_ejercicio.codigo)"/>
@@ -28,6 +28,7 @@
 
 <script>
 import axios from "axios";
+import { mapActions, mapState } from "vuex";
 //contructor de las variables 
 export default {
   data(){
@@ -36,7 +37,10 @@ export default {
       codigo:null,
     }
   },
+  computed:{...mapState(['retorno'])},
+
   methods: {
+    ...mapActions(['limpiarDatoact1']),
     obtenerRutinaEjercicios(){
       // Método para obtener los campos de la lista
       axios.get("http://localhost:8080/api/rutinaejercicio/listar")
@@ -73,10 +77,16 @@ export default {
     },
     limpiarId(){
       this.codigo=null;
-    }
+    },
+    formulario(){
+      if(this.retorno=='retorno'){
+        this.$emit('goForm');
+      }
+    },
   },
   mounted(){
     this.obtenerRutinaEjercicios();
+    this.formulario();
   },
 }
 </script>

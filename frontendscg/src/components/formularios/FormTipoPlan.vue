@@ -1,10 +1,10 @@
 <template>
     <div class="container" id="form">
-      <h1>Formulario tipo de rutina</h1>
+      <h1>Formulario tipo de Plan de entrenamiento</h1>
       <form id="simple-form" @submit.prevent="servicio()" >
         <div class="form-group">
           <label for="nombre">Nombre: </label>
-          <input type="text" ref="myInput" name="nombre" id="nombre" required v-model="nombre" placeholder="ingrese el tipo de rutina">
+          <input type="text" ref="myInput" name="nombre" id="nombre" required v-model="nombre" placeholder="ingrese el tipo de plan">
         </div>
         <div id="flex">
             <button id="guardar" type="submit" name="guardar" v-if="salvar">Guardar</button>
@@ -41,29 +41,29 @@ export default {
 
     guardar(){
       axios
-      .post('http://localhost:8080/api/tiporutina',{
+      .post('http://localhost:8080/api/tipoplan',{
         nombre: this.nombre,
       })
       .then((response)=>{
-        console.log("Tipo rutina registrado con exito", response.data);
-        alert("El Tipo rutina es registrado con exito");
+        console.log("Tipo plan registrado con exito", response.data);
+        alert("El Tipo plan es registrado con exito");
         if(this.retorno=='retorno'){
           this.actualizarDato4(response.data.codigo);
           this.antesderoutear();
-          this.$router.push('rutina');
+          this.$router.push('plan');
         }     
         this.nombre = '';
         this.$emit('escucharForm');
       })
       .catch((error)=>{
-        console.error("Error al registrar tipo de rutina:", error);
+        console.error("Error al registrar tipo de plan:", error);
       });
     },
 
     consultar(value){
       this.codigo=value;
       axios
-        .get('http://localhost:8080/api/tiporutina/'+this.codigo)
+        .get('http://localhost:8080/api/tipoplan/'+this.codigo)
         .then((response)=>{
           //actualiza los campos del formulario con los datos consultados
           if(this.habilitar==1){
@@ -73,24 +73,24 @@ export default {
           this.focusInput();
         })
         .catch((error) =>{
-          console.error("Error al consultar tipo de rutina: ", error);
+          console.error("Error al consultar tipo de plan: ", error);
         });
     },
 
     actualizar(){
       axios
-        .put('http://localhost:8080/api/tiporutina/actualizar/'+this.codigo,{
+        .put('http://localhost:8080/api/tipoplan/actualizar/'+this.codigo,{
           nombre: this.nombre,
       })
       .then((response)=>{
-        console.log("Tipo de rutina actualizado con exito", response.data);
+        console.log("Tipo de plan actualizado con exito", response.data);
         this.nombre = '';
         this.$emit('escucharForm');
         this.modificar= false;
         this.salvar= true;
       })
       .catch((error)=>{
-        console.error("Error al actualizar el tipo de rutina", error);
+        console.error("Error al actualizar el tipo de plan", error);
       });
     },
 

@@ -15,49 +15,49 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import co.edu.sena.models.entity.Plan;
-import co.edu.sena.models.service.PlanService;
+import co.edu.sena.models.entity.TipoPlan;
+import co.edu.sena.models.service.TipoPlanService;
 
 @RestController
-@RequestMapping("/api/plan")
+@RequestMapping("/api/tipoplan")
 @CrossOrigin(origins= "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT})
-public class PlanController {
+public class TipoPlanController {
+
 	@Autowired
-	PlanService planService;
+	TipoPlanService tipoPlanService;
 	
 	@GetMapping("/{id}")
-	public Optional<Plan> buscarPorId(@PathVariable Integer id) {
+	public Optional<TipoPlan> buscarPorId(@PathVariable Integer id) {
 		
-		return planService.findById(id);		
+		return tipoPlanService.findById(id);		
 	}
 	
 	@GetMapping("/listar")
-	public List<Plan> listarTodos(){
+	public List<TipoPlan> listarTodos(){
 		
-		return planService.findAll();
+		return tipoPlanService.findAll();
 	}
 	
 	@PostMapping
-	public Plan guardar(@RequestBody Plan p) {
+	public TipoPlan guardar(@RequestBody TipoPlan tp) {
 		
-		return planService.save(p);
+		return tipoPlanService.save(tp);
 	}
 	
 	@DeleteMapping("/{id}")
 	public void eliminar(@PathVariable Integer id) {
 		
-		planService.deleteById(id);
+		tipoPlanService.deleteById(id);
 	}
 	
 	@PutMapping("/actualizar/{id}")
-	public Plan actualizar(@RequestBody Plan p, @PathVariable Integer id) {
+	public TipoPlan actualizar(@RequestBody TipoPlan tp, @PathVariable Integer id) {
 		
-		Plan pEnBD = planService.findById(id).get();
+		TipoPlan tpEnBD = tipoPlanService.findById(id).get();
 		
-		pEnBD.setTipoPlan(p.getTipoPlan());
-		pEnBD.setMeses(p.getMeses());
+		tpEnBD.setNombre(tp.getNombre());
 				
-		return planService.save(pEnBD);
+		return tipoPlanService.save(tpEnBD);
 		
 	}
 }

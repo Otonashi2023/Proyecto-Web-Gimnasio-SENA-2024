@@ -18,6 +18,11 @@ export default{
         FormMusculo,
         TablaMusculo
     },
+    computed:{
+        user() {
+            return this.$store.state.user;
+        },
+    },
     methods:{
         puente(){
             this.$refs.componente.obtenerMusculos();

@@ -4,7 +4,7 @@
     <form @submit.prevent="servicio()" >
       <div class="comp-form-group">
         <div class="form-group">
-          <label for="rutina">Rutina: version {{ dato3 }}</label>
+          <label for="rutina">Rutina: version {{ dato8 }}</label>
           <input type="text" @click="callMetodoR"  name="rutina" id="input2" v-model="rutina" placeholder="haz click para ingresar la rutina" readonly>
         </div>
         <div class="form-group">
@@ -35,14 +35,20 @@ export default {
   },
 
   computed:{
-    ...mapState(['dato','dato2','dato3','rutina','ejercicio']),
+    ...mapState(['dato6','dato7','dato8','rutina','ejercicio','datoact1']),
   },
   //metodos CRUD
   methods:{
-    ...mapActions(["showPantalla",'actualizarRetorno','actualizarDato','actualizarDato3','registrarRutina','actualizarDato2','registrarEjercicio','registrarEntidad','callMetodo']),
+    ...mapActions(['actualizarRetorno','actualizarDato6','registrarRutina','actualizarDato7','registrarEjercicio',
+    'actualizarDato8','actualizarDatoact1','limpiarDatoact1']),
     servicio(){
       if(this.salvar==true){
-        this.guardar();
+        if(this.dato6!=null && this.dato7!=null){
+          this.guardar();
+        }
+        else{
+          alert("hay campos vacios");
+        }  
       }
       else {
         this.actualizar();       
@@ -52,8 +58,8 @@ export default {
     guardar(){
       axios
       .post('http://localhost:8080/api/rutinaejercicio',{
-        rutina: this.dato,
-        ejercicio: this.dato2
+        rutina: this.dato6,
+        ejercicio: this.dato7,
       })
       .then((response)=>{
         console.log("Rutina de entrenamiento registrado con exito", response.data);
@@ -71,11 +77,11 @@ export default {
         .get('http://localhost:8080/api/rutinaejercicio/'+this.codigo)
         .then((response)=>{
           //actualiza los campos del formulario con los datos consultados
-          this.actualizarDato(response.data.rutina.codigo);
-          this.actualizarDato2(response.data.ejercicio.codigo);
+          this.actualizarDato6(response.data.rutina.codigo);
           this.registrarRutina(response.data.rutina.tipoRutina.nombre);
+          this.actualizarDato7(response.data.ejercicio.codigo);
           this.registrarEjercicio(response.data.ejercicio.nombre.nombre);
-          this.actualizarDato3(response.data.rutina.numero);
+          this.actualizarDato8(response.data.rutina.numero);
         })
         .catch((error) =>{
           console.error("Error al consultar rutina de entrenamiento: ", error);
@@ -83,16 +89,16 @@ export default {
     },
 
     actualizar(){
-      
+      this.codigo=this.datoact1;      
       axios
         .put('http://localhost:8080/api/rutinaejercicio/actualizar/'+this.codigo,{
-          rutina: this.dato,
-          ejercicio: this.dato2,      
+          rutina: this.dato6,
+          ejercicio: this.dato7,      
       })
       .then((response)=>{
         console.log("Rutina de entrenamiento actualizado con exito", response.data);
         this.$emit('leave');
-
+        this.limpiarDatoact1();
       })
       .catch((error)=>{
         console.error("Error al actualizar la rutina de entrenamiento", error);
@@ -100,41 +106,42 @@ export default {
     },
     
     read(value){
+      this.limpiarDatoact1();
       this.consultar(value);
       this.rotar();
     },
     update(value){
       this.consultar(value);
-      this.salvar=false;
-      this.modificar=true;
+      this.actualizarDatoact1(value);
+      this.variar();
     },
     clear(){
       this.rutina="";
       this.ejercicio="";
-      this.cerrar();
     },
     cerrar(){
+      this.clear();
       this.rotar();
-      this.$emit('clearId'); 
+      this.limpiarDatoact1();
     },
     rotar(){
       this.modificar= false;
       this.salvar= true;
     },
-
+    variar(){
+      if(this.datoact1!=null){
+      this.modificar=true;
+      this.salvar=false;
+      }
+    },
+    
     callMetodoR(){
       this.actualizarRetorno('retorno');
-      this.registrarEntidad('rutina');
-      this.callMetodo();
-      this.showPantalla(false);
-      this.$emit('display');
+      this.$router.push('rutina');
     },
     callMetodoE(){
       this.actualizarRetorno('retorno');
-      this.registrarEntidad('ejercicio');
-      this.callMetodo();
-      this.showPantalla(false);
-      this.$emit('display');
+      this.$router.push('ejercicio');
     },
   },
 }

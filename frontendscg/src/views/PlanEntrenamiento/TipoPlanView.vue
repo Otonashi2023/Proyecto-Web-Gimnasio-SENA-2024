@@ -1,21 +1,22 @@
 <template>
-    <div class="view1">
+    <div class="view">
         <div class="components">
-            <FormNombreEjercicio @escucharForm="puente" ref="componenteForm" @clearId="jumper"/>
-            <TablaNombreEjercicio ref="componente" @ById="read" @change="update" @escuchartable="tabla"/>
+            <FormTipoPlan @escucharForm="puente" ref="componenteForm" @clearId="jumper"/>
+            <TablaTipoPlan ref="componente" @ById="read" @change="update" @escuchartable="tabla"/>
         </div>
     </div>
+
 </template>
 
 <script>
-import FormNombreEjercicio from '@/components/formularios/FormNombreEjercicio.vue'
-import TablaNombreEjercicio from '@/components/tablas/TablaNombreEjercicio.vue'
+import FormTipoPlan from '@/components/formularios/FormTipoPlan.vue'
+import TablaTipoPlan from '@/components/tablas/TablaTipoPlan.vue'
 
 export default{
-    name:'NombreEjercicioView',
+    name:'TipoPlanView',
     components:{
-        FormNombreEjercicio,
-        TablaNombreEjercicio
+        FormTipoPlan,
+        TablaTipoPlan
     },
     computed:{
         user() {
@@ -24,7 +25,7 @@ export default{
     },
     methods:{
         puente(){
-            this.$refs.componente.obtenerNombreEjercicios();
+            this.$refs.componente.obtenerTipoPlanes();
         },
         read(value){
             this.$refs.componenteForm.read(value);

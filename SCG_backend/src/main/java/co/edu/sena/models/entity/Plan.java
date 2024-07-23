@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -21,8 +22,9 @@ public class Plan {
 	@Column (name="id_plan", nullable = false)
 	private int codigo;
 	
-	@Column (name="nom_plan", length = 45, nullable = false)
-	private String nombre;
+	@ManyToOne
+	@JoinColumn (name="tipo_plan", nullable = false)
+	private TipoPlan tipoPlan;
 	
 	@Column (name="meses", nullable = false)
 	private int meses;
@@ -44,18 +46,18 @@ public class Plan {
 		this.codigo = codigo;
 	}
 
-	public Plan(String nombre, int meses, List<AprendizPlan> aprendizPlan, List<PlanRutina> planRutina) {
+	public Plan(TipoPlan tipoPlan, int meses, List<AprendizPlan> aprendizPlan, List<PlanRutina> planRutina) {
 		super();
-		this.nombre = nombre;
+		this.tipoPlan = tipoPlan;
 		this.meses = meses;
 		this.aprendizPlan = aprendizPlan;
 		this.planRutina = planRutina;
 	}
 
-	public Plan(int codigo, String nombre, int meses, List<AprendizPlan> aprendizPlan, List<PlanRutina> planRutina) {
+	public Plan(int codigo, TipoPlan tipoPlan, int meses, List<AprendizPlan> aprendizPlan, List<PlanRutina> planRutina) {
 		super();
 		this.codigo = codigo;
-		this.nombre = nombre;
+		this.tipoPlan = tipoPlan;
 		this.meses = meses;
 		this.aprendizPlan = aprendizPlan;
 		this.planRutina = planRutina;
@@ -68,13 +70,13 @@ public class Plan {
 	public void setCodigo(int codigo) {
 		this.codigo = codigo;
 	}
-
-	public String getNombre() {
-		return nombre;
+	
+	public TipoPlan getTipoPlan() {
+		return tipoPlan;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setTipoPlan(TipoPlan tipoPlan) {
+		this.tipoPlan = tipoPlan;
 	}
 
 	public int getMeses() {
@@ -87,7 +89,7 @@ public class Plan {
 
 	@Override
 	public String toString() {
-		return "Plan [codigo=" + codigo + ", nombre=" + nombre + ", meses=" + meses + ", aprendizPlan=" + aprendizPlan
+		return "Plan [codigo=" + codigo + ", tipoPlan=" + tipoPlan + ", meses=" + meses + ", aprendizPlan=" + aprendizPlan
 				+ ", planRutina=" + planRutina + "]";
 	}
 	

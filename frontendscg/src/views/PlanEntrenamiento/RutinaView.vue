@@ -8,8 +8,8 @@
                     <font-awesome-icon icon="circle-xmark" id="cerrar2" v-if="formulario" @click="salir"/>
                 </div>
             </div>
-            <div v-show="formulario"><FormRutina @leave="salir" ref="componenteForm" @display="pantalla" @clearId="jumper"/></div>
-            <div v-show="listar"><TablaRutina ref="componente" @ById="read" @change="update" @escuchartable="tabla"/></div>
+            <div v-show="formulario"><FormRutina @leave="salir" ref="componenteForm"/></div>
+            <div v-show="listar"><TablaRutina ref="componente" @ById="read" @change="update" @escuchartable="tabla" @goForm="inData"/></div>
         </div>
     </div>
 </template>
@@ -17,10 +17,10 @@
 <script>
 import FormRutina from '@/components/formularios/FormRutina.vue';
 import TablaRutina from '@/components/tablas/TablaRutina.vue'
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default{
-    name:'NombreEjercicioView',
+    name:'RutinaView',
     components:{
         FormRutina,
         TablaRutina
@@ -32,10 +32,13 @@ export default{
             mostrar:true,
         }
     },
-    computed:{...mapGetters(['getPantalla','getEntidad2'])},
+    computed:{
+        user() {
+            return this.$store.state.user;
+        },
+    },  
     methods:{
-        ...mapActions(['limpiarDato','limpiarNombre','registrarEntidad2','registrarMetodo3']),
-
+        ...mapActions(['limpiarNombre','limpiarRetorno2','limpiarDatoact2','limpiarDato4','limpiarRutina','limpiarDato8']),
         cambiar(){
             this.formulario=true;
             this.listar=false;
@@ -43,7 +46,7 @@ export default{
         irAformulario(){
             this.cambiar();
             this.limpiarDatos();
-            this.$refs.componenteForm.clear();
+            this.$refs.componenteForm.cerrar();
         },
         salir(){
             this.formulario=false;
@@ -62,27 +65,18 @@ export default{
         tabla(){
             this.$refs.componenteForm.cerrar();
         },
-        jumper(){
-            this.$refs.componente.limpiarId();
+        inData(){
+            this.cambiar();
+            this.limpiarRetorno2();
+            this.$refs.componenteForm.variar();
         },
         limpiarDatos(){
-            this.limpiarDato();
+            this.limpiarDato4();
             this.limpiarNombre();
-        },
-        pantalla(){
-            this.cambiar();
-            this.mostrar = this.getPantalla;
-        },
-        activarForm(){
-            if(this.getEntidad2==true){
-                this.cambiar();
-                this.registrarEntidad2(false);
-            }
+            this.limpiarRutina();
+            this.limpiarDato8();
+            this.limpiarDatoact2();
         }
     },
-    mounted(){
-        this.$store.dispatch('registrarMetodo3',this.pantalla);
-        this.activarForm();
-    }
 }
 </script>

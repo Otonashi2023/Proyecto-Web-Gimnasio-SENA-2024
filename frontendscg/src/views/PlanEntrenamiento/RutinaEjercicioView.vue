@@ -1,5 +1,5 @@
 <template>
-    <div class="view" v-show="mostrar">
+    <div class="view">
         <div class="components">
             <div id="up">
                 <h1 id="alitext">Rutinas de entrenamiento</h1>
@@ -8,8 +8,8 @@
                     <font-awesome-icon icon="circle-xmark" id="cerrar2" v-if="formulario" @click="salir"/>
                 </div>
             </div>
-            <div v-show="formulario"><FormRutinaEjercicio @leave="salir" ref="componenteForm" @display="pantalla" @clearId="jumper"/></div>
-            <div v-show="listar"><TablaRutinaEjercicio ref="componente" @ById="read" @change="update" @escuchartable="tabla"/></div>
+            <div v-show="formulario"><FormRutinaEjercicio @leave="salir" ref="componenteForm"/></div>
+            <div v-show="listar"><TablaRutinaEjercicio ref="componente" @ById="read" @change="update" @escuchartable="tabla" @goForm="inData"/></div>
         </div>
     </div>
 </template>
@@ -17,10 +17,10 @@
 <script>
 import FormRutinaEjercicio from '@/components/formularios/FormRutinaEjercicio.vue';
 import TablaRutinaEjercicio from '@/components/tablas/TablaRutinaEjercicio.vue';
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default{
-    name:'NombreEjercicioView',
+    name:'RutinaEjercicioView',
     components:{
         FormRutinaEjercicio,
         TablaRutinaEjercicio
@@ -32,9 +32,13 @@ export default{
             mostrar:true,
         }
     },
-    computed:{...mapGetters(['getPantalla'])},
+    computed:{
+        user() {
+            return this.$store.state.user;
+        },
+    },
     methods:{
-        ...mapActions(['limpiarDato','limpiarDato2','limpiarDato3','limpiarRutina','limpiarEjercicio','registrarMetodo4']),
+        ...mapActions(['limpiarDato6','limpiarDato7','limpiarRutina','limpiarEjercicio','limpiarDato8','limpiarRetorno','limpiarNombre','limpiarRetorno2','limpiarDato4']),
 
         cambiar(){
             this.formulario=true;
@@ -43,7 +47,7 @@ export default{
         irAformulario(){
             this.cambiar();
             this.limpiarDatos();
-            this.$refs.componenteForm.clear();
+            this.$refs.componenteForm.cerrar();
         },
         salir(){
             this.formulario=false;
@@ -65,19 +69,22 @@ export default{
         jumper(){
             this.$refs.componente.limpiarId();
         },
-        limpiarDatos(){
-            this.limpiarDato();
-            this.limpiarDato2();
-            this.limpiarDato3();
-            this.limpiarRutina();
-            this.limpiarEjercicio();
+        inData(){
+            this.cambiar();
+            this.limpiarRetorno2();
+            this.$refs.componenteForm.variar();
         },
-        pantalla(){
-            this.mostrar = this.getPantalla;
-        }
+        limpiarDatos(){
+            this.limpiarDato6();
+            this.limpiarDato7();
+            this.limpiarDato8();
+            this.limpiarDato4();
+            this.limpiarRutina();
+            this.limpiarNombre();
+            this.limpiarEjercicio();
+            this.limpiarRetorno();
+            this.limpiarRetorno2();
+        },
     },
-    mounted(){
-        this.$store.dispatch('registrarMetodo4',this.pantalla)
-    }
 }
 </script>

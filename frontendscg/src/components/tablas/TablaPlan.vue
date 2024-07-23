@@ -1,23 +1,23 @@
 <template>
     <!--Tabla que lista todos los registros de la entidad-->
     <div class="container2">
-      <h1>Tabla  de rutinas</h1>
+      <h1>Tabla  de Planes</h1>
       <div id="scroll">
         <table>
         <thead>
           <tr>
             <th>Nombre</th>
-            <th>Version</th>
+            <th>Meses</th>
             <th id="rigth">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr id="fila2" v-for="rutina in rutinas" :key="rutina.codigo" @click="() => {callMetodoN(); consultarbyId(rutina.codigo); consultarbyName(rutina.tipoRutina.nombre,rutina.numero)}">
-            <td>{{ rutina.tipoRutina.nombre }}</td>
-            <td>{{ rutina.numero }}</td>
+          <tr id="fila2" v-for="plan in planes" :key="plan.codigo" @click="() => {callMetodoN(); consultarbyId(plan.codigo); consultarbyName(plan.tipoPlan.nombre,plan.meses)}">
+            <td>{{ plan.tipoPlan.nombre }}</td>
+            <td>{{ plan.meses }}</td>
             <td id="alibutton">
-                <font-awesome-icon icon="edit" id="editar" @click="actualizar(rutina.codigo)"/>
-                <font-awesome-icon icon="trash" id="eliminar" @click="eliminar(rutina.codigo)"/>
+                <font-awesome-icon icon="edit" id="editar" @click="actualizar(plan.codigo)"/>
+                <font-awesome-icon icon="trash" id="eliminar" @click="eliminar(plan.codigo)"/>
             </td>            
           </tr>      
         </tbody>
@@ -33,34 +33,34 @@ import { mapActions, mapState } from "vuex";
   export default {
     data(){
       return{
-        rutinas:[],
+        planes:[],
         codigo:null,
       }
     },
-    computed:{...mapState(['retorno','retorno2','retorno3'])},
+    computed:{...mapState(['retorno3','retorno2','dato9'])},
     methods: {
-      ...mapActions(['actualizarDato6','actualizarDato8','registrarRutina']),
+      ...mapActions(['actualizarDato5','actualizarDato9','registrarPlan']),
 
-      obtenerRutinas(){
+      obtenerPlanes(){
         // Método para obtener los campos de la lista
-        axios.get("http://localhost:8080/api/rutina/listar")
+        axios.get("http://localhost:8080/api/plan/listar")
         .then((response)=>{
-          this.rutinas= response.data;
+          this.planes= response.data;
           this.codigo=null;
         })
         .catch((error)=>{
-          console.error("Error al obtener rutinas: ", error);
+          console.error("Error al obtener planes: ", error);
         })
       },
       eliminar(value){
         this.codigo= value;
       axios
-        .delete('http://localhost:8080/api/rutina/'+this.codigo)
+        .delete('http://localhost:8080/api/plan/'+this.codigo)
         .then(()=>{
-          console.log("rutina eliminado con exito");
+          console.log("plan eliminado con exito");
           this.codigo=null;
           this.$emit('escuchartable');
-          this.obtenerRutinas();                   
+          this.obtenerPlanes();                   
         })
         .catch((error)=>{
           console.log("Error al eliminar rutina", error);
@@ -68,7 +68,7 @@ import { mapActions, mapState } from "vuex";
       },
       consultarbyId(value){
         if(this.codigo==null){
-          this.actualizarDato6(value);
+          this.actualizarDato5(value);
           this.$emit('ById',value);
         }
       },
@@ -77,8 +77,8 @@ import { mapActions, mapState } from "vuex";
         this.$emit('change',this.codigo);
       },
       consultarbyName(value,numero){
-        this.registrarRutina(value);
-        this.actualizarDato8(numero);
+        this.registrarPlan(value);
+        this.actualizarDato9(numero);
       },
       limpiarId(){
         this.codigo=null;
@@ -89,11 +89,6 @@ import { mapActions, mapState } from "vuex";
             this.$router.push('planRutina');
           }
         }
-        else if(this.retorno=='retorno'){
-          if(this.codigo==null){
-            this.$router.push('rutinaEjercicio');
-          }
-        }
       },
       formulario(){
         if(this.retorno2=='retorno'){
@@ -102,7 +97,7 @@ import { mapActions, mapState } from "vuex";
       },
     },
     mounted(){
-      this.obtenerRutinas();
+      this.obtenerPlanes();
       this.formulario();
     },
   }

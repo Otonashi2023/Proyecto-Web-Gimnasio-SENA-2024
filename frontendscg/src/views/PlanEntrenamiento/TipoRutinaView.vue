@@ -18,6 +18,11 @@ export default{
         FormTipoRutina,
         TablaTipoRutina
     },
+    computed:{
+        user() {
+            return this.$store.state.user;
+        },
+    },
     methods:{
         puente(){
             this.$refs.componente.obtenerTipoRutinas();

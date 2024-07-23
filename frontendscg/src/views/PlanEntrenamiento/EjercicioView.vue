@@ -20,7 +20,7 @@ import TablaEjercicio from '@/components/tablas/TablaEjercicio.vue'
 import { mapActions, mapGetters } from 'vuex';
 
 export default{
-    name:'NombreEjercicioView',
+    name:'EjercicioView',
     components:{
         FormEjercicio,
         TablaEjercicio
@@ -32,7 +32,11 @@ export default{
             mostrar:true,
         }
     },
-    computed:{...mapGetters(['getPantalla'])},
+    computed:{...mapGetters(['getPantalla']),
+        user() {
+                return this.$store.state.user;
+            },
+    },
     methods:{
         ...mapActions(['limpiarDato','limpiarDato2','limpiarDato3','limpiarNombre','limpiarTipoEjercicio',
         'limpiarMusculo', 'registrarMetodo2']),

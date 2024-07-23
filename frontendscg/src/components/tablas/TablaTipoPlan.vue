@@ -1,7 +1,7 @@
 <template>
     <!--Tabla que lista todos los registros de la entidad-->
     <div class="containerT" id="scroll">
-      <h1>Tabla de tipos de rutina</h1>
+      <h1>Tabla de tipos de Plan de entrenamiento</h1>
       <table>
         <thead>
           <tr>
@@ -36,31 +36,31 @@ import { mapActions, mapState } from "vuex";
     methods: {
       ...mapActions(['showPantalla','actualizarDato4', 'registrarNombre', 'registrarEntidad','callMetodo','callMetodo3']),
       
-      obtenerTipoRutinas(){
+      obtenerTipoPlanes(){
         // Método para obtener los campos de la lista
-        axios.get("http://localhost:8080/api/tiporutina/listar")
+        axios.get("http://localhost:8080/api/tipoplan/listar")
         .then((response)=>{
           this.nombres= response.data;
           this.codigo=null;
         })
         .catch((error)=>{
-          console.error("Error al obtener tipos de rutina: ", error);
+          console.error("Error al obtener tipos de plan: ", error);
         })
       },
 
       eliminar(value){
         this.codigo= value;
       axios
-        .delete('http://localhost:8080/api/tiporutina/'+this.codigo)
+        .delete('http://localhost:8080/api/tipoplan/'+this.codigo)
         .then(()=>{
-          console.log("Tipo de rutina eliminado con exito");
+          console.log("Tipo de plan eliminado con exito");
           //Limpiar los campos del formulario despues de eliminar          
           this.codigo = null;
           this.$emit('escuchartable');          
-          this.obtenerTipoRutinas();
+          this.obtenerTipoPlanes();
         })
         .catch((error)=>{
-          console.log("Error al eliminar el tipo de rutina", error);
+          console.log("Error al eliminar el tipo de plan", error);
           alert("No se puede borrar, este dato esta siendo usado.");
           this.codigo=null;
         });
@@ -82,7 +82,7 @@ import { mapActions, mapState } from "vuex";
       callMetodoN(){
         if(this.retorno2=='retorno'){
           if(this.codigo==null){
-            this.$router.push('rutina');
+            this.$router.push('plan');
           }
         }     
       },
@@ -91,7 +91,7 @@ import { mapActions, mapState } from "vuex";
       }
     },
     mounted(){
-      this.obtenerTipoRutinas();
+      this.obtenerTipoPlanes();
     },
   }
 </script>
