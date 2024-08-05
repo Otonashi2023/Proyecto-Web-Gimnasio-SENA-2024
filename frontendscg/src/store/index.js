@@ -1,5 +1,16 @@
 import { createStore } from 'vuex'
 import createPersistedState from 'vuex-persistedstate';
+import aprendiz from './modules/aprendiz';
+import aprendizPlan from './modules/aprendizPlan';
+import asistencia from './modules/asistencia';
+import datosEjercicio from './modules/datosEjercicio';
+import ficha from './modules/ficha';
+import fichaAntropometrica from './modules/fichaAntropometrica';
+import perimetros from './modules/perimetros';
+import persona from './modules/persona';
+import personal from './modules/personal';
+import usuarios from './modules/usuarios';
+import variables from './modules/variables';
 //import axios from 'axios';
 
 export default createStore({
@@ -10,7 +21,6 @@ export default createStore({
     metodo4:null,
     metodo5:null,
     
-    pantalla:false,
     retorno:'',
     retorno2:'',
     retorno3:"",
@@ -26,7 +36,6 @@ export default createStore({
     dato7:null,
     dato8:null,
     dato9:null,
-    nombreE:null,
 
     nombre:"",
     tipoEjercicio:"",
@@ -34,9 +43,6 @@ export default createStore({
     rutina:"",
     ejercicio:"",
     plan:"",
-
-    entidad:null,
-    entidad2:null,
 
     visibleIn:false,
     visibleOut:true,
@@ -51,8 +57,6 @@ export default createStore({
     obtenerMetodo4:(state)=>state.metodo4,
     obtenerMetodo5:(state)=>state.metodo5,
     
-
-    getPantalla: (state)=> state.pantalla,
     getRetorno: (state)=> state.retorno,
     getRetorno2: (state)=> state.retorno2,
     getRetorno3: (state)=> state.retorno3,
@@ -68,7 +72,6 @@ export default createStore({
     obtenerDato7: (state)=> state.dato7,
     obtenerDato8: (state)=> state.dato8,
     obtenerDato9: (state)=> state.dato9,
-    obtenerNombreE:(state)=>state.nombreE,
 
     getNombre: (state)=> state.nombre,
     getTipoEjercicio: (state)=> state.tipoEjercicio,
@@ -76,9 +79,6 @@ export default createStore({
     getRutina: (state)=> state.rutina,
     getEjercicio: (state)=> state.ejercicio,
     getPlan: (state)=> state.plan,
-
-    getEntidad: (state)=> state.entidad,
-    getEntidad2: (state)=> state.entidad2,
 
     inVisible: state => state.visibleIn,
     outVisible: state => state.visibleOut,
@@ -117,13 +117,6 @@ export default createStore({
       state.metodo5 = null;
     },
 
-
-    setPantalla(state, nuevodato){
-      state.pantalla =nuevodato;
-    },
-    clearPantalla(state){
-      state.pantalla = null;
-    },
     setRetorno(state, nuevodato){
       state.retorno =nuevodato;
     },
@@ -142,7 +135,6 @@ export default createStore({
     clearRetorno3(state){
       state.retorno3 = null;
     },
-
 
     setDatoact1(state, nuevodato){
       state.datoact1 = nuevodato;
@@ -210,13 +202,6 @@ export default createStore({
     clearDato9(state){
       state.dato9 = null;
     },
-    setNombreE(state, nombre){
-      state.nombreE = nombre;
-    },
-    clearNombreE(state){
-      state.nombreE = null;
-    },
-
 
     setNombre(state, nuevodato){
       state.nombre = nuevodato;
@@ -256,20 +241,6 @@ export default createStore({
     },
 
 
-    setEntidad(state, nuevodato){
-      state.entidad = nuevodato;
-    },
-    clearEntidad(state){
-      state.entidad = "";
-    },
-    setEntidad2(state, nuevodato){
-      state.entidad2 = nuevodato;
-    },
-    clearEntidad2(state){
-      state.entidad2 = "";
-    },
-
-
     setVisibleIn(state, visible){
       state.visibleIn = visible
     },
@@ -282,7 +253,6 @@ export default createStore({
     clearVisibleOut(state){
       state.visibleOut =true;
     },
-
 
     setUser(state, user){
       state.user = user;
@@ -365,12 +335,6 @@ export default createStore({
       }
     },
 
-    showPantalla({commit},nuevodato){
-      commit('setPantalla',nuevodato);
-    },
-    hiddenPantalla({commit}){
-      commit('clearPantalla');
-    },
     actualizarRetorno({commit},nuevodato){
       commit('setRetorno', nuevodato);
     },
@@ -457,12 +421,6 @@ export default createStore({
     limpiarDato9({commit}){
       commit('clearDato9');
     },
-    registrarNombreE({commit}, nombre){
-      commit('setNombreE',nombre);
-    },
-    limpiarNombreE({commit}){
-      commit('clearNombreE');
-    },
 
     
     registrarNombre({commit}, nombre){
@@ -503,20 +461,6 @@ export default createStore({
     },
 
 
-    registrarEntidad({commit}, nombre){
-      commit('setEntidad',nombre);
-    },
-    limpiarEntidad({commit}){
-      commit('clearEntidad');
-    },
-    registrarEntidad2({commit}, nombre){
-      commit('setEntidad2',nombre);
-    },
-    limpiarEntidad2({commit}){
-      commit('clearEntidad2');
-    },
-
-
     updateVisibleIn({commit},visible){
       commit('setVisibleIn', visible);
     },
@@ -540,5 +484,16 @@ export default createStore({
   plugins: [createPersistedState()],
 
   modules: {
+    datosEjercicio,
+    ficha,
+    aprendiz,
+    aprendizPlan,
+    asistencia,
+    fichaAntropometrica,
+    perimetros,
+    persona,
+    personal,
+    variables,
+    usuarios,
   }
 });

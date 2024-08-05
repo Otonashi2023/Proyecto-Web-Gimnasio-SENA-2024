@@ -1,11 +1,10 @@
 <template>
     <div class="view">
         <div class="components">
-            <FormTipoDocumento @escucharForm="puente" ref="componenteForm"/>
-            <TablaTipoDocumento ref="componente" @ById="idcodigo" @change="update" @escuchartable="tabla"/>
+            <FormTipoDocumento @escucharForm="puente" ref="componenteForm" @clearId="jumper"/>
+            <TablaTipoDocumento ref="componente" @ById="read" @change="update" @escuchartable="tabla"/>
         </div>
     </div>
-
 </template>
 
 <script>
@@ -18,18 +17,26 @@ export default{
         FormTipoDocumento,
         TablaTipoDocumento
     },
+    computed:{
+        user() {
+            return this.$store.state.user;
+        },
+    },
     methods:{
         puente(){
             this.$refs.componente.obtenerTipoDocumentos();
         },
-        idcodigo(value){
-            this.$refs.componenteForm.consultar(value);
+        read(value){
+            this.$refs.componenteForm.read(value);
         },
         update(value){
-            this.$refs.componenteForm.consultarT(value);
+            this.$refs.componenteForm.update(value);
         },
         tabla(){
             this.$refs.componenteForm.cerrar();
+        },
+        jumper(){
+            this.$refs.componente.limpiarId();
         }
     }
 }

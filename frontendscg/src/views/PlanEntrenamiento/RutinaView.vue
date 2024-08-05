@@ -1,5 +1,5 @@
 <template>
-    <div class="view" v-show="mostrar">
+    <div class="view">
         <div class="components">
             <div id="up">
                 <h1 id="alitext">Rutina</h1>
@@ -29,7 +29,6 @@ export default{
         return{
             formulario:false,
             listar:true,
-            mostrar:true,
         }
     },
     computed:{
@@ -38,7 +37,8 @@ export default{
         },
     },  
     methods:{
-        ...mapActions(['limpiarNombre','limpiarRetorno2','limpiarDatoact2','limpiarDato4','limpiarRutina','limpiarDato8']),
+        ...mapActions(['limpiarNombre','limpiarRetorno2','limpiarDatoact2','limpiarDato4','limpiarRutina','limpiarDato8','limpiarDato6']),
+        
         cambiar(){
             this.formulario=true;
             this.listar=false;
@@ -72,9 +72,10 @@ export default{
         },
         limpiarDatos(){
             this.limpiarDato4();
-            this.limpiarNombre();
-            this.limpiarRutina();
+            this.limpiarNombre();            
             this.limpiarDato8();
+            this.limpiarDato6();
+            this.limpiarRutina();
             this.limpiarDatoact2();
         }
     },

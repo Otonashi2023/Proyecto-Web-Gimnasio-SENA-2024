@@ -1,6 +1,6 @@
 <template>
   <AboutView/>
-  <div id ="lista" >Lista de comandos de los componentes para ingresar en el buscador
+  <!--div id ="lista" >Lista de comandos de los componentes para ingresar en el buscador
       <ul id="listando">
         <li>cargo</li>
         <li>genero</li>
@@ -14,7 +14,7 @@
         <li>rutina</li>
         <li>rutiejercicio</li>
       </ul>
-    </div>
+    </div-->
   <div class="estilo">
     <p style="color: red">Este_</p>
     <p style="color:orangered">espacio_</p>

@@ -66,21 +66,6 @@ export default {
         });
     },
 
-    consultarT(value){
-      this.codigo=value;
-      axios
-        .get('http://localhost:8080/api/tipodocumento/'+this.codigo)
-        .then((response)=>{
-          //actualiza los campos del formulario con los datos consultados
-          this.nombre= response.data.nombre;
-          this.salvar=false;
-          this.modificar=true;
-        })
-        .catch((error) =>{
-          console.error("Error al consultar tipo de documento: ", error);
-        });
-    },
-
     actualizar(){
       axios
         .put('http://localhost:8080/api/tipodocumento/actualizar/'+this.codigo,{
@@ -97,11 +82,21 @@ export default {
         console.error("Error al actualizar el tipo de documentoo", error);
       });
     },
+
+    read(value){
+      this.consultar(value);
+    },
+    update(value){
+      this.consultar(value);
+      this.salvar=false;
+      this.modificar=true;
+    },
     cerrar(){
       this.modificar= false;
       this.salvar= true;
       this.nombre= "";
       this.focusInput();
+      this.$emit('clearId');
     },
     focusInput(){
     this.$refs.myInput.focus();

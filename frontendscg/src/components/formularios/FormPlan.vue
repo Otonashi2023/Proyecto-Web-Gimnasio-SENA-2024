@@ -37,11 +37,11 @@ export default {
   },
 
   computed:{
-    ...mapState(['dato5','nombre','dato9','dato4','datoact1','datoact2','retorno']),...mapGetters(['getNombre'])
+    ...mapState(['dato5','nombre','dato9','dato4','datoact1','datoact2','retorno3']),...mapGetters(['getNombre','obtenerDato9'])
   },
   created(){
     if(this.datoact2!=null){
-      this.numero=this.dato3;
+      this.numero=this.dato4;
     }
     
   },
@@ -74,7 +74,7 @@ export default {
         console.log("Plan registrado con exito", response.data);
         alert("El plan es registrado con exito");
         this.$emit('leave');
-        if(this.retorno=='retorno'){
+        if(this.retorno3=='retorno'){
           this.actualizarDato5(response.data.codigo);
           this.antesderoutear();
           this.$router.push('planRutina');
@@ -114,7 +114,7 @@ export default {
       .then((response)=>{
         console.log("Plan actualizado con exito", response.data);
         this.$emit('leave');
-        if(this.retorno=='retorno'){
+        if(this.retorno3=='retorno'){
           this.actualizarDato5(this.codigo);
           this.antesderoutear();
           this.$router.push('planRutina');
@@ -155,13 +155,18 @@ export default {
       this.salvar=false;
       }
       this.nombre=this.getNombre;
+      this.numero=this.obtenerDato9;
     },
     antesderoutear(){
       this.habilitar=1;
       this.consultar(this.dato5);
     },
+    datos(){
+      this.actualizarDato9(this.numero);
+    },
 
     callMetodoN(){
+      this.datos();
       this.actualizarRetorno2('retorno');
       this.$router.push('tipoPlan');
     },

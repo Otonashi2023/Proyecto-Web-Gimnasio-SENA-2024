@@ -1,11 +1,10 @@
 <template>
     <div class="view">
         <div class="components">
-            <FormGenero @escucharForm="puente" ref="componenteForm"/>
-            <TablaGenero ref="componente" @ById="idcodigo" @change="update" @escuchartable="tabla"/>
+            <FormGenero @escucharForm="puente" ref="componenteForm" @clearId="jumper"/>
+            <TablaGenero ref="componente" @ById="read" @change="update" @escuchartable="tabla"/>
         </div>
     </div>
-
 </template>
 
 <script>
@@ -18,18 +17,26 @@ export default{
         FormGenero,
         TablaGenero
     },
+    computed:{
+        user() {
+            return this.$store.state.user;
+        },
+    },
     methods:{
         puente(){
             this.$refs.componente.obtenerGeneros();
         },
-        idcodigo(value){
-            this.$refs.componenteForm.consultar(value);
+        read(value){
+            this.$refs.componenteForm.read(value);
         },
         update(value){
-            this.$refs.componenteForm.consultarT(value);
+            this.$refs.componenteForm.update(value);
         },
         tabla(){
             this.$refs.componenteForm.cerrar();
+        },
+        jumper(){
+            this.$refs.componente.limpiarId();
         }
     }
 }

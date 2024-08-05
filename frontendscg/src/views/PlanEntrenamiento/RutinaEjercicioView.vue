@@ -29,7 +29,6 @@ export default{
         return{
             formulario:false,
             listar:true,
-            mostrar:true,
         }
     },
     computed:{
@@ -38,6 +37,7 @@ export default{
         },
     },
     methods:{
+        ...mapActions('variables',['limpiarEjercicios','limpiarArrayE']),
         ...mapActions(['limpiarDato6','limpiarDato7','limpiarRutina','limpiarEjercicio','limpiarDato8','limpiarRetorno','limpiarNombre','limpiarRetorno2','limpiarDato4']),
 
         cambiar(){
@@ -47,32 +47,33 @@ export default{
         irAformulario(){
             this.cambiar();
             this.limpiarDatos();
-            this.$refs.componenteForm.cerrar();
+            //this.$refs.componenteForm.cerrar();
         },
         salir(){
             this.formulario=false;
             this.listar=true;
             this.limpiarDatos();
             this.$refs.componente.obtenerRutinaEjercicios();
+            this.$refs.componenteForm.agregarEjercicio();
         },
-        read(value){
+        read(value1,value2){
             this.cambiar();
-            this.$refs.componenteForm.read(value);
+            this.$refs.componenteForm.read(value1,value2);
         },
-        update(value){
+        /*update(value1,value2){
             this.cambiar();
-            this.$refs.componenteForm.update(value);
+            this.$refs.componenteForm.update(value1,value2);
         },
         tabla(){
             this.$refs.componenteForm.cerrar();
         },
         jumper(){
             this.$refs.componente.limpiarId();
-        },
+        },*/
         inData(){
             this.cambiar();
             this.limpiarRetorno2();
-            this.$refs.componenteForm.variar();
+            //this.$refs.componenteForm.variar();
         },
         limpiarDatos(){
             this.limpiarDato6();
@@ -84,6 +85,8 @@ export default{
             this.limpiarEjercicio();
             this.limpiarRetorno();
             this.limpiarRetorno2();
+            this.limpiarEjercicios();
+            this.limpiarArrayE();
         },
     },
 }

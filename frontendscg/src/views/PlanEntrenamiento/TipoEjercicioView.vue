@@ -2,10 +2,9 @@
     <div class="view">
         <div class="components">
             <FormTipoEjercicio @escucharForm="puente" ref="componenteForm" @clearId="jumper"/>
-            <TablaTipoEjercicio ref="componente" @ById="idcodigo" @change="update" @escuchartable="tabla"/>
+            <TablaTipoEjercicio ref="componente" @ById="read" @change="update" @escuchartable="tabla"/>
         </div>
     </div>
-
 </template>
 
 <script>
@@ -27,7 +26,7 @@ export default{
         puente(){
             this.$refs.componente.obtenerTipoEjercicios();
         },
-        idcodigo(value){
+        read(value){
             this.$refs.componenteForm.read(value);
         },
         update(value){

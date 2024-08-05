@@ -10,7 +10,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr id="fila2" v-for="nombre in nombres" :key="nombre.codigo" @click="() => {callMetodoT(); consultarbyId(nombre.codigo); consultarbyName(nombre.nombre)}">
+          <tr id="fila2" v-for="nombre in nombres" :key="nombre.codigo" @click="() => {callMetodoT(); consultarbyId(nombre.codigo); registrarTipoEjercicio(nombre.nombre)}">
             <td>{{ nombre.nombre }}</td>
             <td id="alibutton">
                 <font-awesome-icon icon="edit" id="editar" @click="actualizar(nombre.codigo)"/>
@@ -32,9 +32,9 @@ import { mapActions, mapState } from "vuex";
         codigo: null,
       }
     },
-    computed:{...mapState(['retorno'])},
+    computed:{...mapState(['retorno2'])},
     methods: {
-      ...mapActions(['showPantalla','actualizarDato2', 'registrarTipoEjercicio', 'registrarEntidad', 'callMetodo','callMetodo2']),
+      ...mapActions(['actualizarDato2', 'registrarTipoEjercicio']),
 
       obtenerTipoEjercicios(){
         // Método para obtener los campos de la lista
@@ -76,16 +76,10 @@ import { mapActions, mapState } from "vuex";
         this.codigo=value;
         this.$emit('change',this.codigo);
       },
-      consultarbyName(value){
-        this.registrarTipoEjercicio(value);
-      },
       callMetodoT(){
-        if(this.retorno=='retorno'){
+        if(this.retorno2=='retorno'){
           if(this.codigo==null){
-            this.registrarEntidad('');
-            this.callMetodo();
-            this.showPantalla(true);
-            this.callMetodo2();
+            this.$router.push('ejercicio');
           }
         }     
       },

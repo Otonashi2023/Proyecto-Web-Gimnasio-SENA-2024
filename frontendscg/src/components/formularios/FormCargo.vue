@@ -60,22 +60,6 @@ export default {
           //actualiza los campos del formulario con los datos consultados
           this.nombre = response.data.nombre;
           this.focusInput();
-
-        })
-        .catch((error) =>{
-          console.error("Error al consultar nombre del cargo: ", error);
-        });
-    },
-
-    consultarT(value){
-      this.codigo=value;
-      axios
-        .get('http://localhost:8080/api/cargo/'+this.codigo)
-        .then((response)=>{
-          //actualiza los campos del formulario con los datos consultados
-          this.nombre= response.data.nombre;
-          this.salvar=false;
-          this.modificar=true;
         })
         .catch((error) =>{
           console.error("Error al consultar nombre del cargo: ", error);
@@ -98,11 +82,21 @@ export default {
         console.error("Error al actualizar el nombre del cargo", error);
       });
     },
+
+    read(value){
+      this.consultar(value);
+    },
+    update(value){
+      this.consultar(value);
+      this.salvar=false;
+      this.modificar=true;
+    },
     cerrar(){
       this.modificar= false;
       this.salvar= true;
       this.nombre= "";
       this.focusInput();
+      this.$emit('clearId');
     },
     focusInput(){
     this.$refs.myInput.focus();

@@ -90,14 +90,20 @@ body{
   margin: 0px 35px 10px 35px;
 }
 
-input[type="password"],input[type="text"],input[type=email],input[type="number"]{
+input[type="password"],input[type="text"],input[type=email],input[type="number"],input[type="adrees"]{
   margin-top: 8px;
   padding: 5px 15px 5px 15px;
   width: 364px;
   background-color: #efefef;
   height: 30px;
   border-radius: 5px;
+  outline: #FFFFFF;
+  border-color: var(--color-blanco);
+  transition: border-color 0.3s;
 }
+input:focus {
+      border-color: var(--color-gris-medio)
+    }
 
 p,h1{
   zoom:95%;
@@ -400,19 +406,34 @@ table{
 }
 
 th, td{
+  text-wrap: balance;
   padding: 8px;
   text-align: left;
   border-bottom: 1px solid var(--color-gris-medio);
+  transition: 0.3s;
 }
-
 thead{
   background-color:var(--color-morado);
   color: white;
 }
 
+.head2 td{
+  background-color: var(--color-gris-claro);
+  font-weight: 600;
+  border-bottom:3px solid var(--color-gris-medio)
+}
+#space{
+  width: 150px;
+}
 tr:hover td:nth-of-type(1n+1) {
   transition: 0.1s ease;
   background-color: var(--color-gris-medio);
+  border-bottom:1px solid var(--color-gris-claro);
+}
+tr:hover .head2 {
+  border-bottom:3px solid var(--color-gris-claro);
+  color: var(--color-morado);
+  font-weight: 600;
 }
 
 #scroll{
@@ -422,7 +443,20 @@ tr:hover td:nth-of-type(1n+1) {
   height: 60vh;
   white-space: nowrap;
 }
-
+#scroll2{
+  overflow-x: auto;
+  overflow-y: auto;
+  width: auto;
+  height: 40vh;
+  white-space: nowrap;
+}
+#scroll3{
+  overflow-x: auto;
+  overflow-y: auto;
+  width: auto;
+  height: 80vh;
+  white-space: nowrap;
+}
 #fila2{
   cursor: pointer;
 }
@@ -469,6 +503,7 @@ tr:hover td:nth-of-type(1n+1) {
 #cerrar3 :hover{
   color: var(--color-rojo);
 }
+
 #editar{
   margin: 0 9px;
   padding: 0%;
@@ -493,8 +528,7 @@ tr:hover td:nth-of-type(1n+1) {
 }
 
 #alibutton{
-  display: flex;
-  justify-content: end;
+  text-align: right;
 }
 
 #rigth{

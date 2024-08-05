@@ -10,7 +10,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr id="fila2" v-for="nombre in nombres" :key="nombre.codigo" @click="() => {callMetodoM(); consultarbyId(nombre.codigo); consultarbyName(nombre.nombre)}">
+          <tr id="fila2" v-for="nombre in nombres" :key="nombre.codigo" @click="() => {callMetodoM(); consultarbyId(nombre.codigo); registrarMusculo(nombre.nombre)}">
             <td>{{ nombre.nombre }}</td>
             <td id="alibutton">
                 <font-awesome-icon icon="edit" id="editar" @click="actualizar(nombre.codigo)"/>
@@ -32,9 +32,9 @@ import { mapActions, mapState } from "vuex";
         codigo: null,
       }
     },
-    computed:{...mapState(['retorno'])},
+    computed:{...mapState(['retorno2','musculo'])},
     methods: {
-      ...mapActions(['showPantalla','actualizarDato3', 'registrarMusculo', 'registrarEntidad', 'callMetodo','callMetodo2']),
+      ...mapActions(['actualizarDato3', 'registrarMusculo']),
 
       obtenerMusculos(){
         // Método para obtener los campos de la lista
@@ -69,23 +69,17 @@ import { mapActions, mapState } from "vuex";
       consultarbyId(value){
         if(this.codigo==null){
           this.actualizarDato3(value);
-        this.$emit('ById',this.value);
+          this.$emit('ById',value);
         }
       },
       actualizar(value){
         this.codigo=value;
         this.$emit('change',this.codigo);
       },
-      consultarbyName(value){
-        this.registrarMusculo(value);
-      },
       callMetodoM(){
-        if(this.retorno=='retorno'){
+        if(this.retorno2=='retorno'){
           if(this.codigo==null){
-            this.registrarEntidad('');
-            this.callMetodo();
-            this.showPantalla(true);
-            this.callMetodo2();
+            this.$router.push('ejercicio');
           }
         }    
       },

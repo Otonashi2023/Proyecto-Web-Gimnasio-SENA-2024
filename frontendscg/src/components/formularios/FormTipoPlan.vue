@@ -114,7 +114,7 @@ export default {
     },
     antesderoutear(){
       this.habilitar=1;
-      this.consultar(this.dato4);
+      this.consultar(this.dato5);
     },
   },
   mounted() {

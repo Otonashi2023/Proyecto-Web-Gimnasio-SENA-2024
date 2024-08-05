@@ -39,7 +39,8 @@ import { mapActions, mapState } from "vuex";
     },
     computed:{...mapState(['retorno','retorno2','retorno3'])},
     methods: {
-      ...mapActions(['actualizarDato6','actualizarDato8','registrarRutina']),
+      ...mapActions('variables',['limpiarEjercicios','limpiarArrayE']),
+      ...mapActions(['actualizarDato6','actualizarDato8','registrarRutina','limpiarEjercicio']),
 
       obtenerRutinas(){
         // Método para obtener los campos de la lista
@@ -91,6 +92,9 @@ import { mapActions, mapState } from "vuex";
         }
         else if(this.retorno=='retorno'){
           if(this.codigo==null){
+            this.limpiarEjercicio();
+            this.limpiarArrayE();
+            this.limpiarEjercicios();
             this.$router.push('rutinaEjercicio');
           }
         }

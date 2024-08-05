@@ -8,24 +8,34 @@
           <tr>
             <th>Planes</th>
             <th>Meses</th>
-            <th>Rutinas</th>
+            <th style="text-align: center;">Rutinas</th>
             <th id="rigth">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr id="fila2" v-for="plan_rutina in plan_rutinas" :key="plan_rutina.codigo" @click="consultarbyId(plan_rutina.codigo)">
-            <td>{{ plan_rutina.plan.tipoPlan.nombre}}</td>
-            <td>{{ plan_rutina.plan.meses }}</td>
-            <td>{{ plan_rutina.rutina.tipoRutina.nombre }} {{ plan_rutina.rutina.numero }}</td>
+          <tr id="fila2" v-for="(item, index) in finalData" :key="index" @click="consultarbyId(item.plan.codigo)">
+            <td>{{ item.plan.tipoPlan.nombre}}</td>
+            <td>{{ item.plan.meses }}</td>
+            <td style="width: 70%;">
+              <tr class="head2">
+                <td style="width:500px">Rutina</td>
+                <td style="width:500px">Version</td>
+              </tr>
+              <tr v-for="(rutina, i) in item.rutinas" :key="i">
+                <td id="space">{{ rutina.tipoRutina.nombre }}</td>
+                <td id="space">{{ rutina.numero }}</td>
+              </tr>
+            </td>
             <td id="alibutton">
-                <font-awesome-icon icon="edit" id="editar" @click="actualizar(plan_rutina.codigo)"/>
-                <font-awesome-icon icon="trash" id="eliminar" @click="eliminar(plan_rutina.codigo)"/>
+                <font-awesome-icon icon="edit" id="editar" @click="actualizar(item.plan.codigo)"/>
+                <font-awesome-icon icon="trash" id="eliminar" @click="eliminar(item.plan.codigo)"/>
             </td>            
           </tr>      
         </tbody>
       </table>
       </div>      
     </div>
+    <p>{{ capsula }}</p>
   </template>
   
   <script>
@@ -35,25 +45,47 @@
   export default {
     data(){
       return{
-        plan_rutinas:[],
+        finalData:[],
         codigo:null,
       }
     },
-    computed:{...mapState(['retorno3'])},
+    computed:{...mapState(['retorno3', 'capsula'])},
   
     methods: {
       ...mapActions(['limpiarDatoact1']),
+
       obtenerPlanRutinas(){
         // Método para obtener los campos de la lista
         axios.get("http://localhost:8080/api/planrutina/listar")
         .then((response)=>{
-          this.plan_rutinas= response.data;
+          const data= response.data;
+          if (Array.isArray(data)) {
+            const jsonString=JSON.stringify(data,null,2);
+            console.log('%c'+ jsonString, 'color:yellow; font-weigth:bold;');
+            this.originalData = data; // Guardar los datos originales
+            this.finalData = this.groupDataByName(data);
+            console.log('Datos agrupados:', this.finalData);
+          } else {
+            console.error('La respuesta de la API no es un array:', data);
+          }
           this.codigo=null;
         })
         .catch((error)=>{
           console.error("Error al obtener plan_rutina: ", error);
         })
       },
+      groupDataByName(data) {
+      const groupedData = data.reduce((acc, item) => {
+        const key = `${item.plan.tipoPlan.nombre}_${item.plan.numero}`;
+        if (!acc[key]) {
+          acc[key] = { plan: item.plan, rutinas: [] };
+        }
+        acc[key].rutinas.push(item.rutina);
+        return acc;
+      }, {});
+      return Object.values(groupedData);
+    },
+
       eliminar(value){
         this.codigo= value;
       axios
@@ -91,4 +123,4 @@
       this.formulario();
     },
   }
-  </script>
+</script>

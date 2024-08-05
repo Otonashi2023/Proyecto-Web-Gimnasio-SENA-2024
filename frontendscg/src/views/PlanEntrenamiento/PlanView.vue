@@ -1,5 +1,5 @@
 <template>
-    <div class="view" v-show="mostrar">
+    <div class="view">
         <div class="components">
             <div id="up">
                 <h1 id="alitext">Plan</h1>
@@ -29,7 +29,6 @@ export default{
         return{
             formulario:false,
             listar:true,
-            mostrar:true,
         }
     },
     computed:{

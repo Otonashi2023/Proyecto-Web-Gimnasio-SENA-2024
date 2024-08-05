@@ -4,11 +4,11 @@
       <form @submit.prevent="servicio()" >
         <div class="comp-form-group">
           <div class="form-group">
-            <label for="plan">Plan: Meses {{ dato9 }}</label>
+            <label for="plan">Plan: {{ dato9 }} meses</label>
             <input type="text" @click="callMetodoP"  name="plan" id="input2" v-model="plan" placeholder="haz click para ingresar el plan" readonly>
           </div>
           <div class="form-group">
-            <label for="rutina">Rutina: </label>
+            <label for="rutina">Rutina: version {{ dato8 }}</label>
             <input type="text" @click="callMetodoR" name="rutina" id="input2" v-model="rutina" placeholder="haz click para ingresar la rutina" readonly>
           </div>
           <div class="form-group">
@@ -35,12 +35,12 @@
     },
   
     computed:{
-      ...mapState(['dato5','dato6','dato9','plan','rutina','datoact1', 'retorno3']),
+      ...mapState(['dato5','dato6','dato9','plan','rutina','datoact1', 'retorno3','dato8']),
     },
     //metodos CRUD
     methods:{
       ...mapActions(['actualizarRetorno3','actualizarDato5','registrarPlan','actualizarDato6','registrarRutina',
-      'actualizarDato9','actualizarDatoact1','limpiarDatoact1','limpiarRetorno3']),
+      'actualizarDato9','actualizarDatoact1','limpiarDatoact1','limpiarRetorno3','actualizarDato8']),
       servicio(){
         if(this.salvar==true){
           if(this.dato5!=null && this.dato6!=null){
@@ -82,6 +82,7 @@
             this.actualizarDato6(response.data.rutina.codigo);
             this.registrarRutina(response.data.rutina.tipoRutina.nombre);
             this.actualizarDato9(response.data.plan.meses );
+            this.actualizarDato8(response.data.rutina.numero);
           })
           .catch((error) =>{
             console.error("Error al consultar plan de entrenamiento: ", error);
@@ -133,6 +134,7 @@
         this.modificar=true;
         this.salvar=false;
         }
+
       },
       
       callMetodoP(){
@@ -142,8 +144,8 @@
       },
       callMetodoR(){
         this.actualizarRetorno3('retorno');
-        this.$router.push('rutina');
+        this.$router.push('rutinaEjercicio');
       },
     },
   }
-  </script>
+</script>

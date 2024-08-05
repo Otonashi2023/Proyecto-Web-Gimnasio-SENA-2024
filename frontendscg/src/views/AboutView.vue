@@ -1,5 +1,9 @@
 <template>
-  <div>      
+  <div>     
+  <!--p>dato={{ dato }} __dato2={{ dato2 }} __dato3={{ dato3 }} __dato4={{ dato4 }} __dato5={{ dato5 }} __dato6={{ dato6 }} __dato7={{ dato7 }} __dato8={{ dato8 }} __dato9={{ dato9 }} __</p>
+    <p>nombre={{ nombre }} __tipoEjericio={{ tipoEjercicio }}    __musculo={{ musculo }}</p>
+  <p>ejercicio={{ ejercicio }} __rutina={{ rutina }} __plan={{ plan }}</p>
+  <p>nombreE={{ nombreE }} __entidad={{ entidad }} __entidad2={{ entidad2 }} __retorno={{ retorno }} __retorno2={{ retorno }}</p-->
   <!--routers-->
     <div v-if="componentToShow === 'nombre ejercicio'"><NombreEjercicioView/></div>
     <div v-if="componentToShow === 'tipo ejercicio'"><TipoEjercicioView/></div>
@@ -12,8 +16,10 @@
     <div v-if="componentToShow === 'ejercicio'"><EjercicioView /></div>
     <div v-if="componentToShow === 'rutina'"><RutinaView /></div>
     <div v-if="componentToShow === 'rutiejercicio'"><RutinaEjercicioView /></div><!--p>se esta trabajando</p-->
-  </div>  
+  </div>
+  <div></div>
 </template>
+
 <script>
 import CargoView from './Personal/CargoView.vue'
 import MusculoView from './PlanEntrenamiento/MusculoView.vue'
@@ -26,10 +32,10 @@ import FormacionView from './Aprendiz/FormacionView.vue'
 import EjercicioView from './PlanEntrenamiento/EjercicioView.vue'
 import RutinaView from './PlanEntrenamiento/RutinaView.vue'
 import RutinaEjercicioView from './PlanEntrenamiento/RutinaEjercicioView.vue'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters} from 'vuex'
 
 export default {
-  name: 'HomeView',
+  name: 'AboutView',
     components: {
     NombreEjercicioView,
     TipoEjercicioView,
@@ -41,10 +47,10 @@ export default {
     FormacionView,
     EjercicioView,
     RutinaView,
-    RutinaEjercicioView
-    
+    RutinaEjercicioView,
     },
   computed: {
+    //...mapState(['dato','dato2','dato3','dato4','dato5','dato6','dato7','dato8','dato9','nombre','tipoEjercicio','musculo','ejercicio','rutina','plan','nombreE','enitdad','Entidad2','retorno','retorno2']),
     ...mapGetters(['getEntidad']),
     user() {
       return this.$store.state.user;

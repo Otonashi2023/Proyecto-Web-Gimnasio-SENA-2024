@@ -1,5 +1,5 @@
 <template>
-    <div class="view" v-show="mostrar">
+    <div class="view">
         <div class="components">
             <div id="up">
                 <h1 id="alitext">Ejercicios</h1>
@@ -8,8 +8,8 @@
                     <font-awesome-icon icon="circle-xmark" id="cerrar2" v-if="formulario" @click="salir"/>
                 </div>
             </div>
-            <div v-show="formulario"><FormEjercicio @leave="salir" ref="componenteForm" @display="pantalla" @clearId="jumper"/></div>
-            <div v-show="listar"><TablaEjercicio ref="componente" @ById="read" @change="update" @escuchartable="tabla"/></div>
+            <div v-show="formulario"><FormEjercicio @leave="salir" ref="componenteForm"/></div>
+            <div v-show="listar"><TablaEjercicio ref="componente" @ById="read" @change="update" @escuchartable="tabla" @goForm="inData"/></div>
         </div>
     </div>
 </template>
@@ -17,7 +17,7 @@
 <script>
 import FormEjercicio from '@/components/formularios/FormEjercicio.vue'
 import TablaEjercicio from '@/components/tablas/TablaEjercicio.vue'
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default{
     name:'EjercicioView',
@@ -29,17 +29,16 @@ export default{
         return{
             formulario:false,
             listar:true,
-            mostrar:true,
         }
     },
-    computed:{...mapGetters(['getPantalla']),
+    computed:{
         user() {
                 return this.$store.state.user;
             },
     },
     methods:{
         ...mapActions(['limpiarDato','limpiarDato2','limpiarDato3','limpiarNombre','limpiarTipoEjercicio',
-        'limpiarMusculo', 'registrarMetodo2']),
+        'limpiarMusculo','limpiarEjercicio','limpiarDatoact2','limpiarRetorno2','limpiarDato7','actualizarDatoact2']),
 
         cambiar(){
             this.formulario=true;
@@ -67,8 +66,10 @@ export default{
         tabla(){
             this.$refs.componenteForm.cerrar();
         },
-        jumper(){
-            this.$refs.componente.limpiarId();
+        inData(){
+            this.cambiar();
+            this.limpiarRetorno2();
+            this.$refs.componenteForm.variar();
         },
         limpiarDatos(){
             this.limpiarDato();
@@ -77,13 +78,11 @@ export default{
             this.limpiarNombre();
             this.limpiarTipoEjercicio();
             this.limpiarMusculo();
+            this.limpiarDato7();
+            this.limpiarEjercicio();
+            this.limpiarDatoact2();
+            this.$refs.componenteForm.cerrar()
         },
-        pantalla(){
-            this.mostrar = this.getPantalla;
-        }
-    },
-    mounted(){
-        this.$store.dispatch('registrarMetodo2',this.pantalla);
     }
 }
 </script>

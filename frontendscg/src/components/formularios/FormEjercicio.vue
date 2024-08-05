@@ -44,11 +44,14 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import axios from "axios";
 export default {
   data() {
     return{
+      nombre:"",
+      tipoEjercicio:"",
+      musculo:"",
       series:"",
       repeticiones:"",
       descanso:"",
@@ -58,15 +61,23 @@ export default {
   },
 
   computed:{
-    ...mapState(['dato','dato2','dato3','nombre','tipoEjercicio','musculo']),
+    ...mapState(['dato','dato2','dato3','nombre','tipoEjercicio','musculo','retorno','datoact2','dato7']),...mapGetters(['getNombre','getTipoEjercicio','getMusculo']),
+    ...mapGetters('datosEjercicio',['getSeries','getRepeticiones','getDescanso']),
   },
 //metodos CRUD
   methods:{
-    ...mapActions(["showPantalla",'actualizarRetorno','actualizarDato','actualizarDato2','actualizarDato3','registrarNombre','registrarTipoEjercicio','registrarMusculo','registrarEntidad', 'callMetodo']),
+    ...mapActions(['actualizarDato7','actualizarRetorno2','actualizarDato','actualizarDato2','actualizarDato3','registrarNombre',
+    'registrarTipoEjercicio','registrarMusculo','limpiarDatoact2','actualizarDatoact2','registrarEjercicio']),
+    ...mapActions('datosEjercicio',['actualizarSeries','actualizarRepeticiones','actualizarDescanso']),
     
     servicio(){
       if(this.salvar==true){
-        this.guardar();
+        if(this.dato!=null && this.dato2!=null && this.dato3!=null){
+          this.guardar();
+        }
+        else{
+          alert("hay campos vacios");
+        } 
       }
       else {
         this.actualizar();       
@@ -86,7 +97,12 @@ export default {
       .then((response)=>{
         console.log("Ejercicio registrado con exito", response.data);
         alert("El ejercicio es registrado con exito");
-        this.$emit('leave');      
+        this.$emit('leave');
+        if(this.retorno=='retorno'){
+          this.actualizarDato7(response.data.codigo);
+          this.antesderoutear();
+          this.$router.push('rutinaEjercicio');
+        }           
       })
       .catch((error)=>{
         console.error("Error al registrar ejercicio:", error);
@@ -98,16 +114,19 @@ export default {
       axios
         .get('http://localhost:8080/api/ejercicio/'+this.codigo)
         .then((response)=>{
-          //actualiza los campos del formulario con los datos consultados
-          this.actualizarDato(response.data.nombre.codigo);
-          this.registrarNombre(response.data.nombre.nombre);
-          this.actualizarDato2(response.data.tipoEjercicio.codigo);
-          this.registrarTipoEjercicio(response.data.tipoEjercicio.nombre);
-          this.actualizarDato3(response.data.musculo.codigo);
-          this.registrarMusculo(response.data.musculo.nombre);
+              //actualiza los campos del formulario con los datos consultados
+          this.nombre = response.data.nombre.nombre;
+          this.tipoEjercicio = response.data.tipoEjercicio.nombre;
+          this.musculo = response.data.musculo.nombre;
           this.series = response.data.series;
           this.repeticiones = response.data.repeticiones;
           this.descanso = response.data.descanso;
+          this.actualizarDato(response.data.nombre.codigo);
+          this.actualizarDato2(response.data.tipoEjercicio.codigo);
+          this.actualizarDato3(response.data.musculo.codigo);
+          if(this.habilitar==1){
+            this.registrarEjercicio(response.data.nombre.nombre);
+          }
         })
         .catch((error) =>{
           console.error("Error al consultar ejercicio: ", error);
@@ -115,6 +134,7 @@ export default {
     },
 
     actualizar(){
+      this.codigo=this.datoact2;
       
       axios
         .put('http://localhost:8080/api/ejercicio/actualizar/'+this.codigo,{
@@ -128,6 +148,11 @@ export default {
       .then((response)=>{
         console.log("Ejercicio actualizado con exito", response.data);
         this.$emit('leave');
+        if(this.retorno=='retorno'){
+          this.actualizarDato7(this.codigo);
+          this.antesderoutear();
+          this.$router.push('rutinaEjercicio');
+        }
 
       })
       .catch((error)=>{
@@ -136,49 +161,71 @@ export default {
     },
     
     read(value){
+      this.limpiarDatoact2();
       this.consultar(value);
       this.rotar();
     },
     update(value){
       this.consultar(value);
-      this.salvar=false;
-      this.modificar=true;
+      this.actualizarDatoact2(value);
+      this.variar();
     },
     clear(){
+      this.nombre="";
+      this.tipoEjercicio="";
+      this.musculo="";
       this.series="";
       this.repeticiones="";
       this.descanso="";
-      this.cerrar();
     },
     cerrar(){
-        this.rotar();
-        this.$emit('clearId'); 
+      this.clear();
+      this.rotar();
+      this.limpiarDatoact2();
     },
     rotar(){
       this.modificar= false;
       this.salvar= true;
     },
+    variar(){
+      if(this.datoact2!=null){
+        this.modificar=true;
+        this.salvar=false;
+      }
+      this.nombre=this.getNombre;
+      this.tipoEjercicio=this.getTipoEjercicio;
+      this.musculo=this.getMusculo;
+      this.series=this.getSeries;
+      this.repeticiones=this.getRepeticiones;
+      this.descanso=this.getDescanso;
+    },
+    antesderoutear(){
+      this.habilitar=1;
+      this.consultar(this.dato7);
+    },
+    datos(){
+      this.registrarNombre(this.nombre);
+      this.registrarTipoEjercicio(this.tipoEjercicio);
+      this.registrarMusculo(this.musculo);
+      this.actualizarSeries(this.series);
+      this.actualizarRepeticiones(this.repeticiones);
+      this.actualizarDescanso(this.descanso);
+    },
 
     callMetodoN(){
-      this.actualizarRetorno('retorno');
-      this.registrarEntidad('nombre ejercicio');
-      this.callMetodo();
-      this.showPantalla(false);
-      this.$emit('display');
+      this.datos();
+      this.actualizarRetorno2('retorno');
+      this.$router.push('nombreEjercicio');
     },
     callMetodoT(){
-      this.actualizarRetorno('retorno');
-      this.registrarEntidad('tipo ejercicio');
-      this.callMetodo();
-      this.showPantalla(false);
-      this.$emit('display');
+      this.datos();
+      this.actualizarRetorno2('retorno');
+      this.$router.push('tipoEjercicio');
     },
     callMetodoM(){
-      this.actualizarRetorno('retorno');
-      this.registrarEntidad('musculo');
-      this.callMetodo();
-      this.showPantalla(false);
-      this.$emit('display');
+      this.datos();
+      this.actualizarRetorno2('retorno');
+      this.$router.push('musculo');
     },
   },
 }

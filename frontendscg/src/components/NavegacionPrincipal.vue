@@ -7,7 +7,7 @@
      <div class="items">
        <ul>
          <li><span class="material-icons-sharp">dashboard</span><router-link to="/" @click="limpiar">Panel de Control</router-link></li>
-         <li><span class="material-icons-sharp">assignment_ind</span><a @click="aprendices">Aprendices</a></li>
+         <li><span class="material-icons-sharp">assignment_ind</span><router-link to="/aprendiz" @click="limpiar">Aprendices</router-link></li>
          <li><span class="material-icons-sharp">supervisor_account</span><a @click="instructores">Instructores</a></li>
          <li><span class="material-icons-sharp">sports_score</span><router-link to="/planRutina" @click="limpiar">Planes</router-link></li>
          <li><span class="material-icons-sharp">list_alt</span><router-link to="/rutinaEjercicio" @click="limpiar">Rutinas</router-link></li>
@@ -36,7 +36,7 @@ export default {
     ...mapState(['user']),
   },
   methods:{
-    ...mapActions(['resetVisibleIn','resetVisibleOut','limpiarRetorno','limpiarEntidad','limpiarDatoact1','callMetodo','callMetodo2','showPantalla']),
+    ...mapActions(['resetVisibleIn','resetVisibleOut','limpiarRetorno','limpiarRetorno2','limpiarRetorno3','limpiarDatoact1','limpiarDatoact2']),
     logout(){
         this.$store.dispatch('logout');
         this.$router.push('/login');
@@ -45,11 +45,10 @@ export default {
       },
       limpiar(){
         this.limpiarRetorno();
-        this.limpiarEntidad();
-        this.callMetodo();
-        this.showPantalla(true);
-        this.callMetodo2();
+        this.limpiarRetorno2();
+        this.limpiarRetorno3();
         this.limpiarDatoact1();
+        this.limpiarDatoact2();
       }
   }
 }

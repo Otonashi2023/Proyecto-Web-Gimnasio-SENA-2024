@@ -17,7 +17,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr id="fila2" v-for="ejercicio in ejercicios" :key="ejercicio.codigo" @click="() => {callMetodoE(ejercicio.codigo); consultarbyId(ejercicio.codigo); registrarEjercicio(ejercicio.nombre.nombre)}">
+          <tr id="fila2" v-for="ejercicio in ejercicios" :key="ejercicio.codigo" @click="() => {callMetodoE(ejercicio.codigo); consultarbyId(ejercicio.codigo)}">
             <td>Pendiente</td>
             <td>{{ ejercicio.nombre.nombre }}</td>
             <td>{{ ejercicio.tipoEjercicio.nombre }}</td>
@@ -47,10 +47,12 @@ import { mapActions, mapState } from "vuex";
         codigo:null,
       }
     },
-    computed:{...mapState(['retorno'])},
-
+    computed:{
+      ...mapState(['retorno','retorno2','dato7'])},
+    
     methods: {
       ...mapActions(['actualizarDato7','registrarEjercicio']),
+
       obtenerEjercicios(){
         // Método para obtener los campos de la lista
         axios.get("http://localhost:8080/api/ejercicio/listar")
@@ -70,7 +72,7 @@ import { mapActions, mapState } from "vuex";
           console.log("Ejercicio eliminado con exito");
           this.codigo=null;
           this.$emit('escuchartable');
-          this.obtenerEjercicios();                   
+          this.obtenerEjercicios();                 
         })
         .catch((error)=>{
           console.log("Error al eliminar ejercicio", error);
@@ -78,6 +80,7 @@ import { mapActions, mapState } from "vuex";
       },
       consultarbyId(value){
         if(this.codigo==null){
+          this.actualizarDato7(value);
           this.$emit('ById',value);
         }
       },
@@ -88,17 +91,22 @@ import { mapActions, mapState } from "vuex";
       limpiarId(){
         this.codigo=null;
       },
-      callMetodoE(value){
+      callMetodoE(){
         if(this.retorno=='retorno'){
           if(this.codigo==null){
             this.$router.push('rutinaEjercicio');
-            this.actualizarDato7(value);
           }
+        }
+      },
+      formulario(){
+        if(this.retorno2=='retorno'){
+          this.$emit('goForm');
         }
       },
     },
     mounted(){
       this.obtenerEjercicios();
+      this.formulario();
     },
   }
 </script>

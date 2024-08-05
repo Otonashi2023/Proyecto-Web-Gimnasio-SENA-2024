@@ -37,18 +37,18 @@ export default {
   },
 
   computed:{
-    ...mapState(['dato6','nombre','dato8','dato4','datoact1','datoact2','retorno']),...mapGetters(['getNombre'])
+    ...mapState(['dato6','nombre','dato8','dato4','datoact1','datoact2','retorno','retorno3']),...mapGetters(['getNombre','obtenerDato8'])
   },
   created(){
     if(this.datoact2!=null){
-      this.numero=this.dato3;
+      this.numero=this.dato4;
     }
     
   },
 //metodos CRUD
   methods:{
-    ...mapActions(["showPantalla",'actualizarRetorno2','actualizarDato6','registrarNombre','actualizarDato8','registrarEntidad',
-    'callMetodo','limpiarDatoact2','actualizarDatoact2','actualizarDato4','limpiarDato6', 'registrarRutina']),
+    ...mapActions(['actualizarRetorno2','actualizarDato6','actualizarDato8',
+    'limpiarDatoact2','actualizarDatoact2','actualizarDato4','limpiarDato6', 'registrarRutina']),
     
     servicio(){
       if(this.salvar==true){
@@ -74,11 +74,16 @@ export default {
         console.log("Rutina registrado con exito", response.data);
         alert("La rutina es registrado con exito");
         this.$emit('leave');
-        if(this.retorno=='retorno'){
+        if(this.retorno3=='retorno'){
+          this.actualizarDato6(response.data.codigo);
+          this.antesderoutear();
+          this.$router.push('planRutina');
+        }
+        else if(this.retorno=='retorno'){
           this.actualizarDato6(response.data.codigo);
           this.antesderoutear();
           this.$router.push('rutinaEjercicio');
-        }     
+        }
       })
       .catch((error)=>{
         console.error("Error al registrar rutina:", error);
@@ -114,7 +119,12 @@ export default {
       .then((response)=>{
         console.log("Rutina actualizado con exito", response.data);
         this.$emit('leave');
-        if(this.retorno=='retorno'){
+        if(this.retorno3=='retorno'){
+          this.actualizarDato6(this.codigo);
+          this.antesderoutear();
+          this.$router.push('planRutina');
+        }
+        else if(this.retorno=='retorno'){
           this.actualizarDato6(this.codigo);
           this.antesderoutear();
           this.$router.push('rutinaEjercicio');
@@ -151,17 +161,22 @@ export default {
     },
     variar(){
       if(this.datoact2!=null){
-      this.modificar=true;
-      this.salvar=false;
+        this.modificar=true;
+        this.salvar=false;
       }
       this.nombre=this.getNombre;
+      this.numero=this.obtenerDato8;
     },
     antesderoutear(){
       this.habilitar=1;
       this.consultar(this.dato6);
     },
+    datos(){
+      this.actualizarDato8(this.numero);
+    },
 
     callMetodoN(){
+      this.datos();
       this.actualizarRetorno2('retorno');
       this.$router.push('tipoRutina');
     },

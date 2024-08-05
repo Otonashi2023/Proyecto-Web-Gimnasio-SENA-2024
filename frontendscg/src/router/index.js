@@ -19,6 +19,8 @@ import RutinaEjercicioView from '@/views/PlanEntrenamiento/RutinaEjercicioView.v
 import TipoPlanView from '@/views/PlanEntrenamiento/TipoPlanView.vue';
 import PlanView from '@/views/PlanEntrenamiento/PlanView.vue';
 import PlanRutinaView from '@/views/PlanEntrenamiento/PlanRutinaView.vue';
+import FichaView from '@/views/Aprendiz/FichaView.vue';
+import AprendizView from '@/views/Aprendiz/AprendizView.vue';
 
 const routes = [
   {
@@ -157,6 +159,22 @@ const routes = [
     path: '/planRutina',
     name: 'planRutina',
     component: PlanRutinaView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/ficha',
+    name: 'ficha',
+    component: FichaView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/aprendiz',
+    name: 'aprendiz',
+    component: AprendizView,
     meta: {
       requiresAuth: true,
     },

@@ -10,7 +10,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr id="fila2" v-for="nombre in nombres" :key="nombre.codigo"  @click="() => {callMetodoN(); consultarbyId(nombre.codigo); consultarbyName(nombre.nombre)}">
+          <tr id="fila2" v-for="nombre in nombres" :key="nombre.codigo"  @click="() => {callMetodoN(); consultarbyId(nombre.codigo); registrarNombre(nombre.nombre)}">
             <td>{{ nombre.nombre}}</td>
             <td id="alibutton">
                 <font-awesome-icon icon="edit" id="editar" @click="actualizar(nombre.codigo)"/>
@@ -75,9 +75,6 @@ import { mapActions, mapState } from "vuex";
       actualizar(value){
         this.codigo=value;
         this.$emit('change',this.codigo);
-      },
-      consultarbyName(value){
-        this.registrarNombre(value);
       },
       callMetodoN(){
         if(this.retorno2=='retorno'){

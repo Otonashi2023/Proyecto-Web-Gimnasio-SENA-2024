@@ -29,7 +29,6 @@ export default{
         return{
             formulario:false,
             listar:true,
-            mostrar:true,
         }
     },
     computed:{
@@ -38,7 +37,7 @@ export default{
         },
     },
     methods:{
-        ...mapActions(['limpiarDato5','limpiarDato6','limpiarPlan','limpiarRutina','limpiarDato9','limpiarRetorno','limpiarNombre','limpiarRetorno2','limpiarDato4','limpiarRetorno3']),
+        ...mapActions(['limpiarDato5','limpiarDato6','limpiarPlan','limpiarRutina','limpiarDato9','limpiarRetorno','limpiarNombre','limpiarRetorno2','limpiarDato4','limpiarRetorno3','limpiarDato8']),
 
         cambiar(){
             this.formulario=true;
@@ -75,13 +74,14 @@ export default{
             this.$refs.componenteForm.variar();
         },
         limpiarDatos(){
+            this.limpiarDato4();
             this.limpiarDato5();
             this.limpiarDato6();
+            this.limpiarDato8();
             this.limpiarDato9();
-            this.limpiarDato4();
+            this.limpiarNombre();
             this.limpiarPlan();
             this.limpiarRutina();
-            this.limpiarNombre();
             this.limpiarRetorno2();
             this.limpiarRetorno3();
         },
