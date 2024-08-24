@@ -1,8 +1,8 @@
 <template>
     <div class="view">
         <div class="components">
-            <FormTipoPlan @escucharForm="puente" ref="componenteForm" @clearId="jumper"/>
-            <TablaTipoPlan ref="componente" @ById="read" @change="update" @escuchartable="tabla"/>
+            <FormTipoPlan @escucharForm="puente" ref="componenteForm" @clearId="jumper" @calling="calling"/>
+            <TablaTipoPlan ref="componente" @ById="read" @change="update" @escuchartable="tabla" @send="sended"/>
         </div>
     </div>
 
@@ -38,6 +38,12 @@ export default{
         },
         jumper(){
             this.$refs.componente.limpiarId();
+        },
+        sended(value){
+            this.$refs.componenteForm.sended(value);
+        },
+        calling(){
+            this.$refs.componente.sender();
         }
     }
 }

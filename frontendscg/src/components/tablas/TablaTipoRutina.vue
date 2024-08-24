@@ -85,6 +85,9 @@ import { mapActions, mapState } from "vuex";
       },
       limpiarId(){
         this.codigo=null;
+      },
+      sender(){
+        this.$emit('send',this.nombres);
       }
     },
     mounted(){

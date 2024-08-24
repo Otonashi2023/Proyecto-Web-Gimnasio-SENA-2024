@@ -1,10 +1,10 @@
 <template>
     <div class="container" id="form">
       <h1>Formulario tipo de rutina</h1>
-      <form id="simple-form" @submit.prevent="servicio()" >
+      <form id="simple-form" @submit.prevent="comparar()" >
         <div class="form-group">
           <label for="nombre">Nombre: </label>
-          <input type="text" ref="myInput" name="nombre" id="nombre" required v-model="nombre" placeholder="ingrese el tipo de rutina">
+          <input type="text" ref="myInput" @click="call" name="nombre" id="nombre" required v-model="nombre" placeholder="ingrese el tipo de rutina">
         </div>
         <div id="flex">
             <button id="guardar" type="submit" name="guardar" v-if="salvar">Guardar</button>
@@ -26,10 +26,26 @@ export default {
       modificar: false,
     };
   },
-  computed:{...mapState(['dato4'])},
+  computed:{...mapState(['dato4','retorno','nombre'])},
 //metodos CRUD
   methods:{
-    ...mapActions(['registrarNombre']),
+    ...mapActions(['registrarNombre','actualizarDato4','limpiarNombre','limpiarDato4']),
+
+    comparar() {
+      if (Array.isArray(this.pack)) {
+        const normalizarTexto = (texto) => texto.trim().toLowerCase().replace(/\s+/g, '');
+        
+        const found = this.pack.find(item =>
+          normalizarTexto(item.nombre) === normalizarTexto(this.nombre));
+          
+        if (found) {
+          alert('El nombre ya existe');
+        } else {
+          this.servicio();
+        }
+      }
+    },
+
     servicio(){
       if(this.salvar==true){
         this.guardar();
@@ -40,6 +56,7 @@ export default {
     },
 
     guardar(){
+      this.limpiarDato4();
       axios
       .post('http://localhost:8080/api/tiporutina',{
         nombre: this.nombre,
@@ -49,7 +66,7 @@ export default {
         alert("El Tipo rutina es registrado con exito");
         if(this.retorno=='retorno'){
           this.actualizarDato4(response.data.codigo);
-          this.antesderoutear();
+          this.registrarNombre(response.data.nombre);
           this.$router.push('rutina');
         }     
         this.nombre = '';
@@ -66,9 +83,6 @@ export default {
         .get('http://localhost:8080/api/tiporutina/'+this.codigo)
         .then((response)=>{
           //actualiza los campos del formulario con los datos consultados
-          if(this.habilitar==1){
-            this.registrarNombre(response.data.nombre.nombre);
-          }
           this.nombre = response.data.nombre;
           this.focusInput();
         })
@@ -116,6 +130,12 @@ export default {
       this.habilitar=1;
       this.consultar(this.dato4);
     },
+    sended(value){
+      this.pack = value;
+    },
+    call(){
+      this.$emit('calling');
+    }
   },
   mounted() {
     this.focusInput();

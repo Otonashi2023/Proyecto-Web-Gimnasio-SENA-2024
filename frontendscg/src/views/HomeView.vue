@@ -24,7 +24,7 @@
     <p style="color:fuchsia">panel_</p>
     <p style="color:indigo">de_</p>
     <p style="color:darkgreen">control</p>           
-  </div> 
+  </div>
 </template>
 
 <style>
@@ -34,4 +34,5 @@
   justify-content: center;
 }
 </style>
+
 

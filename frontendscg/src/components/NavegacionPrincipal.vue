@@ -8,11 +8,11 @@
        <ul>
          <li><span class="material-icons-sharp">dashboard</span><router-link to="/" @click="limpiar">Panel de Control</router-link></li>
          <li><span class="material-icons-sharp">assignment_ind</span><router-link to="/aprendiz" @click="limpiar">Aprendices</router-link></li>
-         <li><span class="material-icons-sharp">supervisor_account</span><a @click="instructores">Instructores</a></li>
+         <li><span class="material-icons-sharp">supervisor_account</span><router-link to="/personal" @click="limpiar">Instructores</router-link></li>
          <li><span class="material-icons-sharp">sports_score</span><router-link to="/planRutina" @click="limpiar">Planes</router-link></li>
          <li><span class="material-icons-sharp">list_alt</span><router-link to="/rutinaEjercicio" @click="limpiar">Rutinas</router-link></li>
          <li><span class="material-icons-sharp">fitness_center</span><router-link to="/ejercicio" @click="limpiar">Ejercicios</router-link></li>
-         <li><span class="material-icons-sharp">add_chart</span><a @click="report">Reportes</a></li>
+         <li><span class="material-icons-sharp">add_chart</span><router-link to="/asistencia" @click="limpiar">Reporte</router-link></li>
        </ul>
      </div>
 
@@ -21,7 +21,7 @@
      
      <div class="fondo">
        <ul>
-         <li><span class="material-icons-sharp">settings</span><a @click="config">Configuración</a></li>
+         <li><span class="material-icons-sharp">settings</span><router-link to="/perfil">Configuración</router-link></li>
          <li><span class="material-icons-sharp">logout</span><a @click="logout">Cerrar sesión</a></li>
        </ul>
      </div>
@@ -36,7 +36,11 @@ export default {
     ...mapState(['user']),
   },
   methods:{
-    ...mapActions(['resetVisibleIn','resetVisibleOut','limpiarRetorno','limpiarRetorno2','limpiarRetorno3','limpiarDatoact1','limpiarDatoact2']),
+    ...mapActions('asistencia',['limpiarAsistencias']),
+    ...mapActions('aprendiz',['limpiarAprendices']),
+    ...mapActions('usuario',['limpiarUsuarios']),
+
+    ...mapActions(['resetVisibleIn','resetVisibleOut','limpiarRetorno','limpiarRetorno2','limpiarRetorno3','limpiarDatoact1','limpiarDatoact2','limpiarDato7','limpiarDato6']),
     logout(){
         this.$store.dispatch('logout');
         this.$router.push('/login');
@@ -49,7 +53,12 @@ export default {
         this.limpiarRetorno3();
         this.limpiarDatoact1();
         this.limpiarDatoact2();
-      }
+        this.limpiarDato6();
+        this.limpiarDato7();
+        this.limpiarAsistencias();
+        this.limpiarAprendices();
+        this.limpiarUsuarios();
+      },
   }
 }
 </script>

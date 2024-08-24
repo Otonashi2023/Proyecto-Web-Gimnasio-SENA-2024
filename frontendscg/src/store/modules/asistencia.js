@@ -3,6 +3,7 @@ import { getAsistenciaAllApi, getAsistenciaApi, createAsistenciaApi, updateAsist
 const state = {
   asistencia:{
     codigo: null,
+    fecha: '',
     aprendiz: null,
   },
   asistencias:[],
@@ -23,8 +24,12 @@ const mutations = {
   clearAsistencia(state) {
     state.asistencia = {
         codigo: null,
+        fecha: '',
         aprendiz: null,
     };
+  },
+  clearAsistencias(state) {
+    state.asistencias = [];
   },
 };
 
@@ -61,7 +66,7 @@ const actions = {
       console.error("Error actualizar Asistencia:", error);
     }
   },
-  async eliminarAsistencia({ commit }, codigo) {
+  async eliminarAsistencias({ commit }, codigo) {
     try {
       await deleteAsistenciaApi(codigo);
       commit('clearAsistencia');
@@ -71,7 +76,11 @@ const actions = {
   },
   limpiarAsistencia({commit}){
     commit('clearAsistencia');
+  },
+  limpiarAsistencias({commit}){
+    commit('clearAsistencias');
   }
+
 };
 
 export default {

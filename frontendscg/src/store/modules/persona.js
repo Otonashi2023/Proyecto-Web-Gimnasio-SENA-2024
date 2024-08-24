@@ -10,8 +10,11 @@ const state = {
     cotacto: '',
     celularAlt: null,
     correo: '',
-    tipoDocumento: null,
-    nombreTipoDocumento:"",
+    tipoDocumento:{
+      codigo: null,
+      nombre: '',
+    },
+    nombre:"",
   },
   personas:[],
 };
@@ -19,11 +22,12 @@ const state = {
 const getters = {
   getPersona: (state) => state.persona,
   getPersonas: (state) => state.personas,
+  nombreTD: (state) => state.persona?.tipoDocumento?.nombre,
 };
 
 const mutations = {
   setPersona(state, data) {
-    state.persona = data;
+    state.persona = {...data};
   },
   setPersonas(state, data){
     state.personas = data;
@@ -39,7 +43,7 @@ const mutations = {
       celularAlt: null,
       correo: '',
       tipoDocumento: null,
-      nombreTipoDocumento: '',
+      nombre: '',
     };
   },
 };
@@ -55,8 +59,10 @@ const actions = {
   },
   async consultarPersona({ commit }, codigo) {
     try {
+      console.log('mirando el codigo que llega al modulo persona:',codigo)
       const response = await getPersonaApi(codigo);
       commit('setPersona', response.data);
+      console.log('desde modulo persona:',response.data);
     } catch (error) {
       console.error("Error consultar Persona:", error);
     }
@@ -80,7 +86,6 @@ const actions = {
         console.error("Error message:", error.message);
       }
       console.error("Error config:", error.config);
-      
     }
   },
   async actualizarPersona({ commit }, { codigo, data }) {
@@ -88,7 +93,21 @@ const actions = {
       const response = await updatePersonaApi(codigo, data);
       commit('setPersona', response.data);
     } catch (error) {
+      alert('hola');
       console.error("Error actualizar Persona:", error);
+      if (error.response) {
+        // El servidor respondió con un código de estado fuera del rango 2xx
+        console.error("Error response data:", error.response.data);
+        console.error("Error response status:", error.response.status);
+        console.error("Error response headers:", error.response.headers);
+      } else if (error.request) {
+        // La solicitud se hizo pero no se recibió respuesta
+        console.error("Error request:", error.request);
+      } else {
+        // Algo pasó al configurar la solicitud que provocó un error
+        console.error("Error message:", error.message);
+      }
+      console.error("Error config:", error.config);
     }
   },
   async eliminarPersona({ commit }, codigo) {
@@ -99,9 +118,12 @@ const actions = {
       console.error("Error eliminar Persona:", error);
     }
   },
+  addPersona({commit}, data){
+    commit('setPersona', data);
+  },
   limpiarPersona({commit}){
     commit('clearPersona');
-  }
+  },
 };
 
 export default {

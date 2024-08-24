@@ -1,7 +1,7 @@
 <template>
     <div class="container" id="form">
       <h1>Formulario de Rutina</h1>
-      <form @submit.prevent="servicio()" >
+      <form @submit.prevent="save()" >
         <div class="comp-form-group">
           <div class="form-group">
             <label for="nombre">Nombre: </label>
@@ -37,6 +37,7 @@ export default {
   },
 
   computed:{
+    ...mapState('variables',['datos2']),
     ...mapState(['dato6','nombre','dato8','dato4','datoact1','datoact2','retorno','retorno3']),...mapGetters(['getNombre','obtenerDato8'])
   },
   created(){
@@ -47,8 +48,9 @@ export default {
   },
 //metodos CRUD
   methods:{
+    ...mapActions('variables',['actionActiveM','limpiarEjercicios','limpiarArrayE']),
     ...mapActions(['actualizarRetorno2','actualizarDato6','actualizarDato8',
-    'limpiarDatoact2','actualizarDatoact2','actualizarDato4','limpiarDato6', 'registrarRutina']),
+    'limpiarDatoact2','actualizarDatoact2','actualizarDato4','limpiarDato6', 'registrarRutina','limpiarEjercicio']),
     
     servicio(){
       if(this.salvar==true){
@@ -63,6 +65,24 @@ export default {
         this.actualizar();       
       }
     },
+    save(){
+      console.log('datos2 length: ',this.datos2.length);
+      if(this.datos2.length > 0){
+        const existe = this.datos2
+        .some(item => item.tipoRutina.codigo === this.dato4 && item.numero === this.numero);
+        console.log('DATOS NOMBRE: ',this.datos2?.tipoRutina?.codigo);
+        console.log('DATOS VERSION: ',this.datos2.codigo);
+        console.log('DATOS NOMBRE: ', this.dato4,);
+        console.log('DATOS VERSION: ', this.numero);
+        console.log('1.existe:', existe);
+        if(existe){
+          alert('este ejercicio ya existe');
+        }
+        else{          
+          this.servicio();
+        }
+      }  
+    },
 
     guardar(){
       axios
@@ -74,14 +94,13 @@ export default {
         console.log("Rutina registrado con exito", response.data);
         alert("La rutina es registrado con exito");
         this.$emit('leave');
-        if(this.retorno3=='retorno'){
+        if(this.retorno=='retorno'){
           this.actualizarDato6(response.data.codigo);
           this.antesderoutear();
-          this.$router.push('planRutina');
-        }
-        else if(this.retorno=='retorno'){
-          this.actualizarDato6(response.data.codigo);
-          this.antesderoutear();
+          this.limpiarEjercicio();
+          this.limpiarArrayE();
+          this.limpiarEjercicios();
+          this.actionActiveM(true);
           this.$router.push('rutinaEjercicio');
         }
       })

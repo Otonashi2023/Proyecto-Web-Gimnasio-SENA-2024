@@ -37,8 +37,11 @@ import { mapActions, mapState } from "vuex";
         codigo:null,
       }
     },
-    computed:{...mapState(['retorno3','retorno2','dato9'])},
+    computed:{
+      ...mapState('variables',['datos2']),
+      ...mapState(['retorno3','retorno2','dato9','plan'])},
     methods: {
+      ...mapActions('variables',['actionDatos2','limpiarRutina','limpiarRutinas','limpiarArrayR','actionActiveM']),
       ...mapActions(['actualizarDato5','actualizarDato9','registrarPlan']),
 
       obtenerPlanes(){
@@ -46,6 +49,7 @@ import { mapActions, mapState } from "vuex";
         axios.get("http://localhost:8080/api/plan/listar")
         .then((response)=>{
           this.planes= response.data;
+          this.datos2act();
           this.codigo=null;
         })
         .catch((error)=>{
@@ -65,6 +69,12 @@ import { mapActions, mapState } from "vuex";
         .catch((error)=>{
           console.log("Error al eliminar rutina", error);
         });
+      },
+      async datos2act(){
+        console.log('PLAN:'.planes);
+        await this.actionDatos2(this.planes);
+        await this.$nextTick();
+        console.log('AQUIIIIIII:',this.datos2);
       },
       consultarbyId(value){
         if(this.codigo==null){
@@ -86,6 +96,10 @@ import { mapActions, mapState } from "vuex";
       callMetodoN(){
         if(this.retorno3=='retorno'){
           if(this.codigo==null){
+            this.limpiarRutina();
+            this.limpiarArrayR();
+            this.limpiarRutinas();
+            this.actionActiveM(true);
             this.$router.push('planRutina');
           }
         }

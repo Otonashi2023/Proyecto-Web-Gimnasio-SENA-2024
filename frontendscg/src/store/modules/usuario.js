@@ -17,10 +17,12 @@ const getters = {
 
 const mutations = {
   setUsuario(state, data) {
-    state.usuario = data;
+    state.usuario = {...data};
   },
   setUsuarios(state, data){
+    console.log('data usuarios: ', data);
     state.usuarios = data;
+    console.log('resultado:', state.usuarios);
   },
   clearUsuario(state) {
     state.usuario = {
@@ -30,12 +32,16 @@ const mutations = {
       personal: null,
     };
   },
+  clearUsuarios(state){
+    state.usuarios = []
+  }
 };
 
 const actions = {
   async consultarAllUsuarios({ commit }) {
     try {
       const response = await getUsuarioAllApi();
+      console.log('resoponse:',response.data);
       commit('setUsuarios', response.data);
     } catch (error) {
       console.error("Error consultar all Usuarios:", error);
@@ -73,8 +79,14 @@ const actions = {
       console.error("Error eliminar Usuario:", error);
     }
   },
+  addUsuario({commit}, data){
+    commit('setUsuario', data);
+  },
   limpiarUsuario({commit}){
     commit('clearUsuario');
+  },
+  limpiarUsuarios({commit}){
+    commit('clearUsuarios');
   }
 };
 

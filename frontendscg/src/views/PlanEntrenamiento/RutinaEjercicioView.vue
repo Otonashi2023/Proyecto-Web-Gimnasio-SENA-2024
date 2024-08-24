@@ -2,13 +2,13 @@
     <div class="view">
         <div class="components">
             <div id="up">
-                <h1 id="alitext">Rutinas de entrenamiento</h1>
+                <h1 id="alitext">Rutinas</h1>
                 <div id="alibutton">
                     <font-awesome-icon :icon="['fas', 'address-book']" id="agregar" v-if="listar" @click="irAformulario()"/>
                     <font-awesome-icon icon="circle-xmark" id="cerrar2" v-if="formulario" @click="salir"/>
                 </div>
             </div>
-            <div v-show="formulario"><FormRutinaEjercicio @leave="salir" ref="componenteForm"/></div>
+            <div v-show="formulario"><FormRutinaEjercicio @leave="salir" ref="componenteForm" @refresh="refresh"/></div>
             <div v-show="listar"><TablaRutinaEjercicio ref="componente" @ById="read" @change="update" @escuchartable="tabla" @goForm="inData"/></div>
         </div>
     </div>
@@ -38,7 +38,7 @@ export default{
     },
     methods:{
         ...mapActions('variables',['limpiarEjercicios','limpiarArrayE']),
-        ...mapActions(['limpiarDato6','limpiarDato7','limpiarRutina','limpiarEjercicio','limpiarDato8','limpiarRetorno','limpiarNombre','limpiarRetorno2','limpiarDato4']),
+        ...mapActions(['limpiarDato6','limpiarDato7','limpiarRutina','limpiarDato8','limpiarRetorno','limpiarNombre','limpiarRetorno2','limpiarDato4']),
 
         cambiar(){
             this.formulario=true;
@@ -60,10 +60,10 @@ export default{
             this.cambiar();
             this.$refs.componenteForm.read(value1,value2);
         },
-        /*update(value1,value2){
+        update(value1,value2){
             this.cambiar();
             this.$refs.componenteForm.update(value1,value2);
-        },
+        },/*
         tabla(){
             this.$refs.componenteForm.cerrar();
         },
@@ -75,6 +75,10 @@ export default{
             this.limpiarRetorno2();
             //this.$refs.componenteForm.variar();
         },
+        refresh(){
+            this.$refs.componente.obtenerRutinaEjercicios();
+        },
+
         limpiarDatos(){
             this.limpiarDato6();
             this.limpiarDato7();
@@ -82,7 +86,6 @@ export default{
             this.limpiarDato4();
             this.limpiarRutina();
             this.limpiarNombre();
-            this.limpiarEjercicio();
             this.limpiarRetorno();
             this.limpiarRetorno2();
             this.limpiarEjercicios();

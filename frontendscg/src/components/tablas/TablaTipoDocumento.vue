@@ -10,7 +10,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr id="fila2" v-for="nombre in nombres" :key="nombre.codigo" @click="() => {callMetodoN(); consultarbyId(nombre.codigo); registrarNombre(nombre.nombre)}">
+          <tr id="fila2" v-for="nombre in nombres" :key="nombre.codigo" @click="() => {callMetodoN(); consultarbyId(nombre.codigo); consultarTipoDocumento(nombre.codigo)}">
             <td>{{ nombre.nombre }}</td>
             <td id="alibutton">
                 <font-awesome-icon icon="edit" id="editar" @click="actualizar(nombre.codigo)"/>
@@ -34,7 +34,8 @@ import { mapActions, mapState } from "vuex";
     },
     computed:{...mapState(['retorno2'])},
     methods: {
-      ...mapActions(['actualizarDato','registrarNombre']),
+      ...mapActions('tipoDocumento',['consultarTipoDocumento']),
+      ...mapActions(['actualizarDato']),
 
       obtenerTipoDocumentos(){
         // Método para obtener los campos de la lista
@@ -79,7 +80,7 @@ import { mapActions, mapState } from "vuex";
       callMetodoN(){
         if(this.retorno2=='retorno'){
           if(this.codigo==null){
-            this.$router.push('persona');
+            this.$router.push('personal');
           }
         }     
       },

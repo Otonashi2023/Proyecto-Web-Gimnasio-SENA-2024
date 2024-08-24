@@ -59,7 +59,6 @@ export default {
         .then((response)=>{
           //actualiza los campos del formulario con los datos consultados
           this.nombre = response.data.nombre;
-          this.focusInput();
         })
         .catch((error) =>{
           console.error("Error al consultar tipo de documento: ", error);

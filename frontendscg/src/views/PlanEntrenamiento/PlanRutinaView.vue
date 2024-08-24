@@ -2,7 +2,7 @@
     <div class="view">
         <div class="components">
             <div id="up">
-                <h1 id="alitext">Planes de entrenamiento</h1>
+                <h1 id="alitext">Planes</h1>
                 <div id="alibutton">
                     <font-awesome-icon :icon="['fas', 'address-book']" id="agregar" v-if="listar" @click="irAformulario()"/>
                     <font-awesome-icon icon="circle-xmark" id="cerrar2" v-if="formulario" @click="salir"/>
@@ -37,6 +37,7 @@ export default{
         },
     },
     methods:{
+        ...mapActions('variables',['limpiarArrayR','limpiarRutinas']),
         ...mapActions(['limpiarDato5','limpiarDato6','limpiarPlan','limpiarRutina','limpiarDato9','limpiarRetorno','limpiarNombre','limpiarRetorno2','limpiarDato4','limpiarRetorno3','limpiarDato8']),
 
         cambiar(){
@@ -46,18 +47,18 @@ export default{
         irAformulario(){
             this.cambiar();
             this.limpiarDatos();
-            this.$refs.componenteForm.cerrar();
+            //this.$refs.componenteForm.cerrar();
         },
         salir(){
             this.formulario=false;
             this.listar=true;
             this.limpiarDatos();
-            this.$refs.componente.obtenerPlanRutinas();
+            this.$refs.componente.obtenerPlanRutinasYEnriquecer();
         },
-        read(value){
+        read(value1,value2){
             this.cambiar();
-            this.$refs.componenteForm.read(value);
-        },
+            this.$refs.componenteForm.read(value1,value2);
+        },/*
         update(value){
             this.cambiar();
             this.$refs.componenteForm.update(value);
@@ -67,11 +68,14 @@ export default{
         },
         jumper(){
             this.$refs.componente.limpiarId();
-        },
+        },*/
         inData(){
             this.cambiar();
-            this.limpiarRetorno2();
-            this.$refs.componenteForm.variar();
+            this.limpiarRetorno3();
+            //this.$refs.componenteForm.variar();
+        },
+        refresh(){
+            this.$refs.componente.obtenerPlanRutinasYEnriquecer();
         },
         limpiarDatos(){
             this.limpiarDato4();
@@ -82,8 +86,9 @@ export default{
             this.limpiarNombre();
             this.limpiarPlan();
             this.limpiarRutina();
-            this.limpiarRetorno2();
             this.limpiarRetorno3();
+            this.limpiarRutinas();
+            this.limpiarArrayR();
         },
     },
 }

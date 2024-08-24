@@ -1,7 +1,7 @@
 <template>
     <div class="container" id="form">
       <h1>Formulario de Plan</h1>
-      <form @submit.prevent="servicio()" >
+      <form @submit.prevent="save()" >
         <div class="comp-form-group">
           <div class="form-group">
             <label for="nombre">Nombre: </label>
@@ -9,7 +9,7 @@
           </div>
           <div class="form-group">
             <label for="Meses">Meses: </label>
-            <input type="number" name="Meses" id="input2" v-model="numero" placeholder="haz click para ingresar los meses de duaracion" required> 
+            <input type="number" name="Meses" id="input2" v-model="meses" placeholder="haz click para ingresar los meses de duaracion" required> 
           </div>
           <div class="form-group">
             <div id="formbutton">
@@ -30,14 +30,16 @@ export default {
   data() {
     return{
       nombre:'',
-      numero:'',
+      meses:'',
       salvar: true,
       modificar: false,
     };
   },
 
   computed:{
-    ...mapState(['dato5','nombre','dato9','dato4','datoact1','datoact2','retorno3']),...mapGetters(['getNombre','obtenerDato9'])
+    ...mapState('variables',['datos2']),
+    ...mapState(['dato5','nombre','dato9','dato4','datoact1','datoact2','retorno3','plan']),
+    ...mapGetters(['getNombre','obtenerDato9'])
   },
   created(){
     if(this.datoact2!=null){
@@ -48,11 +50,11 @@ export default {
 //metodos CRUD
   methods:{
     ...mapActions(["showPantalla",'actualizarRetorno2','actualizarDato5','registrarNombre','actualizarDato9','registrarEntidad',
-    'callMetodo','limpiarDatoact2','actualizarDatoact2','actualizarDato4','limpiarDato5', 'registrarPlan']),
+    'callMetodo','limpiarDatoact2','actualizarDatoact2','actualizarDato4','limpiarDato5', 'registrarPlan','limpiarNombre']),
     
     servicio(){
       if(this.salvar==true){
-        if(this.dato4!=null && this.numero!=null){
+        if(this.dato4!=null && this.meses!=null){
           this.guardar();
         }
         else{
@@ -63,12 +65,32 @@ export default {
         this.actualizar();       
       }
     },
+    save(){
+      console.log('datos2 length: ',this.datos2.length);
+      if(this.datos2.length > 0){
+        const existe = this.datos2
+        .some(item => item.tipoPlan.codigo === this.dato4 && item.meses === this.meses);
+        console.log('DATOS NOMBRE: ',this.datos2?.tipoPlan?.codigo);
+        console.log('DATOS VERSION: ',this.datos2.codigo);
+        console.log('DATOS NOMBRE: ', this.dato4,);
+        console.log('DATOS VERSION: ', this.meses);
+        console.log('1.existe:', existe);
+        if(existe){
+          alert('este ejercicio ya existe');
+        }
+        else{        
+          this.servicio();
+        }
+      } else{
+        this.servicio();
+      }
+    },
 
     guardar(){
       axios
       .post('http://localhost:8080/api/plan',{
         tipoPlan: this.dato4,
-        meses:this.numero,
+        meses:this.meses,
       })
       .then((response)=>{
         console.log("Plan registrado con exito", response.data);
@@ -76,8 +98,9 @@ export default {
         this.$emit('leave');
         if(this.retorno3=='retorno'){
           this.actualizarDato5(response.data.codigo);
+          this.actualizarDato9(response.data.meses);
           this.antesderoutear();
-          this.$router.push('planRutina');
+          this.$emit('callMetodoN');
         }     
       })
       .catch((error)=>{
@@ -96,7 +119,7 @@ export default {
           this.actualizarDato4(response.data.tipoPlan.codigo);
           if(this.habilitar==1){
             this.registrarPlan(response.data.tipoPlan.nombre);
-            this.actualizarDato9(response.data.meses);
+            console.log('obteniendo elnombre', this.nombre);
           }
         })
         .catch((error) =>{
@@ -167,6 +190,7 @@ export default {
 
     callMetodoN(){
       this.datos();
+      this.limpiarNombre();
       this.actualizarRetorno2('retorno');
       this.$router.push('tipoPlan');
     },

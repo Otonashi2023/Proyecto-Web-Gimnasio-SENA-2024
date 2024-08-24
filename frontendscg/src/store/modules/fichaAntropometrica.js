@@ -63,6 +63,19 @@ const actions = {
       commit('setFichaAntropo', response.data);
     } catch (error) {
       console.error("Error guardar FichaAntropo:", error);
+      if (error.response) {
+        // El servidor respondió con un código de estado fuera del rango 2xx
+        console.error("Error response data:", error.response.data);
+        console.error("Error response status:", error.response.status);
+        console.error("Error response headers:", error.response.headers);
+      } else if (error.request) {
+        // La solicitud se hizo pero no se recibió respuesta
+        console.error("Error request:", error.request);
+      } else {
+        // Algo pasó al configurar la solicitud que provocó un error
+        console.error("Error message:", error.message);
+      }
+      console.error("Error config:", error.config);
     }
   },
   async actualizarFichaAntropo({ commit }, { codigo, data }) {

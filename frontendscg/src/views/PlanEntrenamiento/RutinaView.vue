@@ -73,8 +73,8 @@ export default{
         limpiarDatos(){
             this.limpiarDato4();
             this.limpiarNombre();            
-            this.limpiarDato8();
-            this.limpiarDato6();
+            //this.limpiarDato8();
+            //this.limpiarDato6();
             this.limpiarRutina();
             this.limpiarDatoact2();
         }

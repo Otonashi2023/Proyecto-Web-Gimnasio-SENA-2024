@@ -61,6 +61,8 @@ export default {
   },
 
   computed:{
+    ...mapState('datosEjercicio',['nombreCode','tipoEjercicioCode','musculoCode']),
+    ...mapState('variables',['datos2']),
     ...mapState(['dato','dato2','dato3','nombre','tipoEjercicio','musculo','retorno','datoact2','dato7']),...mapGetters(['getNombre','getTipoEjercicio','getMusculo']),
     ...mapGetters('datosEjercicio',['getSeries','getRepeticiones','getDescanso']),
   },
@@ -73,15 +75,48 @@ export default {
     servicio(){
       if(this.salvar==true){
         if(this.dato!=null && this.dato2!=null && this.dato3!=null){
-          this.guardar();
+          this.save();
         }
         else{
           alert("hay campos vacios");
         } 
       }
       else {
-        this.actualizar();       
+        this.updateSave();       
       }
+    },
+    save(){
+      console.log('datos2: ',this.datos2);
+      if(this.datos2.length > 0){
+        const existe = this.datos2
+        .some(item => item.nombre.codigo === this.dato && item.tipoEjercicio.codigo === this.dato2 && item.musculo.codigo === this.dato3);
+        console.log('1.existe:', existe);
+        if(existe){
+          alert('este ejercicio ya existe');
+        }
+        else{          
+          this.guardar();
+        }
+      }  
+    },
+    updateSave(){
+      console.log('datos2: ',this.datos2);
+      if(this.datos2.length > 0){
+        const existe = this.datos2
+        .some(item => item.nombre.codigo === this.dato && item.tipoEjercicio.codigo === this.dato2 && item.musculo.codigo === this.dato3);
+        if(existe){
+          if(this.dato=== this.nombreCode && 
+            this.dato2 === this.tipoEjercicioCode && 
+            this.dato3 === this.musculoCode){
+            this.actualizar();
+          } else{
+            alert('este ejercicio ya existe');            
+          }
+        }
+        else{   
+          this.actualizar();
+        }
+      }  
     },
 
     guardar(){
@@ -135,7 +170,6 @@ export default {
 
     actualizar(){
       this.codigo=this.datoact2;
-      
       axios
         .put('http://localhost:8080/api/ejercicio/actualizar/'+this.codigo,{
           nombre: this.dato,

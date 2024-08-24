@@ -27,8 +27,8 @@ export default{
     },
     data(){
         return{
-            formulario:true,
-            listar:false,
+            formulario:false,
+            listar:true,
         }
     },
     computed:{
@@ -53,7 +53,7 @@ export default{
             this.formulario=false;
             this.listar=true;
             //this.limpiarDatos();
-            this.$refs.componente.consultarAprendizPlanAll();
+            this.$refs.componente.consultarAllAprendices();
         },
         /*read(value){
             this.cambiar();

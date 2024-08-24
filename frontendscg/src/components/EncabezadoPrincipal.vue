@@ -4,21 +4,68 @@
         <input type="text" placeholder="Buscar..." v-model="query" @input="handleSearch" ref="myInput">
     </div>
     <div class="perfil">
-        <span class="material-icons-sharp">notifications</span>
+        <!--span class="material-icons-sharp">notifications</span-->
         <img src="@/assets/Foto1.jpeg" alt="Imagen perfil">
-        <span id="usuario"></span>
-        <span id="rol"></span>
+        <div style="display:grid; text-align: right">
+            <span id="usuario">{{ nombre }}</span>
+            <span id="rol">{{ rol }}</span> 
+        </div>
     </div>
 </template>
 <script>
+import { mapActions, mapState } from 'vuex';
+
 
 export default{
     data(){
         return{
-            query:""
+            query:"",
+            nombre: '',
+            rol: '',
         }
     },
+    computed:{
+        ...mapState('usuario',['usuario','usuarios']),
+    },
+    
     methods:{
+        ...mapActions('usuario',['consultarUsuario','consultarAllUsuarios','limpiarUsuario']),
+
+        async datosPerfil(){
+            this.limpiarUsuario();
+            const username = localStorage.getItem('username').trim();
+            const password = localStorage.getItem('password').trim();
+            console.log('USERNAME FROM LOCALSTORAGE:', username);
+            console.log('PASSWORD FROM LOCALSTORAGE:', password);
+            await this.consultarAllUsuarios();
+            console.log('USUARIOS:', this.usuarios);
+            await this.$nextTick();
+
+            if(Array.isArray(this.usuarios)){
+                const foundUser = this.usuarios.find(user =>
+                user.username.trim() === username &&
+                user.password.trim() === password);
+                console.log('FOUNDUSER: ', foundUser); // Usa 'foundUser' en lugar de 'this.foundUser'
+        
+                if (foundUser) { // Asegúrate de que 'foundUser' no es undefined
+                    const idUsuario = foundUser.codigo;
+                    console.log('hay dato?:', idUsuario);
+                    await this.consultarUsuario(idUsuario);
+                    await this.$nextTick();
+
+                    this.nombre = this.usuario.personal.persona.nombres;
+                    this.rol = this.usuario.personal.cargo.nombre;
+                    console.log('Usuario ; ',this.nombre,' rol: ',this.rol);
+                } else {
+                    console.error('Usuario no encontrado.');
+                    alert(`Lo sentimos el servidor esta caido
+intentelo mas tarde.`)
+                }
+            } else {
+                console.error('usuarios no es un array.');
+            }
+        },
+
         handleSearch() {
         if (this.query === 'nombre ejercicio') {
             this.$router.push(this.$route.query.redirect || '/nombreEjercicio');
@@ -74,6 +121,7 @@ export default{
     },
     mounted(){
         this.focusInput();
+        this.datosPerfil();
     }
 }
 </script>

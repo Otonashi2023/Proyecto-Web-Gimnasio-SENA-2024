@@ -10,7 +10,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr id="fila2" v-for="nombre in nombres" :key="nombre.codigo" @click="() => {callMetodoN(); consultarbyId(nombre.codigo); registrarNombre(nombre.nombre)}">
+          <tr id="fila2" v-for="nombre in nombres" :key="nombre.codigo" @click="() => {callMetodoN(); consultarbyId(nombre.codigo); readCargo(nombre.codigo); /*personalModificado(nombre)*/}">
             <td>{{ nombre.nombre }}</td>
             <td id="alibutton">
                 <font-awesome-icon icon="edit" id="editar" @click="actualizar(nombre.codigo)"/>
@@ -20,6 +20,7 @@
         </tbody>
       </table>
     </div>
+    <p>{{ personal }}</p>
 </template>
 <script>
 import axios from "axios";
@@ -32,9 +33,15 @@ import { mapActions, mapState } from "vuex";
         codigo: "",
       }
     },
-    computed:{...mapState(['retorno2'])},
+    computed:{
+      ...mapState('persona',['persona']),
+      ...mapState('personal',['personal','idPersonal']),
+      ...mapState('usuario',['usuario']),
+      ...mapState(['retorno2','datoact2'])},
     methods: {
-      ...mapActions(['actualizarDato','registrarNombre']),
+      ...mapActions('cargo',['consultarCargo']),
+      ...mapActions('personal',['altPersonal','consultarPersonal']),
+      ...mapActions(['actualizarDato']),
 
       obtenerCargos(){
         // Método para obtener los campos de la lista
@@ -67,6 +74,7 @@ import { mapActions, mapState } from "vuex";
       },
       
       consultarbyId(value){
+        console.log('Nombre del cargo', value);
         if(this.codigo==null){
           this.actualizarDato(value);
           this.$emit('ById',value);
@@ -76,10 +84,22 @@ import { mapActions, mapState } from "vuex";
         this.codigo=value;
         this.$emit('change',this.codigo);
       },
+
+      async readCargo(value){
+        await this.consultarCargo(value);
+        await this.$nextTick();
+      },/*
+      async personalModificado(value){
+        const persona = value;
+        console.log('PERSONAXD',persona);
+        await this.altPersonal(value);
+        await this.altPersonal(persona);
+        console.log('Personal por extension',this.personal);
+      },*/
       callMetodoN(){
         if(this.retorno2=='retorno'){
           if(this.codigo==null){
-            this.$router.push('persona');
+            this.$router.push('personal');
           }
         }     
       },

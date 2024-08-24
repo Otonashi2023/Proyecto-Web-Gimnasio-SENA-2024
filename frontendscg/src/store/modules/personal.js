@@ -7,16 +7,18 @@ const state = {
     cargo: null,
   },
   personalAll:[],
+  idPersonal: null,
 };
 
 const getters = {
   getPersonal: (state) => state.personal,
   getPersonalAll: (state) => state.personalAll,
+  getIdPersonal: (state) => state.idPersonal,
 };
 
 const mutations = {
   setPersonal(state, data) {
-    state.personal = data;
+    state.personal = {...data};
   },
   setPersonalAll(state, data){
     state.personalAll = data;
@@ -28,6 +30,15 @@ const mutations = {
         cargo: null,
     };
   },
+  changePersonal(state, {data}){
+    state.personal = {
+      ...state.personal,
+      ...data
+    };
+  },
+  setIdPersonal(state, data){
+    state.idPersonal = data;
+  }
 };
 
 const actions = {
@@ -39,7 +50,7 @@ const actions = {
       console.error("Error consultar all PersonalAll:", error);
     }
   },
-  async consultarPersona({ commit }, codigo) {
+  async consultarPersonal({ commit }, codigo) {
     try {
       const response = await getPersonalApi(codigo);
       commit('setPersonal', response.data);
@@ -51,11 +62,14 @@ const actions = {
     try {
       const response = await createPersonalApi(data);
       commit('setPersonal', response.data);
+      alert('registrado exitosamente');
     } catch (error) {
       console.error("Error guardar Personal:", error);
     }
   },
   async actualizarPersonal({ commit }, { codigo, data }) {
+    console.log('desde el modulo el actualizar personal codigo: ', codigo);
+    console.log('desde el modulo el actualizar personal data: ', data);
     try {
       const response = await updatePersonalApi(codigo, data);
       commit('setPersonal', response.data);
@@ -71,8 +85,17 @@ const actions = {
       console.error("Error eliminar Personal:", error);
     }
   },
-  limpiarPersona({commit}){
+  addPersonal({commit}, data){
+    commit('setPersonal', data);
+  },
+  limpiarPersonal({commit}){
     commit('clearPersonal');
+  },
+  altPersonal({commit}, data){
+    commit('changePersonal', data);
+  },
+  saveIdPersonal({commit}, data){
+    commit('setIdPersonal', data);    
   }
 };
 

@@ -6,20 +6,27 @@ import asistencia from './modules/asistencia';
 import datosEjercicio from './modules/datosEjercicio';
 import ficha from './modules/ficha';
 import fichaAntropometrica from './modules/fichaAntropometrica';
-import perimetros from './modules/perimetros';
 import persona from './modules/persona';
 import personal from './modules/personal';
-import usuarios from './modules/usuarios';
+import usuario from './modules/usuario';
 import variables from './modules/variables';
+import perimetros from './modules/perimetros';
+import tipoDocumento from './modules/tipoDocumento';
+import genero from './modules/genero';
+import cargo from './modules/cargo';
+import formacion from './modules/formacion';
+import ensayo from './modules/ensayo';
+import utils from './modules/utils';
+import ejercicio from './modules/ejercicio';
 //import axios from 'axios';
 
 export default createStore({
   state: {  
-    metodo:null,
+    /*metodo:null,
     metodo2:null,
     metodo3:null,
     metodo4:null,
-    metodo5:null,
+    metodo5:null,*/
     
     retorno:'',
     retorno2:'',
@@ -51,11 +58,11 @@ export default createStore({
   },
 
   getters: {
-    obtenerMetodo:(state)=>state.metodo,
+    /*obtenerMetodo:(state)=>state.metodo,
     obtenerMetodo2:(state)=>state.metodo2,
     obtenerMetodo3:(state)=>state.metodo3,
     obtenerMetodo4:(state)=>state.metodo4,
-    obtenerMetodo5:(state)=>state.metodo5,
+    obtenerMetodo5:(state)=>state.metodo5,*/
     
     getRetorno: (state)=> state.retorno,
     getRetorno2: (state)=> state.retorno2,
@@ -86,7 +93,7 @@ export default createStore({
     isAuthenticated: state => !!state.user,
   },
   mutations: {
-    setMetodo(state,metodo){
+    /*setMetodo(state,metodo){
       state.metodo = metodo;
     },
     clearMetodo(state){
@@ -115,7 +122,7 @@ export default createStore({
     },
     clearMetodo5(state){
       state.metodo5 = null;
-    },
+    },*/
 
     setRetorno(state, nuevodato){
       state.retorno =nuevodato;
@@ -124,6 +131,7 @@ export default createStore({
       state.retorno = null;
     },
     setRetorno2(state, nuevodato){
+      console.log('nuevodato: ',nuevodato)
       state.retorno2 =nuevodato;
     },
     clearRetorno2(state){
@@ -263,7 +271,7 @@ export default createStore({
   },
 
   actions: {
-    registrarMetodo({commit}, metodo){
+    /*registrarMetodo({commit}, metodo){
       commit('setMetodo', metodo);
     },
     limpiarMetodo({commit}){
@@ -333,7 +341,7 @@ export default createStore({
       else{
         console.error('Metodo no encontrado');
       }
-    },
+    },*/
 
     actualizarRetorno({commit},nuevodato){
       commit('setRetorno', nuevodato);
@@ -342,6 +350,7 @@ export default createStore({
       commit('clearRetorno');
     },
     actualizarRetorno2({commit},nuevodato){
+      console.log('nuevodato: ',nuevodato);
       commit('setRetorno2', nuevodato);
     },
     limpiarRetorno2({commit}){
@@ -484,16 +493,23 @@ export default createStore({
   plugins: [createPersistedState()],
 
   modules: {
-    datosEjercicio,
+    persona,
+    datosEjercicio,//no hay api
     ficha,
     aprendiz,
     aprendizPlan,
     asistencia,
     fichaAntropometrica,
     perimetros,
-    persona,
     personal,
-    variables,
-    usuarios,
+    variables,//no hay api
+    usuario,
+    tipoDocumento,
+    genero,
+    cargo,
+    formacion,
+    ensayo,
+    utils,
+    ejercicio,
   }
 });

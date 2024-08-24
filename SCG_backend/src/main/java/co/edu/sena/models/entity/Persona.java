@@ -28,7 +28,7 @@ public class Persona {
 	@Column (name="apellidos", length = 45, nullable = false)
 	private String apellidos;
 	
-	@Column (name="cedula", nullable = false)
+	@Column (name="cedula",unique=true, nullable = false)
 	private BigInteger cedula;
 	
 	@Column (name="celular", nullable = false)
@@ -40,7 +40,7 @@ public class Persona {
 	@Column (name="celular_alt", nullable = false)
 	private BigInteger celularAlt;
 	
-	@Column (name="email", length = 45, nullable = false)
+	@Column (name="email", unique=true, length = 45, nullable = false)
 	private String correo;
 	
 	@ManyToOne

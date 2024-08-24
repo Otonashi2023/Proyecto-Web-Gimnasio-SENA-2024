@@ -3,9 +3,9 @@
             <!--h1>Aprendices</h1>
             <button class="btn btn-primary new"><i class="fas fa-user-plus"></i> Agregar nuevo Aprendiz</button-->
         </div>
-        <div class="filter-container p-3 mb-4 rounded d-flex align-items-center bordered" style="max-width:fit-content" id="grid">
+        <!--div class="filter-container p-3 mb-4 rounded d-flex align-items-center bordered" style="max-width:fit-content" id="grid">
             <div class="d-flex align-items-center">
-                <!-- <i class="fas fa-filter mr-2"></i> -->
+                < <i class="fas fa-filter mr-2"></i> >
                 <span class="material-symbols-outlined">
                     pendiente el filtro
                     </span>
@@ -25,10 +25,10 @@
             <div>
                 <button class="btn btn-link text-danger font-weight-bold"><i class="fas fa-undo"></i> Resetear Filtro</button>
             </div>
-        </div>
+        </div-->
     <!--Tabla que lista todos los registros de la entidad-->
     <div class="container2">
-      <h1>Tabla  de aprendices</h1>
+      <h1>Aprendices</h1>
       <div id="scroll">
         <table>
         <thead>
@@ -36,25 +36,22 @@
             <th>Imagen</th>
             <th>Nombres</th>
             <th>Apellidos</th>
-            <th>Fecha ingreso</th>
-            <th>Plan</th>
-            <th>Duracion</th>
-            <th>Estado</th>
+            <th>Ficha</th>
+            <th>Formación</th>
+            <th id="rigth">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr id="fila2" v-for="(item,index) in aprendizPlanAll" :key=index>
+          <tr id="fila2" v-for="(item,index) in aprendices" :key=index>
             <td>Pendiente</td>
-            <td>{{ item.aprendiz.persona.nombres}}</td>
-            <td>{{ item.aprendiz.persona.apellidos }}</td>
-            <td>{{ item.inicio }}</td>
-            <td>{{ item.plan.tipoPlan.nombre }}</td>
-            <td>{{ item.plan.meses }} meses</td>
-            <td></td>
-            <!--td id="alibutton">
-                <font-awesome-icon icon="edit" id="editar" @click="actualizar(item.codigo)"/>
-                <font-awesome-icon icon="trash" id="eliminar" @click="eliminar(item.codigo)"/>
-            </td-->            
+            <td>{{ item.persona.nombres}}</td>
+            <td>{{ item.persona.apellidos}}</td>
+            <td>{{ item.ficha.numero}}</td>
+            <td>{{ item.ficha.formacion.nombre }}</td>
+            <td id="alibutton">
+                <font-awesome-icon icon="edit" id="editar" v-if="false" @click="actualizar(item.codigo)"/>
+                <font-awesome-icon icon="trash" id="eliminar" v-if="false" @click="eliminar(item.codigo)"/>
+            </td>            
           </tr>      
         </tbody>
       </table>
@@ -63,7 +60,7 @@
 </template>
 
 <script>
-import '@/assets/css/1.css'
+//import '@/assets/css/1.css'
 //import axios from "axios";
 import { mapActions, mapState } from "vuex";
   //contructor de las variables 
@@ -75,12 +72,12 @@ import { mapActions, mapState } from "vuex";
       }
     },
     computed:{
-        ...mapState('aprendizPlan',['aprendizPlanAll']),
+        ...mapState('aprendiz',['aprendices']),
         //...mapState(['retorno','retorno2','dato7'])
         },
     
     methods: {
-        ...mapActions('aprendizPlan',['consultarAprendizPlanAll',]),
+        ...mapActions('aprendiz',['consultarAllAprendices',]),
         /*...mapActions(['actualizarDato7','registrarEjercicio']),
 
       obtenerEjercicios(){
@@ -137,7 +134,7 @@ import { mapActions, mapState } from "vuex";
     mounted(){
       //this.obtenerEjercicios();
       //this.formulario();
-      this.consultarAprendizPlanAll();
+      this.consultarAllAprendices();
     },
   }
 </script>

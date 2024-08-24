@@ -37,9 +37,11 @@ import { mapActions, mapState } from "vuex";
         codigo:null,
       }
     },
-    computed:{...mapState(['retorno','retorno2','retorno3'])},
+    computed:{
+      ...mapState('variables',['datos2']),
+      ...mapState(['retorno','retorno2','retorno3'])},
     methods: {
-      ...mapActions('variables',['limpiarEjercicios','limpiarArrayE']),
+      ...mapActions('variables',['limpiarEjercicios','limpiarArrayE','actionDatos2','actionActiveM',]),
       ...mapActions(['actualizarDato6','actualizarDato8','registrarRutina','limpiarEjercicio']),
 
       obtenerRutinas(){
@@ -47,6 +49,9 @@ import { mapActions, mapState } from "vuex";
         axios.get("http://localhost:8080/api/rutina/listar")
         .then((response)=>{
           this.rutinas= response.data;
+          console.log('RUTINAS: ', this.rutinas);
+          this.datos2act();
+          console.log('DATOS2 aqui: ',typeof this.datos2);
           this.codigo=null;
         })
         .catch((error)=>{
@@ -67,6 +72,13 @@ import { mapActions, mapState } from "vuex";
           console.log("Error al eliminar rutina", error);
         });
       },
+      async datos2act(){
+        console.log('RUTI:', this.rutinas);
+        await this.actionDatos2(this.rutinas);
+        await this.$nextTick();
+        console.log('AQUIIIIIII:',this.datos2);
+      },
+
       consultarbyId(value){
         if(this.codigo==null){
           this.actualizarDato6(value);
@@ -87,7 +99,9 @@ import { mapActions, mapState } from "vuex";
       callMetodoN(){
         if(this.retorno3=='retorno'){
           if(this.codigo==null){
-            this.$router.push('planRutina');
+            this.limpiarEjercicios();
+            this.actionActiveM(true);
+            this.$router.push('RutinaEjercicio');
           }
         }
         else if(this.retorno=='retorno'){
@@ -95,6 +109,7 @@ import { mapActions, mapState } from "vuex";
             this.limpiarEjercicio();
             this.limpiarArrayE();
             this.limpiarEjercicios();
+            this.actionActiveM(true);
             this.$router.push('rutinaEjercicio');
           }
         }

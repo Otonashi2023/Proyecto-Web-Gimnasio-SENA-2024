@@ -1,10 +1,10 @@
 <template>
     <div class="container" id="form">
       <h1>Formulario nombre de ejercicio</h1>
-      <form id="simple-form" @submit.prevent="servicio()" >
+      <form id="simple-form" @submit.prevent="comparar()" >
         <div class="form-group">
           <label for="nombre">Nombre: </label>
-          <input type="text" ref="myInput" name="nombre" id="nombre" required v-model="nombre" placeholder="ingrese el nombre del ejercicio">
+          <input type="text" ref="myInput" @click="call" name="nombre" id="nombre" required v-model="nombre" placeholder="ingrese el nombre del ejercicio">
         </div>
         <div id="flex">
             <button id="guardar" type="submit" name="guardar" v-if="salvar">Guardar</button>
@@ -27,6 +27,21 @@ export default {
   },
 //metodos CRUD
   methods:{
+    comparar() {
+      if (Array.isArray(this.pack)) {
+        const normalizarTexto = (texto) => texto.trim().toLowerCase().replace(/\s+/g, '');
+        
+        const found = this.pack.find(item =>
+          normalizarTexto(item.nombre) === normalizarTexto(this.nombre));
+          
+        if (found) {
+          alert('El nombre ya existe');
+        } else {
+          this.servicio();
+        }
+      }
+    },
+
     servicio(){
       if(this.salvar==true){
         this.guardar();
@@ -100,6 +115,12 @@ export default {
     },
     focusInput(){
       this.$refs.myInput.focus();
+    },
+    sended(value){
+      this.pack = value;
+    },
+    call(){
+      this.$emit('calling');
     }
   },
   mounted() {

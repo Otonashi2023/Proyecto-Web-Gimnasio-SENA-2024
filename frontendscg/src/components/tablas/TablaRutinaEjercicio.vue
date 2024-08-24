@@ -12,8 +12,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr id="fila2" v-for="(item, index) in finalData" :key="index" @click="consultarbyId(item.rutina.codigo)">
-            <td>{{ item.rutina.tipoRutina.nombre}} {{ item.rutina.numero }}</td>
+          <tr id="fila2" v-for="(item, index) in finalData" :key="index" @click="callMetodoR(item.rutina.codigo); consultarbyId(item.rutina.codigo)">
+            <td>{{ item.rutina.tipoRutina.nombre}} ({{ item.rutina.numero }})</td>
             <td>
               <tr class="head2">
                 <td id="space">Ejercicio</td>
@@ -29,11 +29,11 @@
                 <td id="space">{{ ejercicio.musculo.nombre }}</td>
                 <td id="space">{{ ejercicio.series }}</td>
                 <td id="space">{{ ejercicio.repeticiones }}</td>
-                <td id="space">{{ ejercicio.descanso }}</td>
+                <td id="space">{{ ejercicio.descanso }} min</td>
               </tr>
             </td>
             <td id="alibutton">
-                <!--font-awesome-icon icon="edit" id="editar" @click="actualizar(item.rutina.codigo)"/-->
+                <font-awesome-icon icon="edit" id="editar" v-if='rele' @click="actualizar(item.rutina.codigo)"/>
                 <font-awesome-icon icon="trash" id="eliminar" @click.stop="removeAllByNombre(item.rutina.codigo)"/>
             </td>            
           </tr>      
@@ -55,10 +55,12 @@ export default {
       codigo:null,
     }
   },
-  computed:{...mapState(['retorno'])},
+  computed:{
+    ...mapState('variables',['groupFilter']),
+    ...mapState(['retorno','retorno3'])},
 
   methods: {
-    ...mapActions('variables',['limpiarEjercicios','actionDatos']),
+    ...mapActions('variables',['limpiarEjercicios','actionDatos','actionGroupFilter']),
     ...mapActions(['limpiarDatoact1']),
 
     obtenerRutinaEjercicios(){
@@ -72,7 +74,9 @@ export default {
         if (Array.isArray(data)) {
           this.originalData = data; // Guardar los datos originales
           this.finalData = this.groupDataByName(data);
-          console.log('Datos agrupados:', this.finalData);
+          this.actionGroupFilter(this.finalData);
+          console.log('FINALDATA :', this.finalData);
+          console.log('GROUPFILTER: ',this.groupFilter);
         } else {
           console.error('La respuesta de la API no es un array:', data);
         }
@@ -91,6 +95,7 @@ export default {
         acc[key].ejercicios.push(item.ejercicio);
         return acc;
       }, {});
+      console.log('GROUPEDDATA: ',groupedData);
       return Object.values(groupedData);
     },
 
@@ -114,7 +119,7 @@ export default {
       // Después de eliminar todas las entradas, actualizar los datos
       promiseChain.then(() => {
         // Filtrar los datos originales para eliminar todos los ítems con el rutina especificado
-        this.originalData = this.originalData.filter(item => item.rutina.codigp !== nombreCodigo);
+        this.originalData = this.originalData.filter(item => item.rutina.codigo !== nombreCodigo);
         // Reagrupar los datos restantes
         this.finalData = this.groupDataByName(this.originalData);
         this.obtenerRutinaEjercicios(); 
@@ -142,22 +147,38 @@ export default {
         this.$emit('ById',value,this.finalData);
       }
     },
-    /*actualizar(value){
-      this.codigo=value;
-      this.$emit('change',this.codigo,this.finalData);
-    },*/
+    actualizar(value){        
+        this.limpiarEjercicios();
+        this.codigo=value;
+        this.$emit('change',this.codigo,this.finalData);
+    },
     limpiarId(){
       this.codigo=null;
     },
+    callMetodoR(){
+        if(this.retorno3=='retorno'){
+          if(this.codigo==null){
+            this.$router.push('PlanRutina');
+          }
+        }
+      },
     formulario(){
       if(this.retorno=='retorno'){
         this.$emit('goForm');
+      }
+    },
+    desactivar(){
+      if(this.retorno3=='retorno'){
+        this.rele=true;
+      } else{
+        this.rele=false;
       }
     },
   },
   mounted(){
     this.obtenerRutinaEjercicios();
     this.formulario();
+    this.desactivar();
   },
 }
 </script>

@@ -10,7 +10,6 @@
         <EncabezadoPrincipal/>
       </div>
       <div>
-        <AboutView/>
         <router-view/>
       </div>  
     </section>
@@ -22,7 +21,6 @@
 <script>
 import NavegacionPrincipal from './components/NavegacionPrincipal.vue';
 import EncabezadoPrincipal from './components/EncabezadoPrincipal.vue';
-import AboutView from './views/AboutView.vue';
 import { mapGetters } from 'vuex';
 
 
@@ -30,7 +28,6 @@ export default{
   components:{
     NavegacionPrincipal,
     EncabezadoPrincipal,
-    AboutView
   },
   computed:{
     ...mapGetters(['inVisible','outVisible'])
@@ -90,7 +87,7 @@ body{
   margin: 0px 35px 10px 35px;
 }
 
-input[type="password"],input[type="text"],input[type=email],input[type="number"],input[type="adrees"]{
+input[type="password"],input[type="text"],input[type=email],input[type="number"],input[type="adrees"],input[type="date"]{
   margin-top: 8px;
   padding: 5px 15px 5px 15px;
   width: 364px;
@@ -302,12 +299,12 @@ section{
 }
 
 #contenido .navegacion .perfil span {
-    margin-right: 20px;
-    font-size: 19px;
-    color: var(--color-azul);
+    font-size: 16px;
+    color: var(--color-morado2);
 }
 
 #contenido .navegacion .perfil img {
+  margin-right: 15px;
     width: 30px;
     height: 30px;
 }
@@ -315,6 +312,9 @@ section{
 
 
 /** COMPONENTES */
+#form{
+  height:100%;padding-bottom: 8px;
+}
 #simple-form {
   display: flex;
   align-items: center;
@@ -349,6 +349,25 @@ section{
   outline: none;
   border: 1px solid var(--color-gris-medio);
 }
+.comp-form-group2{
+  display: grid;
+  grid-column-gap: 0.1rem;
+  grid-row-gap: .1rem;
+  grid-template-columns: auto auto;
+  grid-auto-rows: 0.1fr;
+}
+.comp-form-group2 .form-group{
+  display: grid;
+  grid-column-gap: 0.1rem;
+  grid-row-gap: .1rem;
+  grid-template-rows: auto;
+  grid-auto-rows: 0.1fr;
+}
+.comp-form-group2 .form-group #input2 {
+  width: auto;
+  outline: none;
+  border: 1px solid var(--color-gris-medio);
+}
 
 #formbutton{
   margin-top: 48px;
@@ -372,7 +391,7 @@ section{
   background-color: var(--color-blanco);
   padding-left: 1rem;
   padding-right: 1rem;
-  height:100%;
+  height:90vh;
 }
 .containerT{
   border-radius: 10px;
@@ -386,7 +405,7 @@ section{
 }
 
 .container2{
-  border-radius: 15px;
+  border-radius: 10px;
   zoom: 90%;
   margin: .5rem;
   /*box-shadow: 0 0 10px rgba(76, 92, 164, 1);*/
@@ -410,7 +429,6 @@ th, td{
   padding: 8px;
   text-align: left;
   border-bottom: 1px solid var(--color-gris-medio);
-  transition: 0.3s;
 }
 thead{
   background-color:var(--color-morado);
@@ -440,21 +458,28 @@ tr:hover .head2 {
   overflow-x: auto;
   overflow-y: auto;
   width: auto;
-  height: 60vh;
+  height: 72vh;
   white-space: nowrap;
 }
 #scroll2{
   overflow-x: auto;
   overflow-y: auto;
   width: auto;
-  height: 40vh;
+  height: 57vh;
   white-space: nowrap;
 }
 #scroll3{
   overflow-x: auto;
   overflow-y: auto;
   width: auto;
-  height: 80vh;
+  height: 90%;
+  white-space: nowrap;
+}
+#scroll4{
+  overflow-x: auto;
+  overflow-y: auto;
+  width: auto;
+  height: 84%;
   white-space: nowrap;
 }
 #fila2{
@@ -550,32 +575,6 @@ tr:hover .head2 {
   display: flex;
   align-items: center;
 }
-
-
-
-
-/** MODAL */
-.modal-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.2);
-}
-
-.modal {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-  background: white;
-  padding: 20px;
-  border-radius: 5px;
-  width: 500px;
-  height: 400px;
-}
-
 #lista{
   margin: 12px 16px 0 16px;
   padding: 10px 8px 0 8px;
@@ -597,4 +596,29 @@ tr:hover .head2 {
   grid-template-columns: 1fr 1fr 1fr;
   grid-auto-rows: 0.1fr;
 }
+
+
+
+
+/** MODAL *//*
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 500px;
+  height: 400px;
+}*/
 </style>

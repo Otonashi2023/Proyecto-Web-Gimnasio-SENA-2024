@@ -17,7 +17,8 @@
     <div v-if="componentToShow === 'rutina'"><RutinaView /></div>
     <div v-if="componentToShow === 'rutiejercicio'"><RutinaEjercicioView /></div><!--p>se esta trabajando</p-->
   </div>
-  <div></div>
+  <div>
+  </div>
 </template>
 
 <script>
@@ -32,7 +33,7 @@ import FormacionView from './Aprendiz/FormacionView.vue'
 import EjercicioView from './PlanEntrenamiento/EjercicioView.vue'
 import RutinaView from './PlanEntrenamiento/RutinaView.vue'
 import RutinaEjercicioView from './PlanEntrenamiento/RutinaEjercicioView.vue'
-import { mapActions, mapGetters} from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'AboutView',
@@ -106,6 +107,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch('registrarMetodo', this.opcion);
+    
   }  
 }
 

@@ -17,7 +17,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr id="fila2" v-for="ejercicio in ejercicios" :key="ejercicio.codigo" @click="() => {callMetodoE(ejercicio.codigo); consultarbyId(ejercicio.codigo)}">
+          <tr id="fila2" v-for="ejercicio in ejercicios" :key="ejercicio.codigo" @click="() => {callMetodoE(ejercicio.codigo);
+            consultarbyId(ejercicio.codigo);addEjercicio(ejercicio.nombre.codigo, ejercicio.tipoEjercicio.codigo, ejercicio.musculo.codigo)}">
             <td>Pendiente</td>
             <td>{{ ejercicio.nombre.nombre }}</td>
             <td>{{ ejercicio.tipoEjercicio.nombre }}</td>
@@ -27,7 +28,7 @@
             <td>{{ ejercicio.descanso }} min</td>
             <td id="alibutton">
                 <font-awesome-icon icon="edit" id="editar" @click="actualizar(ejercicio.codigo)"/>
-                <font-awesome-icon icon="trash" id="eliminar" @click="eliminar(ejercicio.codigo)"/>
+                <font-awesome-icon icon="trash" id="eliminar"  v-if='rele' @click="eliminar(ejercicio.codigo)"/>
             </td>            
           </tr>      
         </tbody>
@@ -48,9 +49,12 @@ import { mapActions, mapState } from "vuex";
       }
     },
     computed:{
+      ...mapState('variables',['datos2']),
       ...mapState(['retorno','retorno2','dato7'])},
     
     methods: {
+      ...mapActions('datosEjercicio',['actualizarNombreCode','actualizarTipoEjercicioCode','actualizarMusculoCode']),
+      ...mapActions('variables',['actionDatos2']),
       ...mapActions(['actualizarDato7','registrarEjercicio']),
 
       obtenerEjercicios(){
@@ -58,6 +62,8 @@ import { mapActions, mapState } from "vuex";
         axios.get("http://localhost:8080/api/ejercicio/listar")
         .then((response)=>{
           this.ejercicios= response.data;
+          this.actionDatos2(this.ejercicios);
+          console.log('DATOS2_', this.datos2);
           this.codigo=null;
         })
         .catch((error)=>{
@@ -78,13 +84,19 @@ import { mapActions, mapState } from "vuex";
           console.log("Error al eliminar ejercicio", error);
         });
       },
+      addEjercicio(value1, value2, value3){
+        this.actualizarNombreCode(value1);
+        this.actualizarTipoEjercicioCode(value2);
+        this.actualizarMusculoCode(value3);
+      },
       consultarbyId(value){
         if(this.codigo==null){
           this.actualizarDato7(value);
           this.$emit('ById',value);
         }
       },
-      actualizar(value){
+      async actualizar(value){
+        console.log('VALOR CODIGO: ',value);
         this.codigo=value;
         this.$emit('change',this.codigo);
       },
@@ -103,10 +115,18 @@ import { mapActions, mapState } from "vuex";
           this.$emit('goForm');
         }
       },
+      desactivar(){
+        if(this.retorno=='retorno'){
+          this.rele=false;
+        } else{
+          this.rele=true;
+        }
+      }
     },
     mounted(){
       this.obtenerEjercicios();
       this.formulario();
+      this.desactivar();
     },
   }
 </script>

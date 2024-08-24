@@ -1,7 +1,10 @@
 export default{
     namespaced: true,
     state:{
-        series:'hola',
+        nombreCode: null,
+        tipoEjercicioCode: null,
+        musculoCode: null,
+        series: null,
         repeticiones:null,
         descanso:null,
     },
@@ -11,6 +14,24 @@ export default{
         getDescanso:(state)=> state.descanso,
     },
     mutations:{
+        setNombreCode(state, nuevodato){
+            state.nombreCode= nuevodato;
+        },
+        clearNombreCode(state){
+            state.nombreCode= null;
+        },
+        setTipoEjercicioCode(state, nuevodato){
+            state.tipoEjercicioCode= nuevodato;
+        },
+        clearTipoEjercicioCode(state){
+            state.tipoEjercicioCode= null;
+        },
+        setMusculoCode(state, nuevodato){
+            state.musculoCode= nuevodato;
+        },
+        clearMusculoCode(state){
+            state.musculoCode= null;
+        },
         setSeries(state, nuevodato){
             state.series= nuevodato;
         },
@@ -31,6 +52,24 @@ export default{
         },
     },
     actions:{
+        actualizarNombreCode({commit},nuevodato){
+            commit('setNombreCode',nuevodato);
+        },
+        limpiarNombreCode({commit}){
+            commit('clearNombreCode');
+        },
+        actualizarTipoEjercicioCode({commit},nuevodato){
+            commit('setTipoEjercicioCode',nuevodato);
+        },
+        limpiarTipoEjercicioCode({commit}){
+            commit('clearTipoEjercicioCode');
+        },
+        actualizarMusculoCode({commit},nuevodato){
+            commit('setMusculoCode',nuevodato);
+        },
+        limpiarMusculoCode({commit}){
+            commit('clearMusculoCode');
+        },
         actualizarSeries({commit},nuevodato){
             commit('setSeries',nuevodato);
         },

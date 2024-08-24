@@ -237,14 +237,21 @@ insert into tipo_documento (nom_documento) values ("tarjeta de identidad");
 
 insert into persona (nombres, apellidos, cedula, celular, nom_contacto, celular_alt, email, tipo_documento) values ("Diana", "Acevedo Martinez", 607901669, 315683455, "Carlos Orozco", 321409264, "diam123@gmail.com",1);
 insert into persona (nombres, apellidos, cedula, celular, nom_contacto, celular_alt, email, tipo_documento) values ("Laura Nataly", "Giraldo Rodriguez", 1020123456, 31012312345, "Liliana Rodriguez", 3203456789, "kaitocrv2@gmail.com",1);
+insert into persona (nombres, apellidos, cedula, celular, nom_contacto, celular_alt, email, tipo_documento) values ("David Eduardo", "Florez Gomez", 80334345, 3166483587, "Sofia Andrade", 3178764803, "deflorez@sena.edu.co",1);
+insert into persona (nombres, apellidos, cedula, celular, nom_contacto, celular_alt, email, tipo_documento) values ("Liliana", "Zapata", 1120127435, 31112312327, "Liliana Castro", 321640472, "liza232@gmail.com",1);
+insert into persona (nombres, apellidos, cedula, celular, nom_contacto, celular_alt, email, tipo_documento) values ("Carlos", "Cuervo", 113324335, 316683426, "Fredy Fandiño", 323980777, "ca342@gmail.com",1);
 
-insert into cargo (nom_cargo) values ("instructor");
-insert into cargo (nom_cargo) values ("medico");
-insert into cargo (nom_cargo) values ("administrador");
 
-insert into personal (persona, cargo) values (1,1);
+insert into cargo (nom_cargo) values ("Instructor");
+insert into cargo (nom_cargo) values ("Medico");
+insert into cargo (nom_cargo) values ("Administrador");
+insert into cargo (nom_cargo) values ("Instructora");
 
-insert into usuario (nom_usu, cont_usu, personal) values ("admin", "admin", 1);
+insert into personal (persona, cargo) values (1,4);
+insert into personal (persona, cargo) values (3,1);
+
+insert into usuario (nom_usu, cont_usu, personal) values ("admin", "admin", 2);
+insert into usuario (nom_usu, cont_usu, personal) values ("admin2", "admin2", 1);
 
 insert into formacion (nom_formacion) values ("Tecnologia en Analisis y Desarrollo de Software");
 
@@ -254,6 +261,8 @@ insert into ficha (numero, formacion) values (2522001, 1);
 insert into ficha (numero, formacion) values (2522002, 1);
 
 insert into aprendiz (restric_medicas, persona, ficha) values ("Ninguna", 2, 2);
+insert into aprendiz (restric_medicas, persona, ficha) values ("Problemas de la rodilla izquierda", 4, 4);
+insert into aprendiz (restric_medicas, persona, ficha) values ("Ninguna", 5, 4);
 
 insert into genero (nom_genero) values ("masculino");
 insert into genero (nom_genero) values ("femenino");
@@ -263,6 +272,13 @@ insert into fichaantropo (num_control, fecha_toma, altura, peso, imc, personal, 
 insert into perimetros (cabeza, cuello, brazo_relax, brazo_tensionado, antebrazo, muñeca, torax, cintura, cadera, muslo_max, muslo_min, pantorrilla_max, pantorrilla_min, fichaantropo) values (55, 30, 27, 28, 22,14, 85.5, 67, 90, 54, 52, 32, 20, 1);
 
 insert into asistencia (fecha, aprendiz) values ("2024-06-12 16:39:21", 1);
+insert into asistencia (fecha, aprendiz) values ("2024-07-14 16:30:31", 1);
+insert into asistencia (fecha, aprendiz) values ("2024-06-12 16:39:21", 1);
+insert into asistencia (fecha, aprendiz) values ("2024-07-14 16:30:31", 2);
+insert into asistencia (fecha, aprendiz) values ("2024-06-12 16:39:21", 2);
+insert into asistencia (fecha, aprendiz) values ("2024-07-14 16:30:31", 2);
+insert into asistencia (fecha, aprendiz) values ("2024-06-12 16:39:21", 3);
+insert into asistencia (fecha, aprendiz) values ("2024-07-14 16:30:31", 3);
 
 insert into tipo_plan (nom_plan) values ('adelgazar');
 insert into tipo_plan (nom_plan) values ('aumento de masa muscular');

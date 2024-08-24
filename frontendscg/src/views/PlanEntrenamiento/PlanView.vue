@@ -2,13 +2,13 @@
     <div class="view">
         <div class="components">
             <div id="up">
-                <h1 id="alitext">Plan</h1>
+                <h1 id="alitext">Planes</h1>
                 <div id="alibutton">
                     <font-awesome-icon :icon="['fas', 'address-book']" id="agregar" v-if="listar" @click="irAformulario()"/>
                     <font-awesome-icon icon="circle-xmark" id="cerrar2" v-if="formulario" @click="salir"/>
                 </div>
             </div>
-            <div v-show="formulario"><FormPlan @leave="salir" ref="componenteForm"/></div>
+            <div v-show="formulario"><FormPlan @leave="salir" ref="componenteForm" @callMetodoN="callMetodoN"/></div>
             <div v-show="listar"><TablaPlan ref="componente" @ById="read" @change="update" @escuchartable="tabla" @goForm="inData"/></div>
         </div>
     </div>
@@ -63,6 +63,9 @@ export default{
         },
         tabla(){
             this.$refs.componenteForm.cerrar();
+        },
+        callMetodoN(){
+            this.$refs.componente.callMetodoN();
         },
         inData(){
             this.cambiar();

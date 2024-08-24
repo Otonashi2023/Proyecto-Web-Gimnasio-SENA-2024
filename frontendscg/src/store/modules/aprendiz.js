@@ -17,7 +17,7 @@ const getters = {
 
 const mutations = {
   setAprendiz(state, data) {
-    state.aprendiz = data;
+    state.aprendiz = {...data};
   },
   setAprendices(state, data){
     state.aprendices = data;
@@ -30,6 +30,9 @@ const mutations = {
         ficha: null,
     };
   },
+  clearAprendices(state) {
+    state.aprendices = []
+  }
 };
 
 const actions = {
@@ -53,8 +56,22 @@ const actions = {
     try {
       const response = await createAprendizApi(data);
       commit('setAprendiz', response.data);
+      alert('aprendiz guardado con exito');
     } catch (error) {
       console.error("Error guardar Aprendiz:", error);
+      if (error.response) {
+        // El servidor respondió con un código de estado fuera del rango 2xx
+        console.error("Error response data:", error.response.data);
+        console.error("Error response status:", error.response.status);
+        console.error("Error response headers:", error.response.headers);
+      } else if (error.request) {
+        // La solicitud se hizo pero no se recibió respuesta
+        console.error("Error request:", error.request);
+      } else {
+        // Algo pasó al configurar la solicitud que provocó un error
+        console.error("Error message:", error.message);
+      }
+      console.error("Error config:", error.config);
     }
   },
   async actualizarAprendiz({ commit }, { codigo, data }) {
@@ -75,6 +92,9 @@ const actions = {
   },
   limpiarAprendiz({commit}){
     commit('clearAprendiz');
+  },
+  limpiarAprendices({commit}){
+    commit('clearAprendices');
   }
 };
 

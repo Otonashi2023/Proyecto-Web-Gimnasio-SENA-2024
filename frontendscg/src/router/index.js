@@ -21,6 +21,12 @@ import PlanView from '@/views/PlanEntrenamiento/PlanView.vue';
 import PlanRutinaView from '@/views/PlanEntrenamiento/PlanRutinaView.vue';
 import FichaView from '@/views/Aprendiz/FichaView.vue';
 import AprendizView from '@/views/Aprendiz/AprendizView.vue';
+import FichaAntropometricaView from '@/views/FichaAntropometrica/FichaAntropometricaView.vue';
+import BorradorView from '@/views/BorradorView.vue';
+import AprendizPlanView from '@/views/PlanEntrenamiento/AprendizPlanView.vue';
+import PersonalView from '@/views/Personal/PersonalView.vue';
+import AsistenciaView from '@/views/Aprendiz/AsistenciaView.vue';
+import PerfilView from '@/views/PerfilView.vue';
 
 const routes = [
   {
@@ -175,6 +181,54 @@ const routes = [
     path: '/aprendiz',
     name: 'aprendiz',
     component: AprendizView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/fichaAntropometrica',
+    name: 'fichaAntropometrica',
+    component: FichaAntropometricaView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/borrador',
+    name: 'borrador',
+    component: BorradorView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/aprendizPlan',
+    name: 'aprendizPlan',
+    component: AprendizPlanView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/personal',
+    name: 'personal',
+    component: PersonalView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/asistencia',
+    name: 'asistencia',
+    component: AsistenciaView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/perfil',
+    name: 'perfil',
+    component: PerfilView,
     meta: {
       requiresAuth: true,
     },
