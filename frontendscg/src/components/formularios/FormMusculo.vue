@@ -17,6 +17,7 @@
 
 <script>
 import axios from "axios";
+import { mapActions, mapState } from "vuex";
 export default {
   data() {
     return{
@@ -26,8 +27,12 @@ export default {
       modificar: false,
     };
   },
+  computed:{
+    ...mapState(['retorno2']),
+  },
 //metodos CRUD
   methods:{
+    ...mapActions(['actualizarDato3','registrarMusculo']),
     comparar() {
       if (Array.isArray(this.pack)) {
         const normalizarTexto = (texto) => texto.trim().toLowerCase().replace(/\s+/g, '');
@@ -60,8 +65,14 @@ export default {
       .then((response)=>{
         console.log("Nombre del musculo registrado con exito", response.data);
         alert("El nombe del musculo es registrado con exito");
-        this.nombre = '';
-        this.$emit('escucharForm');
+        if(this.retorno2=='retorno'){
+          this.actualizarDato3(response.data.codigo);
+          this.registrarMusculo(response.data.nombre);
+          this.$router.push('ejercicio');
+        } else{
+          this.nombre = '';
+          this.$emit('escucharForm');
+        }
       })
       .catch((error)=>{
         console.error("Error al registrar nombre del musculo:", error);
@@ -89,8 +100,14 @@ export default {
       })
       .then((response)=>{
         console.log("nombre del musculo actualizado con exito", response.data);
-        this.nombre = '';
-        this.$emit('escucharForm');
+        if(this.retorno2=='retorno'){
+          this.actualizarDato3(response.data.codigo);
+          this.registrarMusculo(response.data.nombre);
+          this.$router.push('ejercicio');
+        } else{
+          this.nombre = '';
+          this.$emit('escucharForm');
+        }
         this.modificar= false;
         this.salvar= true;
       })

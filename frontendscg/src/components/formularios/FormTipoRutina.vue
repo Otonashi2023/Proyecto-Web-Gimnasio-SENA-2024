@@ -69,9 +69,10 @@ export default {
           this.actualizarDato4(response.data.codigo);
           this.registrarNombre(response.data.nombre);
           this.$router.push('rutina');
-        }     
-        this.nombre = '';
+        } else{
+          this.nombre = '';
         this.$emit('escucharForm');
+        }    
       })
       .catch((error)=>{
         console.error("Error al registrar tipo de rutina:", error);
@@ -99,8 +100,14 @@ export default {
       })
       .then((response)=>{
         console.log("Tipo de rutina actualizado con exito", response.data);
-        this.nombre = '';
-        this.$emit('escucharForm');
+        if(this.retorno=='retorno'){
+          this.actualizarDato4(response.data.codigo);
+          this.registrarNombre(response.data.nombre);
+          this.$router.push('rutina');
+        } else{
+          this.nombre = '';
+          this.$emit('escucharForm');
+        }
         this.modificar= false;
         this.salvar= true;
       })

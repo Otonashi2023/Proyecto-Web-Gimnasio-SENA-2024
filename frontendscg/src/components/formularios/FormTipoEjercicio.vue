@@ -17,6 +17,7 @@
 
 <script>
 import axios from "axios";
+import { mapActions, mapState } from "vuex";
 export default {
   data() {
     return{
@@ -26,8 +27,12 @@ export default {
       modificar: false,
     };
   },
+  computed:{
+    ...mapState(['retorno2']),
+  },
 //metodos CRUD
   methods:{
+    ...mapActions(['actualizarDato2','registrarTipoEjercicio']),
     comparar() {
       if (Array.isArray(this.pack)) {
         const normalizarTexto = (texto) => texto.trim().toLowerCase().replace(/\s+/g, '');
@@ -60,8 +65,14 @@ export default {
       .then((response)=>{
         console.log("Tipo de ejercicio registrado con exito", response.data);
         alert("El tipo de ejercicio es registrado con exito");
-        this.nombre = '';
-        this.$emit('escucharForm');
+        if(this.retorno2=='retorno'){
+          this.actualizarDato2(response.data.codigo);
+          this.registrarTipoEjercicio(response.data.nombre);
+          this.$router.push('ejercicio');
+        } else{
+          this.nombre = '';
+          this.$emit('escucharForm');
+        }
       })
       .catch((error)=>{
         console.error("Error al registrar tipo de ejercicio:", error);
@@ -89,8 +100,14 @@ export default {
       })
       .then((response)=>{
         console.log("Tipo de ejercicio actualizado con exito", response.data);
-        this.nombre = '';
-        this.$emit('escucharForm');
+        if(this.retorno2=='retorno'){
+          this.actualizarDato2(response.data.codigo);
+          this.registrarTipoEjercicio(response.data.nombre);
+          this.$router.push('ejercicio');
+        } else{
+          this.nombre = '';
+          this.$emit('escucharForm');
+        }
         this.modificar= false;
         this.salvar= true;
       })
