@@ -21,6 +21,7 @@ import { mapActions, mapState } from "vuex";
 export default {
   data() {
     return{
+      pack: [],
       nombre: "",
       salvar: true,
       modificar: false,

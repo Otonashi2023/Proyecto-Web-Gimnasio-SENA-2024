@@ -20,6 +20,7 @@ import axios from "axios";
 export default {
   data() {
     return{
+      pack: [],
       nombre: '',
       salvar: true,
       modificar: false,

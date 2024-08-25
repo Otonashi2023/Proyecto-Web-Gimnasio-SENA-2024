@@ -21,6 +21,7 @@ import { mapActions, mapState } from "vuex";
 export default {
   data() {
     return{
+      pack: [],
       nombre: "",
       salvar: true,
       modificar: false,
@@ -133,8 +134,9 @@ export default {
     sended(value){
       this.pack = value;
     },
-    call(){
+    async call(){
       this.$emit('calling');
+      await this.$nextTick();
     }
   },
   mounted() {

@@ -38,7 +38,7 @@ export default{
     },
     methods:{
         ...mapActions('variables',['limpiarEjercicios','limpiarArrayE']),
-        ...mapActions(['limpiarDato6','limpiarDato7','limpiarRutina','limpiarDato8','limpiarRetorno','limpiarNombre','limpiarRetorno2','limpiarDato4']),
+        ...mapActions(['limpiarDato6','limpiarDato7','limpiarRutina','limpiarDato8','limpiarRetorno','limpiarNombre','limpiarRetorno2','limpiarDato4','limpiarEjercicio']),
 
         cambiar(){
             this.formulario=true;
@@ -89,6 +89,7 @@ export default{
             this.limpiarRetorno();
             this.limpiarRetorno2();
             this.limpiarEjercicios();
+            this.limpiarEjercicio();
             this.limpiarArrayE();
         },
     },
