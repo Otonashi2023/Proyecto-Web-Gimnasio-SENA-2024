@@ -32,6 +32,9 @@ const mutations = {
   setPersonas(state, data){
     state.personas = data;
   },
+  clearCodigo(state) {
+    state.persona.codigo = null;
+  },
   clearPersona(state) {
     state.persona = {
       codigo: null,
@@ -93,7 +96,6 @@ const actions = {
       const response = await updatePersonaApi(codigo, data);
       commit('setPersona', response.data);
     } catch (error) {
-      alert('hola');
       console.error("Error actualizar Persona:", error);
       if (error.response) {
         // El servidor respondió con un código de estado fuera del rango 2xx
@@ -120,6 +122,9 @@ const actions = {
   },
   addPersona({commit}, data){
     commit('setPersona', data);
+  },
+  limpiarCodigoPersona({commit}){
+    commit('clearCodigo')
   },
   limpiarPersona({commit}){
     commit('clearPersona');

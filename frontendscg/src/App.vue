@@ -597,6 +597,29 @@ tr:hover .head2 {
   grid-auto-rows: 0.1fr;
 }
 
+#botonA{
+  color:#00B69B;
+  font-weight: bold;
+  font-size: 15px;
+  text-align: center;
+  width: 130px;
+  background: none;
+  border: none;
+  margin-right: 6px;
+  margin-left: 6px;
+  height: 30px;
+}
+#botonB{
+  color:#4880FF;
+  font-weight: bold;
+  font-size: 15px;
+  text-align: center;
+  width: 130px;
+  background: none;
+  border: none;
+  margin-left: 6px;
+  height: 30px;
+}
 
 
 

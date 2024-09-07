@@ -1,19 +1,19 @@
 <template>
     <div class="container2" id="form">
       <h1>Asignación del plan de entrenamiento</h1>
-      <form @submit.prevent="registrarAprendizPlan">
+      <form @submit.prevent="servicio">
         <div class="comp-form-group2">
           <div class="form-group">
             <label for="aprendiz">Aprendiz: </label>
-            <input type="number" name="aprendiz" id="input2" v-model="aprendiz" placeholder="ingrese el aprendiz" readonly disabled>
+            <input type="text" name="aprendiz" id="input2" v-model="vaprendiz" placeholder="ingrese el aprendiz" readonly disabled>
           </div>
           <div class="form-group">
-            <label for="plan">Plan: </label>
-            <input type="number" name="plan" id="input2" v-model="plan" placeholder="ingrese el plan" required>
+            <label for="plan">Plan: <span style="color:magenta; font-weight: 700;">{{ meses }} </span> meses </label>
+            <input type="text" name="plan" id="input2" @click="callMetodoP" v-model="vplan" placeholder="ingrese el plan" readonly>
           </div> 
           <div class="form-group">
             <label for="fecha">Fecha de inicio: </label>
-            <input type="date" name="inicio" id="input2" v-model="inicio"  @change="tofinalizacion" required>
+            <input type="date" name="inicio" id="input2" v-model="inicio" @click="verificar"  @change="tofinalizacion" required>
           </div>
           <div class="form-group">
             <label for="finaliza">fecha de finalización: </label>
@@ -39,29 +39,33 @@ import { mapActions, mapState } from "vuex";
 export default {
   data() {
     return{
-      inicio: '', // Fecha seleccionada en el primer input
-      finaliza: '', // Fecha modificada que se mostrará en el segundo input
+      vaprendiz: '',
+      vplan:'',
+      inicio: '',
+      finaliza: '', 
       salvar: true,
       modificar: false,
+      meses: null,
     };
   },
 
   computed:{
-    ...mapState('aprendizPlan',['aprendizPlan']),
-    ...mapState(['retorno','datoact2']),
+    ...mapState('aprendiz',['aprendiz']),
+    ...mapState('aprendizPlan',['aprendizPlan','aprendizPlanAll']),
+    ...mapState(['retorno4','datoact3']),
   },
 //metodos CRUD
   methods:{
-    ...mapActions('aprendizPlan',['guardarAprendizPlan']),
-
-    ...mapActions(['actualizarRetorno2','limpiarDatoact2','actualizarDatoact2']),
+    ...mapActions('aprendizPlan',['guardarAprendizPlan','consultarAprendizPlan','limpiarCodigoAprendizPlan','actualizarAprendizPlan']),
+    ...mapActions(['actualizarRetorno4','limpiarRetorno4','limpiarDatoact3','actualizarDatoact3']),
 
     tofinalizacion(){
       let dataInput = this.inicio;
       let dateInicio = new Date(dataInput);
       this.inicio= dateInicio.toISOString().split('T')[0];
       let date = new Date(dataInput);
-      let incrementoMes =3;
+      let incrementoMes =this.meses;
+      console.log(incrementoMes);
       let mesTotal = date.getMonth() + incrementoMes;
 
       if (mesTotal >= 12) {
@@ -78,236 +82,126 @@ export default {
       this.finaliza = date.toISOString().split('T')[0];
       console.log('Fecha: ', this.finaliza);
     },
-
+    getNombreAp(){
+      const nombre = (this.aprendiz?.persona?.nombres).split(' ')[0];
+      const apellido = this.aprendiz?.persona?.apellidos.split(' ')[0];
+      this.vaprendiz = [nombre, apellido].join(' ');
+    },
+    setCurrentDate() {
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      this.currentDate = `${year}-${month}-${day}`;
+    },
+    cargarDatos(){
+      this.getNombreAp();
+      this.vplan = this.aprendizPlan?.plan?.tipoPlan?.nombre;
+      this.inicio = this.aprendizPlan?.inicio;
+      this.finaliza= this.aprendizPlan?.finaliza;
+      this.meses = this.aprendizPlan?.plan?.meses;
+    },
+    verificar(){
+      console.log('codigo del plan: ',this.aprendizPlan?.plan?.codigo);
+      if(this.aprendizPlan?.plan?.codigo == null || this.aprendizPlan?.plan?.codigo == undefined){
+        alert('Elija un plan primero');
+      }
+      else{ console.log('aprendizPlan: ',this.aprendizPlan)}
+    },
+    dataAprendizPlan(){
+      this.data ={
+        codigo:this.aprendizPlan.codigo,
+        inicio: this.inicio,
+        finaliza:this.finaliza,
+        aprendiz: this.aprendiz.codigo,
+        plan: this.aprendizPlan.plan.codigo,          
+      };
+      console.log('DATA: ', this.data); 
+  },
+  servicio(){
+      if(this.salvar==true){
+        this.registrarAprendizPlan();
+      }
+      else{
+        this.modificaAPrendizPlan();
+      }
+    },
     async registrarAprendizPlan(){
+      await this.limpiarCodigoAprendizPlan();
+      await this.$nextTick();
       try{
-        const data ={
-          inicio: this.inicio,
-          finaliza:this.finaliza,
-          aprendiz: this.aprendiz,
-          plan: this.plan,          
-        };
-        console.log(data);
-        console.log(this.aprendiz);
-        await this.guardarAprendizPlan(data);
+        this.dataAprendizPlan();
+        await this.guardarAprendizPlan(this.data);
         await this.$nextTick();
         this.$emit('leave');
       } catch(error){
         console.error("Error al guardar aprendiz:", error);
       }
     },
-
-    /*result(){
-      this.imc = this.peso/(this.altura*this.altura);
-      console.log('imc: ', this.imc);
-    },
-    
-    async registrarFichaAntropo(){
-      try {
-        let dataInput = this.fecha;
-        let date = new Date(dataInput);
-        let formattedDate = date.toISOString().split('T')[0];
-
-        const data ={
-          numControl: this.numControl,
-          fecha: formattedDate,
-          altura: this.altura,
-          peso: this.peso,
-          imc: this.imc,
-          personal: 1,
-          genero: 2,
-          aprendiz: 1,
-        };
-        await this.guardarFichaAntropo(data);
+    async modificaAPrendizPlan(){
+      try{
+        this.dataAprendizPlan();
+        await this.actualizarAprendizPlan({codigo:this.data.codigo, data:this.data});
         await this.$nextTick();
-        const fichaAntropoId = this.fichaAntropo.codigo;
-        console.log('Codigo ficha:',this.fichaAntropo.codigo);
-        console.log('Codigo ficha:', fichaAntropoId);
-
-        const dataPerimetros = {
-          cabeza: this.cabeza,
-          cuello: this.cuello,
-          brazoRelax: this.brazoRelax,
-          brazoTenso: this.brazoTenso,
-          antebrazo: this.antebrazo,
-          muñeca: this.muñeca,
-          torax: this.torax,
-          cintura: this.cintura,
-          cadera: this.cadera,
-          musloMax: this.musloMax,
-          musloMin: this.musloMin,
-          pantorrillaMax: this.pantorrillaMax,
-          pantorrillaMin: this.pantorrillaMin,
-          fichaantropo: fichaAntropoId,
-        };
-        console.log("ficha antropometrica",this.fichaAntropo);
-        console.log('PERIMETROS', dataPerimetros);
-        await this.guardarPerimetros(dataPerimetros);
-        await this.$nextTick();
-        console.log('perimetros', this.perimetros);
-        this.$router.push('FichaAntropometrica');        
-      } catch (error) {
-        console.error("Error al guardar aprendiz:", error);
-      }
-    },*/
-    /*
-    servicio(){
-      if(this.salvar==true){
-        if(this.dato!=null && this.dato2!=null && this.dato3!=null){
-          this.guardar();
-        }
-        else{
-          alert("hay campos vacios");
-        } 
-      }
-      else {
-        this.actualizar();       
-      }
-    },
-
-    guardar(){
-      axios
-      .post('http://localhost:8080/api/ejercicio',{
-        nombre: this.dato,
-        tipoEjercicio: this.dato2,
-        musculo: this.dato3,
-        series: this.series,
-        repeticiones: this.repeticiones,
-        descanso: this.descanso,
-      })
-      .then((response)=>{
-        console.log("Ejercicio registrado con exito", response.data);
-        alert("El ejercicio es registrado con exito");
         this.$emit('leave');
-        if(this.retorno=='retorno'){
-          this.actualizarDato7(response.data.codigo);
-          this.antesderoutear();
-          this.$router.push('rutinaEjercicio');
-        }           
-      })
-      .catch((error)=>{
-        console.error("Error al registrar ejercicio:", error);
-      });
+      } catch(error){
+        console.error("Error al actualizar la asignacion de plan de entrenamineto:", error);
+      }
     },
 
-    consultar(value){
-      this.codigo=value;
-      axios
-        .get('http://localhost:8080/api/ejercicio/'+this.codigo)
-        .then((response)=>{
-              //actualiza los campos del formulario con los datos consultados
-          this.nombre = response.data.nombre.nombre;
-          this.tipoEjercicio = response.data.tipoEjercicio.nombre;
-          this.musculo = response.data.musculo.nombre;
-          this.series = response.data.series;
-          this.repeticiones = response.data.repeticiones;
-          this.descanso = response.data.descanso;
-          this.actualizarDato(response.data.nombre.codigo);
-          this.actualizarDato2(response.data.tipoEjercicio.codigo);
-          this.actualizarDato3(response.data.musculo.codigo);
-          if(this.habilitar==1){
-            this.registrarEjercicio(response.data.nombre.nombre);
-          }
-        })
-        .catch((error) =>{
-          console.error("Error al consultar ejercicio: ", error);
-        });
-    },
+    async read(value){
+      const idAprendizPlan = this.aprendizPlanAll.filter(item => item.codigo === value).map(item => item.codigo);
+      await this.consultarAprendizPlan(idAprendizPlan);
+      await this.$nextTick();
+      this.cargarDatos();
 
-    actualizar(){
-      this.codigo=this.datoact2;
-      
-      axios
-        .put('http://localhost:8080/api/ejercicio/actualizar/'+this.codigo,{
-          nombre: this.dato,
-          tipoEjercicio: this.dato2,
-          musculo: this.dato3,
-          series: this.series,
-          repeticiones: this.repeticiones,
-          descanso: this.descanso,        
-      })
-      .then((response)=>{
-        console.log("Ejercicio actualizado con exito", response.data);
-        this.$emit('leave');
-        if(this.retorno=='retorno'){
-          this.actualizarDato7(this.codigo);
-          this.antesderoutear();
-          this.$router.push('rutinaEjercicio');
-        }
-
-      })
-      .catch((error)=>{
-        console.error("Error al actualizar el ejercicio", error);
-      });
-    },
-    
-    read(value){
-      this.limpiarDatoact2();
-      this.consultar(value);
-      this.rotar();
-    },
-    update(value){
-      this.consultar(value);
-      this.actualizarDatoact2(value);
-      this.variar();
+      console.log('idAprendizPlan: ', idAprendizPlan);
+      console.log('aprendizPlan: ', this.aprendizPlan);
     },
     clear(){
-      this.nombre="";
-      this.tipoEjercicio="";
-      this.musculo="";
-      this.series="";
-      this.repeticiones="";
-      this.descanso="";
+      this.vplan = '';
+      this.inicio = '';
+      this.finaliza = '';
+    },
+    loadDatos3(){
+      console.log('APRENDIZ PLAN: ', this.aprendizPlan);
+      this.vplan = this.aprendizPlan?.plan?.tipoPlan?.nombre;
+      this.meses = this.aprendizPlan?.plan?.meses;
+      this.setCurrentDate();
+      this.inicio = this.currentDate;
+      this.tofinalizacion();
+    },
+    
+    update(value){
+      this.actualizarDatoact3(value);
+      this.variar();
     },
     cerrar(){
-      //this.clear();
-      //this.rotar();
-      this.limpiarDatoact2();
+      this.clear();
+      this.rotar();
+      this.limpiarDatoact3();
     },
     rotar(){
       this.modificar= false;
       this.salvar= true;
     },
     variar(){
-      if(this.datoact2!=null){
+      if(this.datoact3!=null){
         this.modificar=true;
         this.salvar=false;
       }
-      this.nombre=this.getNombre;
-      this.tipoEjercicio=this.getTipoEjercicio;
-      this.musculo=this.getMusculo;
-      this.series=this.getSeries;
-      this.repeticiones=this.getRepeticiones;
-      this.descanso=this.getDescanso;
     },
-    antesderoutear(){
-      this.habilitar=1;
-      this.consultar(this.dato7);
+    
+    callMetodoP(){
+      this.limpiarRetorno4();
+      this.actualizarRetorno4('retorno');
+      console.log('retorno4: ', this.retorno4);
+      this.$router.push('planRutina');
     },
-    datos(){
-      this.registrarNombre(this.nombre);
-      this.registrarTipoEjercicio(this.tipoEjercicio);
-      this.registrarMusculo(this.musculo);
-      this.actualizarSeries(this.series);
-      this.actualizarRepeticiones(this.repeticiones);
-      this.actualizarDescanso(this.descanso);
-    },
-
-    callMetodoN(){
-      this.datos();
-      this.actualizarRetorno2('retorno');
-      this.$router.push('nombreEjercicio');
-    },
-    callMetodoT(){
-      this.datos();
-      this.actualizarRetorno2('retorno');
-      this.$router.push('tipoEjercicio');
-    },
-    callMetodoM(){
-      this.datos();
-      this.actualizarRetorno2('retorno');
-      this.$router.push('musculo');
-    },*/
   },
+  mounted(){
+    this.getNombreAp();
+    this.cargarDatos();
+  }
 }
 </script>

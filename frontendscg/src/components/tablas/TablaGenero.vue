@@ -10,7 +10,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr id="fila2" v-for="nombre in nombres" :key="nombre.codigo" @click="() => {callMetodoN(); consultarbyId(nombre.codigo); registrarNombre(nombre.nombre)}">
+          <tr id="fila2" v-for="nombre in nombres" :key="nombre.codigo" @click="() => {callMetodoG(nombre.codigo); consultarbyId(nombre.codigo); registrarNombre(nombre.nombre)}">
             <td>{{ nombre.nombre }}</td>
             <td id="alibutton">
                 <font-awesome-icon icon="edit" id="editar" @click="actualizar(nombre.codigo)"/>
@@ -32,8 +32,9 @@ import { mapActions, mapState } from "vuex";
         codigo: "",
       }
     },
-    computed:{...mapState(['retorno2'])},
+    computed:{...mapState(['retorno3'])},
     methods: {
+      ...mapActions('genero',['consultarGenero']),
       ...mapActions(['actualizarDato','registrarNombre']),
 
       obtenerGeneros(){
@@ -74,10 +75,12 @@ import { mapActions, mapState } from "vuex";
         this.codigo=value;
         this.$emit('change',this.codigo);
       },
-      callMetodoN(){
-        if(this.retorno2=='retorno'){
+      async callMetodoG(value){
+        if(this.retorno3=='retorno'){
           if(this.codigo==null){
-            this.$router.push('persona');
+            await this.consultarGenero(value);
+            await this.$nextTick();
+            this.$router.push('fichaAntropometrica');
           }
         }     
       },

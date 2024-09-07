@@ -10,7 +10,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr id="fila2" v-for="nombre in nombres" :key="nombre.codigo" @click="() => {callMetodoN(); consultarbyId(nombre.codigo); actionNombreFo(nombre.nombre)}">
+          <tr id="fila2" v-for="nombre in nombres" :key="nombre.codigo" @click="() => {callMetodoN(nombre.codigo); consultarbyId(nombre.codigo);}">
             <td>{{ nombre.nombre }}</td>
             <td id="alibutton">
                 <font-awesome-icon icon="edit" id="editar" @click="actualizar(nombre.codigo)"/>
@@ -32,9 +32,12 @@ import { mapActions, mapState } from "vuex";
         codigo: "",
       }
     },
-    computed:{...mapState(['retorno2'])},
+    computed:{
+      ...mapState('formacion',['formacion']),
+      ...mapState(['retorno2'])},
     methods: {
-      ...mapActions('ficha',['actionFormacion','actionNombreFo']),
+      ...mapActions('formacion',['consultarFormacion','limpiarFormacion']),
+      ...mapActions(['actualizarDato4']),
 
       obtenerFormaciones(){
         // Método para obtener los campos de la lista
@@ -68,7 +71,7 @@ import { mapActions, mapState } from "vuex";
 
       consultarbyId(value){
         if(this.codigo==null){
-          this.actionFormacion(value);
+          this.actualizarDato4(value);
           this.$emit('ById',value);
         }
       },
@@ -76,15 +79,21 @@ import { mapActions, mapState } from "vuex";
         this.codigo=value;
         this.$emit('change',this.codigo);
       },
-      callMetodoN(){
+      async callMetodoN(value){
         if(this.retorno2=='retorno'){
           if(this.codigo==null){
+            this.limpiarFormacion();
+            await this.consultarFormacion(value);
+            await this.$nextTick();
             this.$router.push('ficha');
           }
         }     
       },
       limpiarId(){
         this.codigo=null;
+      },
+      sender(){
+        this.$emit('send',this.nombres);
       }
     },
     mounted(){

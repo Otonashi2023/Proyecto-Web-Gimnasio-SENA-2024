@@ -54,7 +54,7 @@ export default {
     
     servicio(){
       if(this.salvar==true){
-        if(this.dato4!=null && this.meses!=null){
+        if(this.dato4!=null && this.dato9!=null){
           this.guardar();
         }
         else{
@@ -76,7 +76,7 @@ export default {
         console.log('DATOS VERSION: ', this.meses);
         console.log('1.existe:', existe);
         if(existe){
-          alert('este ejercicio ya existe');
+          alert('este rutina ya existe');
         }
         else{        
           this.servicio();
@@ -87,10 +87,11 @@ export default {
     },
 
     guardar(){
+      this.actualizarDato9(this.meses);
       axios
       .post('http://localhost:8080/api/plan',{
         tipoPlan: this.dato4,
-        meses:this.meses,
+        meses:this.dato9,
       })
       .then((response)=>{
         console.log("Plan registrado con exito", response.data);
@@ -115,7 +116,7 @@ export default {
         .then((response)=>{
           //actualiza los campos del formulario con los datos consultados
           this.nombre=response.data.tipoPlan.nombre;
-          this.numero=response.data.meses;
+          this.meses=response.data.meses;
           this.actualizarDato4(response.data.tipoPlan.codigo);
           if(this.habilitar==1){
             this.registrarPlan(response.data.tipoPlan.nombre);
@@ -129,10 +130,11 @@ export default {
 
     actualizar(){
       this.codigo=this.datoact2;
+      this.actualizarDato9(this.meses);
       axios
         .put('http://localhost:8080/api/plan/actualizar/'+this.codigo,{
           tipoPlan: this.dato4,
-          meses: this.numero,      
+          meses: this.dato9,      
       })
       .then((response)=>{
         console.log("Plan actualizado con exito", response.data);

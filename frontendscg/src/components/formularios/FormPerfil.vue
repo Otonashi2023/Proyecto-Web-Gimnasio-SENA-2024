@@ -1,7 +1,7 @@
 <template>
     <div class="container2" id="form">
         <h1>Datos personales</h1>
-        <form @submit.prevent="actualizarDatos()" id="scroll3">
+        <form @submit.prevent="actualizarDatos()" id="scroll">
         
         <div class="comp-form-group2">
             <div class="form-group">
@@ -34,7 +34,7 @@
             </div>
             <div class="form-group">
             <label for="correo">Email:</label>
-            <input type="adrees" name="descanso" id="input2" v-model="persona.correo" placeholder="ingrese el correo electrónico">
+            <input type="email" name="descanso" id="input2" v-model="persona.correo" placeholder="ingrese el correo electrónico">
             </div>
             <div class="form-group">
             <label for="username">Username:</label>

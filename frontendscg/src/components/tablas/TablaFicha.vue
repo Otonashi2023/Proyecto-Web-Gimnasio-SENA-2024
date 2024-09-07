@@ -12,7 +12,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr id="fila2" v-for="ficha in fichas" :key="ficha.codigo" @click="() => {callMetodoN(); consultarbyId(ficha.codigo); consultarbyName(ficha.formacion.nombre,ficha.numero)}">
+          <tr id="fila2" v-for="ficha in fichas" :key="ficha.codigo" @click="() => {callMetodoN(ficha.codigo); consultarbyId(ficha.codigo);}">
             <td>{{ ficha.numero }}</td>
             <td>{{ ficha.formacion.nombre }}</td>
             <td id="alibutton">
@@ -37,9 +37,13 @@ import { mapActions, mapState } from "vuex";
         codigo:null,
       }
     },
-    computed:{...mapState(['retorno','retorno2'])},
+    computed:{
+      ...mapState('formacion',['formacion']),
+      ...mapState('ficha',['ficha']),
+      ...mapState(['retorno','retorno2','datoact2'])},
     methods: {
-      ...mapActions('ficha',['actionFicha','actionNumeroFi','actionNombreFo']),
+      ...mapActions('formacion',['consultarFormacion']),
+      ...mapActions('ficha',['consultarFicha','limpiarFicha']),
 
       obtenerFichas(){
         // Método para obtener los campos de la lista
@@ -66,9 +70,9 @@ import { mapActions, mapState } from "vuex";
           console.log("Error al eliminar ficha", error);
         });
       },
-      consultarbyId(value){
+      async consultarbyId(value){
         if(this.codigo==null){
-          this.actionFicha(value);
+          await this.consultarFicha(value);
           this.$emit('ById',value);
         }
       },
@@ -76,16 +80,18 @@ import { mapActions, mapState } from "vuex";
         this.codigo=value;
         this.$emit('change',this.codigo);
       },
-      consultarbyName(value,numero){
-        this.actionNombreFo(value);
-        this.actionNumeroFi(numero);
-      },
       limpiarId(){
         this.codigo=null;
       },
-      callMetodoN(){
+      async callMetodoN(value){
         if(this.retorno=='retorno'){
           if(this.codigo==null){
+            this.limpiarFicha();
+            await this.consultarFicha(value);
+            await this.consultarFormacion(this.ficha.formacion.codigo);
+            await this.$nextTick();
+            console.log('Formacion antes de ir a aprendiz: ', this.formacion
+            );
             this.$router.push('aprendiz');
           }
         }

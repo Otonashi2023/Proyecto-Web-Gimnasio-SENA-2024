@@ -9,7 +9,7 @@
                 </div>
             </div>
             <div v-show="formulario"><FormAprendiz @leave="salir" ref="componenteForm"/></div>
-            <div v-show="listar"><TablaAprendiz ref="componente" @ById="read" @change="update" @escuchartable="tabla" @goForm="inData"/></div>
+            <div v-show="listar"><TablaAprendiz ref="componente" @ById="read" @change="update" @goForm="inData"/></div>
         </div>
     </div>
 </template>
@@ -17,7 +17,7 @@
 <script>
 import FormAprendiz from '@/components/formularios/FormAprendiz.vue';
 import TablaAprendiz from '@/components/tablas/TablaAprendiz.vue';
-//import { mapActions } from 'vuex';
+import { mapActions, mapState} from 'vuex';
 
 export default{
     name:'EjercicioView',
@@ -31,58 +31,57 @@ export default{
             listar:true,
         }
     },
-    computed:{
+    computed:{...mapState(['datoact1']),
         user() {
                 return this.$store.state.user;
             },
     },
     methods:{
-        /*...mapActions(['limpiarDato','limpiarDato2','limpiarDato3','limpiarNombre','limpiarTipoEjercicio',
-        'limpiarMusculo','limpiarEjercicio','limpiarDatoact2','limpiarRetorno2','limpiarDato7','actualizarDatoact2']),*/
+        ...mapActions('tipoDocumento',['limpiarTipoDocumento']),
+        ...mapActions('persona',['limpiarPersona']),
+        ...mapActions('formacion',['limpiarFormacion']),
+        ...mapActions('ficha',['limpiarFicha']),
+        ...mapActions('aprendiz',['limpiarAprendiz']),
+        ...mapActions(['limpiarDatoact1','limpiarRetorno']),
 
-        cambiar(){
-            this.formulario=true;
-            this.listar=false;
-        },
         irAformulario(){
+            this.limpiarDatos();
             this.cambiar();
-            //this.limpiarDatos();
-            //this.$refs.componenteForm.clear();
+            this.$refs.componenteForm.cerrar();       
+            this.$refs.componenteForm.cargarDatos();
         },
         salir(){
+            this.limpiarDatos();
             this.formulario=false;
             this.listar=true;
-            //this.limpiarDatos();
+            this.$refs.componenteForm.cerrar();
             this.$refs.componente.consultarAllAprendices();
         },
-        /*read(value){
+        read(value){
             this.cambiar();
             this.$refs.componenteForm.read(value);
         },
         update(value){
-            this.cambiar();
             this.$refs.componenteForm.update(value);
-        },
-        tabla(){
-            this.$refs.componenteForm.cerrar();
         },
         inData(){
             this.cambiar();
-            this.limpiarRetorno2();
+            this.limpiarRetorno();
             this.$refs.componenteForm.variar();
+            this.$refs.componenteForm.cargarDatos();
         },
         limpiarDatos(){
-            this.limpiarDato();
-            this.limpiarDato2();
-            this.limpiarDato3();
-            this.limpiarNombre();
-            this.limpiarTipoEjercicio();
-            this.limpiarMusculo();
-            this.limpiarDato7();
-            this.limpiarEjercicio();
-            this.limpiarDatoact2();
-            this.$refs.componenteForm.cerrar()
-        },*/
+            this.limpiarTipoDocumento(); 
+            this.limpiarPersona();
+            this.limpiarFormacion();
+            this.limpiarFicha();
+            this.limpiarAprendiz();
+            this.limpiarDatoact1();
+        },
+        cambiar(){
+            this.listar=false;
+            this.formulario=true;
+        },
     }
 }
 </script>

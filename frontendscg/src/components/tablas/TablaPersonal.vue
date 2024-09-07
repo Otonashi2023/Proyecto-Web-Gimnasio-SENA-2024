@@ -18,7 +18,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr id="fila2" v-for="(item, index) in usuarios" :key="index" @click.stop="consultar(item.codigo)">
+          <tr id="fila2" v-for="(item, index) in usuarios" :key="index" @click="() => {callMetodoP(item.personal.codigo); consultar(item.codigo);}">
             <td>pendiente</td>
             <td>{{ item.personal.persona.nombres}}</td>
             <td>{{ item.personal.persona.apellidos }}</td>
@@ -43,12 +43,14 @@ import { mapActions, mapState } from 'vuex';
 
 export default{
     computed:{
+      ...mapState('personal',['personal']),
       ...mapState('usuario',['usuarios']),
-      ...mapState(['retorno2']),
+      ...mapState(['retorno2','retorno3']),
     },
     methods:{
-      ...mapActions('usuario',['consultarAllUsuarios']),
       ...mapActions('persona',['eliminarPersona']),
+      ...mapActions('personal',['consultarPersonal']),
+      ...mapActions('usuario',['consultarAllUsuarios']),
 
       async eliminar(event, value){
         event.stopPropagation();
@@ -65,7 +67,19 @@ export default{
         this.$emit('ById', value);
       },
 
+      async callMetodoP(value){
+      if(this.retorno3=='retorno'){
+        if(this.codigo==null){
+          await this.consultarPersonal(value);
+          await this.$nextTick();
+          console.log('Personal detalles: ', this.personal);
+          this.$router.push('fichaAntropometrica');
+        }
+      }
+    },
+
       formulario(){
+        console.log('aqui en tabla personal', this.retorno2);
         if(this.retorno2=='retorno'){
           this.$emit('goForm');
         }

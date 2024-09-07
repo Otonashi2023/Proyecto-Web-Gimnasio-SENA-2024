@@ -47,7 +47,6 @@ export default{
         irAformulario(){
             this.cambiar();
             this.limpiarDatos();
-            //this.$refs.componenteForm.cerrar();
         },
         salir(){
             this.formulario=false;
@@ -58,17 +57,11 @@ export default{
         read(value1,value2){
             this.cambiar();
             this.$refs.componenteForm.read(value1,value2);
-        },/*
+        },
         update(value){
             this.cambiar();
             this.$refs.componenteForm.update(value);
         },
-        tabla(){
-            this.$refs.componenteForm.cerrar();
-        },
-        jumper(){
-            this.$refs.componente.limpiarId();
-        },*/
         inData(){
             this.cambiar();
             this.limpiarRetorno3();

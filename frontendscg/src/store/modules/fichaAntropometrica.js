@@ -4,6 +4,7 @@ const state = {
   fichaAntropo:{
     codigo: null,
     numControl: null,
+    fecha: '',
     altura: null,
     peso: null,
     imc: null,
@@ -12,6 +13,7 @@ const state = {
     aprendiz: null,
   },
   fichaAntropoAll:[],
+  estado: null,
 };
 
 const getters = {
@@ -26,10 +28,14 @@ const mutations = {
   setFichaAntropoAll(state, data){
     state.fichaAntropoAll = data;
   },
+  clearCodigo(state){
+    state.fichaAntropo.codigo = null;
+  },
   clearFichaAntropo(state) {
     state.fichaAntropo = {
         codigo: null,
         numControl: null,
+        fecha: "",
         altura: null,
         peso: null,
         imc: null,
@@ -37,6 +43,12 @@ const mutations = {
         genero: null,
         aprendiz: null,
     };
+  },
+  setEstado(state, value){
+    state.estado = value;
+  },
+  clearEstado(state){
+    state.estado = null;
   },
 };
 
@@ -59,7 +71,9 @@ const actions = {
   },
   async guardarFichaAntropo({ commit }, data) {
     try {
+      console.log('DATA QUE LLEGA: ', data);
       const response = await createFichaAntropoApi(data);
+      console.log('AQUI DESDE EL MODULO FICHA ANTROPO API: ', response.data);
       commit('setFichaAntropo', response.data);
     } catch (error) {
       console.error("Error guardar FichaAntropo:", error);
@@ -94,8 +108,20 @@ const actions = {
       console.error("Error eliminar FichaAntropo:", error);
     }
   },
-  limpiarPersona({commit}){
+  addFichaantropo({commit}, data){
+    commit('setFichaAntropo', data);
+  },
+  limpiarCodigoFichaantropo({commit}){
+    commit('clearCodigo');
+  },
+  limpiarFichaAntropo({commit}){
     commit('clearFichaAntropo');
+  },
+  addEstado({commit}, value){
+    commit('setEstado', value);
+  },
+  limpiarEstado({commit}){
+    commit('clearEstado');
   }
 };
 

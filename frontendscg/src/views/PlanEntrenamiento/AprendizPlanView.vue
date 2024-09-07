@@ -4,12 +4,14 @@
             <div id="up">
                 <h1 id="alitext">Aprendiz</h1>
                 <div id="alibutton">
+                    <router-link to="fichaAntropometrica" style="color:orangered;margin-right: 40px; font-weight: 700;">Ir a ficha antropo</router-link>
                     <font-awesome-icon :icon="['fas', 'address-book']" id="agregar" v-if="listar" @click="irAformulario()"/>
                     <font-awesome-icon icon="circle-xmark" id="cerrar2" v-if="formulario" @click="salir"/>
                 </div>
             </div>
             <div v-show="formulario"><FormAprendizPlan @leave="salir" ref="componenteForm"/></div>
-            <div v-show="listar"><TablaAprendizPlan ref="componente" @ById="read" @change="update" @escuchartable="tabla" @goForm="inData"/></div>
+            <div v-show="listar"><TablaAprendizPlan ref="componente" @ById="read" @change="update" @escuchartable="tabla" @goForm="inData" @verModal="verModal"/></div>
+            <div v-show="modal"><ModalAprendizPlan @verModal="verModal"/></div>
         </div>
     </div>
 </template>
@@ -17,43 +19,48 @@
 <script>
 import FormAprendizPlan from '@/components/formularios/FormAprendizPlan.vue';
 import TablaAprendizPlan from '@/components/tablas/TablaAprendizPlan.vue';
-import { mapActions } from 'vuex';
+import ModalAprendizPlan from '@/components/modal/ModalAprendizPlan.vue';
+import { mapActions, mapState } from 'vuex';
 
 export default{
-    name:'EjercicioView',
+    name:'AprendizPlanView',
     components:{
         FormAprendizPlan,
         TablaAprendizPlan,
+        ModalAprendizPlan,
     },
     data(){
         return{
-            formulario:true,
+            formulario:false,
             listar:true,
+            modal: false,
         }
     },
-    computed:{
+    computed:{...mapState('aprendizPlan',['aprendizPlan']),
         user() {
                 return this.$store.state.user;
             },
     },
     methods:{
-        ...mapActions(['limpiarDato','limpiarDato2','limpiarDato3','limpiarNombre','limpiarTipoEjercicio',
-        'limpiarMusculo','limpiarEjercicio','limpiarDatoact2','limpiarRetorno2','limpiarDato7','actualizarDatoact2']),
+        ...mapActions('aprendizPlan',['limpiarAprendizPlan']),
+        ...mapActions(['limpiarRetorno4','limpiarDatoact4']),
 
         cambiar(){
             this.formulario=true;
             this.listar=false;
         },
-        irAformulario(){
-            this.cambiar();
+        async irAformulario(){
             this.limpiarDatos();
-            this.$refs.componenteForm.clear();
+            await this.$nextTick();
+            this.cambiar();
+            this.$refs.componenteForm.cerrar();
         },
-        salir(){
+        async salir(){
+            this.limpiarDatos();
+            await this.$nextTick();
             this.formulario=false;
             this.listar=true;
-            this.limpiarDatos();
-            this.$refs.componente.consultarAprendizPlanAll();
+            this.$refs.componente.aprendizPlanFiltrado();
         },
         read(value){
             this.cambiar();
@@ -63,26 +70,29 @@ export default{
             this.cambiar();
             this.$refs.componenteForm.update(value);
         },
-        tabla(){
-            this.$refs.componenteForm.cerrar();
-        },
         inData(){
             this.cambiar();
-            this.limpiarRetorno2();
+            this.limpiarRetorno4();
+            this.$refs.componenteForm.loadDatos3();
             this.$refs.componenteForm.variar();
         },
         limpiarDatos(){
-            this.limpiarDato();
-            this.limpiarDato2();
-            this.limpiarDato3();
-            this.limpiarNombre();
-            this.limpiarTipoEjercicio();
-            this.limpiarMusculo();
-            this.limpiarDato7();
-            this.limpiarEjercicio();
-            this.limpiarDatoact2();
-            this.$refs.componenteForm.cerrar()
+            this.limpiarAprendizPlan();
         },
-    }
+        verModal(value){
+            if(value == true){
+                this.modal = true;
+                this.formulario = false;
+                this.listar = false;
+                console.log('open: ',this.modal);
+            } else{
+                this.modal = false;
+                this.formulario = false;
+                this.listar = true;
+                console.log('close: ',this.modal);
+            }
+            
+        }
+    },
 }
 </script>

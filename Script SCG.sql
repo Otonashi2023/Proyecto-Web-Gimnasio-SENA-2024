@@ -8,13 +8,13 @@ create table tipo_documento (
 
 create table persona (
   id_person bigint not null primary key auto_increment,
-  nombres varchar(45) not null,
+  nombres varchar(100) not null,
   apellidos varchar(45) not null,
   cedula bigint not null unique,
   celular bigint not null,
   nom_contacto varchar(45) not null,
   celular_alt bigint not null,
-  email varchar(45) not null unique,
+  email varchar(45) not null,
   tipo_documento int not null,
   constraint fk_persona_tipodocumento
     foreign key (tipo_documento)
@@ -153,8 +153,8 @@ create table genero (
 
 create table fichaantropo (
   id_fich_ant bigint not null primary key auto_increment,
-  num_control int not null,
-  fecha_toma date not null,
+  num_control bigint not null,
+  fecha_toma date,
   altura float not null,
   peso float not null,
   imc float not null,
@@ -288,7 +288,7 @@ insert into plan (tipo_plan, meses) values (1, 3);
 insert into plan (tipo_plan, meses) values (2, 6);
 insert into plan (tipo_plan, meses) values (3, 3);
 
-insert into aprendiz_plan (inicio, finaliza, aprendiz, plan) values ("2024-06-08", "2024-09-16", 1, 1);
+insert into aprendiz_plan (inicio, finaliza, aprendiz, plan) values ("2024-06-08", "2024-09-08", 1, 1);
 
 insert into tipo_rutina (nom_rutina) values ("Full-Fuerza");
 insert into tipo_rutina (nom_rutina) values ("Full-Resistencia");
@@ -324,3 +324,63 @@ insert into ejercicio (series, repeticiones, descanso, nombre_ejercicio, tipo_ej
 
 insert into rutina_ejercicio (rutina, ejercicio) values (1, 1);
 insert into rutina_ejercicio (rutina, ejercicio) values (1, 2);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\tipo_documento.csv'
+INTO TABLE tipo_documento
+FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(nom_documento);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\persona.csv'
+INTO TABLE persona
+FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(nombres, apellidos, cedula, celular, nom_contacto, celular_alt, email, tipo_documento);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\formacion.csv'
+INTO TABLE formacion
+FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(nom_formacion);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\ficha.csv'
+INTO TABLE ficha
+FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(numero, formacion);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\aprendiz.csv'
+INTO TABLE aprendiz
+FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(restric_medicas, persona, ficha);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\cargo.csv'
+INTO TABLE cargo
+FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(nom_cargo);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\personal.csv'
+INTO TABLE personal
+FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(persona, cargo);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\fichaantropo.csv'
+INTO TABLE fichaantropo
+FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(num_control, fecha_toma, altura, peso, imc, personal, genero, aprendiz);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\perimetros.csv'
+INTO TABLE perimetros
+FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(cabeza, cuello, brazo_relax, brazo_tensionado, antebrazo, muñeca, torax, cintura, cadera, muslo_max, muslo_min, pantorrilla_max, pantorrilla_min, fichaantropo);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\usuario.csv'
+INTO TABLE usuario
+FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(nom_usu, cont_usu, personal);

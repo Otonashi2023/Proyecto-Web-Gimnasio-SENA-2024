@@ -87,8 +87,8 @@ const actions = {
         }
       },
 
-    actionFicha({commit}, codigo){
-        commit('setFicha', codigo);
+    addFicha({commit}, data){
+        commit('setFicha', data);
     },
     limpiarFicha({commit}){
         commit('clearFicha');

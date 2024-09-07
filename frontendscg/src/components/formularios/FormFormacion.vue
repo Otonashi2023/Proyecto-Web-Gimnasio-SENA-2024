@@ -1,10 +1,10 @@
 <template>
     <div class="container" id="form">
       <h1>Formulario de formación académica</h1>
-      <form id="simple-form" @submit.prevent="servicio()" >
+      <form id="simple-form" @submit.prevent="comparar()" >
         <div class="form-group">
           <label for="nombre">Nombre: </label>
-          <input type="text" ref="myInput" name="nombre" id="nombre" required v-model="nombre" placeholder="ingrese el nombre de la fomación">
+          <input type="text" ref="myInput" name="nombre" id="nombre" @click="call" v-model="nombre" placeholder="ingrese el nombre de la fomación" required>
         </div>
         <div id="flex">
             <button id="guardar" type="submit" name="guardar" v-if="salvar">Guardar</button>
@@ -17,16 +17,38 @@
 
 <script>
 import axios from "axios";
+import { mapActions, mapState } from "vuex";
 export default {
   data() {
     return{
+      pack: [],
       nombre: "",
       salvar: true,
       modificar: false,
     };
   },
+  computed:{
+    ...mapState('formacion',['formacion']),
+    ...mapState(['retorno2']),
+  },
 //metodos CRUD
   methods:{
+    ...mapActions('formacion',['consultarFormacion','limpiarFormacion']),
+    comparar() {
+      if (Array.isArray(this.pack)) {
+        const normalizarTexto = (texto) => texto.trim().toLowerCase().replace(/\s+/g, '');
+        
+        const found = this.pack.find(item =>
+          normalizarTexto(item.nombre) === normalizarTexto(this.nombre));
+          
+        if (found) {
+          alert('El nombre ya existe');
+        } else {
+          this.servicio();
+        }
+      }
+    },
+    
     servicio(){
       if(this.salvar==true){
         this.guardar();
@@ -44,12 +66,23 @@ export default {
       .then((response)=>{
         console.log("Nombre de la formacion registrado con exito", response.data);
         alert("El nombe de la formacion es registrado con exito");
-        this.nombre = '';
-        this.$emit('escucharForm');
+        if(this.retorno2 == 'retorno'){
+          this.limpiarFormacion();
+          this.consultarTD(response.data.codigo);
+          console.log(1);
+        } else{
+          this.nombre = '';
+          this.$emit('escucharForm');
+        }
       })
       .catch((error)=>{
         console.error("Error al registrar nombre de la formacion:", error);
       });
+    },
+    async consultarTD(valor){
+      await this.consultarFormacion(valor);
+      await this.$nextTick();
+      this.$router.push('ficha');
     },
 
     consultar(value){
@@ -73,8 +106,14 @@ export default {
       })
       .then((response)=>{
         console.log("nombre de la formacion actualizado con exito", response.data);
-        this.nombre = '';
-        this.$emit('escucharForm');
+        if(this.retorno2 == 'retorno'){
+          this.limpiarFormacion();
+          this.consultarTD(response.data.codigo);
+          console.log(1);
+        } else{
+          this.nombre = '';
+          this.$emit('escucharForm');
+        }
         this.modificar= false;
         this.salvar= true;
       })
@@ -100,7 +139,13 @@ export default {
     },
     focusInput(){
     this.$refs.myInput.focus();
-  }
+    },
+    sended(value){
+      this.pack = value;
+    },
+    call(){
+      this.$emit('calling');
+    }
   },
   mounted() {
     this.focusInput();

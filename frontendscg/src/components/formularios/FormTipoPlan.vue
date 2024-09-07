@@ -22,7 +22,7 @@ export default {
   data() {
     return{
       pack: [],
-      nombre: "",
+      nombre: '',
       salvar: true,
       modificar: false,
     };

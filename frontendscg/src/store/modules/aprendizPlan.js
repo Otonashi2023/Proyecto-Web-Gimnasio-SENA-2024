@@ -20,6 +20,16 @@ const mutations = {
   setAprendizPlan(state, data) {
     state.aprendizPlan = {...data};
   },
+  setAddPlan(state, planFiltrado){
+    state.aprendizPlan = {
+      ...state.aprendizPlan,
+      plan: { ...planFiltrado.plan
+      }
+    };
+  },
+  clearCodigo(state){
+    state.aprendizPlan.codigo = null;
+  },
   setAprendizPlanAll(state, data){
     state.aprendizPlanAll = data;
   },
@@ -89,6 +99,12 @@ const actions = {
     } catch (error) {
       console.error("Error eliminar AprendizPlan:", error);
     }
+  },
+  agregarPlan({commit}, planFiltrado){
+    commit('setAddPlan', planFiltrado);
+  },
+  limpiarCodigoAprendizPlan({commit}){
+    commit('clearCodigo');
   },
   limpiarAprendizPlan({commit}){
     commit('clearAprendizPlan');

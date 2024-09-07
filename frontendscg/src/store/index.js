@@ -18,74 +18,68 @@ import formacion from './modules/formacion';
 import ensayo from './modules/ensayo';
 import utils from './modules/utils';
 import ejercicio from './modules/ejercicio';
+import plan from './modules/plan';
 //import axios from 'axios';
 
 export default createStore({
-  state: {  
-    /*metodo:null,
-    metodo2:null,
-    metodo3:null,
-    metodo4:null,
-    metodo5:null,*/
-    
-    retorno:'',
-    retorno2:'',
-    retorno3:"",
+  state: {    
+    retorno: '',
+    retorno2: '',
+    retorno3: "",
+    retorno4: null,
 
-    datoact1:null,
-    datoact2:null,
-    dato:null,
-    dato2:null,
-    dato3:null,
+    datoact1: null,
+    datoact2: null,
+    datoact3: null,
+    dato: null,
+    dato2: null,
+    dato3: null,
     dato4: null,
-    dato5:null,
-    dato6:null,
-    dato7:null,
-    dato8:null,
-    dato9:null,
+    dato5: null,
+    dato6: null,
+    dato7: null,
+    dato8: null,
+    dato9: null,
 
-    nombre:"",
-    tipoEjercicio:"",
-    musculo:"",
-    rutina:"",
-    ejercicio:"",
-    plan:"",
+    nombre: "",
+    tipoEjercicio: "",
+    musculo: "",
+    rutina: "",
+    ejercicio: "",
+    plan: "",
 
-    visibleIn:false,
-    visibleOut:true,
+    visibleIn: false,
+    visibleOut: true,
     
     user: null,
   },
 
-  getters: {
-    /*obtenerMetodo:(state)=>state.metodo,
-    obtenerMetodo2:(state)=>state.metodo2,
-    obtenerMetodo3:(state)=>state.metodo3,
-    obtenerMetodo4:(state)=>state.metodo4,
-    obtenerMetodo5:(state)=>state.metodo5,*/
-    
-    getRetorno: (state)=> state.retorno,
-    getRetorno2: (state)=> state.retorno2,
-    getRetorno3: (state)=> state.retorno3,
+  getters: {   
+    getRetorno: (state) => state.retorno,
+    getRetorno2: (state) => state.retorno2,
+    getRetorno3: (state) => state.retorno3,
+    getRetorno4: (state) => state.retorno4,
 
-    obtenerDatoact1: (state)=> state.datoact1,
-    obtenerDatoact2: (state)=> state.datoact2,
-    obtenerDato: (state)=> state.dato,
-    obtenerDato2: (state)=> state.dato2,
-    obtenerDato3: (state)=> state.dato3,
-    obtenerDato4: (state)=> state.dato4,
-    obtenerDato5: (state)=> state.dato5,
-    obtenerDato6: (state)=> state.dato6,
-    obtenerDato7: (state)=> state.dato7,
-    obtenerDato8: (state)=> state.dato8,
-    obtenerDato9: (state)=> state.dato9,
+    obtenerDatoact1: (state) => state.datoact1,
+    obtenerDatoact2: (state) => state.datoact2,
+    obtenerDatoact3: (state) => state.datoact3,
 
-    getNombre: (state)=> state.nombre,
-    getTipoEjercicio: (state)=> state.tipoEjercicio,
-    getMusculo: (state)=> state.musculo,
-    getRutina: (state)=> state.rutina,
-    getEjercicio: (state)=> state.ejercicio,
-    getPlan: (state)=> state.plan,
+    obtenerDato: (state) => state.dato,
+    obtenerDato2: (state) => state.dato2,
+    obtenerDato3: (state) => state.dato3,
+    obtenerDato4: (state) => state.dato4,
+    obtenerDato5: (state) => state.dato5,
+    obtenerDato6: (state) => state.dato6,
+    obtenerDato7: (state) => state.dato7,
+    obtenerDato8: (state) => state.dato8,
+    obtenerDato9: (state) => state.dato9,
+
+    getNombre: (state) => state.nombre,
+    getTipoEjercicio: (state) => state.tipoEjercicio,
+    getMusculo: (state) => state.musculo,
+    getRutina: (state) => state.rutina,
+    getEjercicio: (state) => state.ejercicio,
+    getPlan: (state) => state.plan,
 
     inVisible: state => state.visibleIn,
     outVisible: state => state.visibleOut,
@@ -93,37 +87,6 @@ export default createStore({
     isAuthenticated: state => !!state.user,
   },
   mutations: {
-    /*setMetodo(state,metodo){
-      state.metodo = metodo;
-    },
-    clearMetodo(state){
-      state.metodo = null;
-    },
-    setMetodo2(state,metodo){
-      state.metodo2 = metodo;
-    },
-    clearMetodo2(state){
-      state.metodo2 = null;
-    },
-    setMetodo3(state,metodo){
-      state.metodo3 = metodo;
-    },
-    clearMetodo3(state){
-      state.metodo3 = null;
-    },
-    setMetodo4(state,metodo){
-      state.metodo4 = metodo;
-    },
-    clearMetodo4(state){
-      state.metodo4 = null;
-    },
-    setMetodo5(state,metodo){
-      state.metodo5 = metodo;
-    },
-    clearMetodo5(state){
-      state.metodo5 = null;
-    },*/
-
     setRetorno(state, nuevodato){
       state.retorno =nuevodato;
     },
@@ -131,7 +94,6 @@ export default createStore({
       state.retorno = null;
     },
     setRetorno2(state, nuevodato){
-      console.log('nuevodato: ',nuevodato)
       state.retorno2 =nuevodato;
     },
     clearRetorno2(state){
@@ -142,6 +104,12 @@ export default createStore({
     },
     clearRetorno3(state){
       state.retorno3 = null;
+    },
+    setRetorno4(state, value){
+      state.retorno4 =value;
+    },
+    clearRetorno4(state){
+      state.retorno4 = null;
     },
 
     setDatoact1(state, nuevodato){
@@ -155,6 +123,12 @@ export default createStore({
     },
     clearDatoact2(state){
       state.datoact2 = null;
+    },
+    setDatoact3(state, nuevodato){
+      state.datoact3 = nuevodato;
+    },
+    clearDatoact3(state){
+      state.datoact3 = null;
     },
     setDato(state, nuevodato){
       state.dato = nuevodato;
@@ -271,78 +245,6 @@ export default createStore({
   },
 
   actions: {
-    /*registrarMetodo({commit}, metodo){
-      commit('setMetodo', metodo);
-    },
-    limpiarMetodo({commit}){
-      commit('clearMetodo');
-    },
-    callMetodo({state}){
-      if(state.metodo){
-        state.metodo();
-      }
-      else{
-        console.error('Metodo no encontrado');
-      }
-    },
-    registrarMetodo2({commit}, metodo){
-      commit('setMetodo2', metodo);
-    },
-    limpiarMetodo2({commit}){
-      commit('clearMetodo2');
-    },
-    callMetodo2({state}){
-      if(state.metodo2){
-        state.metodo2();
-      }
-      else{
-        console.error('Metodo no encontrado');
-      }
-    },
-    registrarMetodo3({commit}, metodo){
-      commit('setMetodo3', metodo);
-    },
-    limpiarMetodo3({commit}){
-      commit('clearMetodo3');
-    },
-    callMetodo3({state}){
-      if(state.metodo3){
-        state.metodo3();
-      }
-      else{
-        console.error('Metodo no encontrado');
-      }
-    },
-    registrarMetodo4({commit}, metodo){
-      commit('setMetodo4', metodo);
-    },
-    limpiarMetodo4({commit}){
-      commit('clearMetodo4');
-    },
-    callMetodo4({state}){
-      if(state.metodo4){
-        state.metodo4();
-      }
-      else{
-        console.error('Metodo no encontrado');
-      }
-    },
-    registrarMetodo5({commit}, metodo){
-      commit('setMetodo5', metodo);
-    },
-    limpiarMetodo5({commit}){
-      commit('clearMetodo5');
-    },
-    callMetodo5({state}){
-      if(state.metodo5){
-        state.metodo5();
-        alert("hola desde el store metodo 5")
-      }
-      else{
-        console.error('Metodo no encontrado');
-      }
-    },*/
-
     actualizarRetorno({commit},nuevodato){
       commit('setRetorno', nuevodato);
     },
@@ -350,7 +252,6 @@ export default createStore({
       commit('clearRetorno');
     },
     actualizarRetorno2({commit},nuevodato){
-      console.log('nuevodato: ',nuevodato);
       commit('setRetorno2', nuevodato);
     },
     limpiarRetorno2({commit}){
@@ -361,6 +262,12 @@ export default createStore({
     },
     limpiarRetorno3({commit}){
       commit('clearRetorno3');
+    },
+    actualizarRetorno4({commit},nuevodato){
+      commit('setRetorno4', nuevodato);
+    },
+    limpiarRetorno4({commit}){
+      commit('clearRetorno4');
     },
     
 
@@ -375,6 +282,12 @@ export default createStore({
     },
     limpiarDatoact2({commit}){
       commit('clearDatoact2');
+    },
+    actualizarDatoact3({commit},nuevodato){
+      commit('setDatoact3', nuevodato);
+    },
+    limpiarDatoact3({commit}){
+      commit('clearDatoact3');
     },
     actualizarDato({commit},nuevodato){
       commit('setDato', nuevodato);
@@ -508,8 +421,9 @@ export default createStore({
     genero,
     cargo,
     formacion,
-    ensayo,
-    utils,
+    ensayo,//no hay api
+    utils,//no hay api
     ejercicio,
+    plan,// sin usar
   }
 });

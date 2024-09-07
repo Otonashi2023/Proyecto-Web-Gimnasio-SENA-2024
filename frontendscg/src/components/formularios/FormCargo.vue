@@ -1,10 +1,10 @@
 <template>
     <div class="container" id="form">
       <h1>Formulario nombre de cargo</h1>
-      <form id="simple-form" @submit.prevent="servicio()" >
+      <form id="simple-form" @submit.prevent="comparar()" >
         <div class="form-group">
           <label for="nombre">Nombre: </label>
-          <input type="text" ref="myInput" name="nombre" id="nombre" required v-model="nombre" placeholder="ingrese el nombre del cargo">
+          <input type="text" ref="myInput" name="nombre" id="nombre" @click="call" v-model="nombre" placeholder="ingrese el nombre del cargo" required>
         </div>
         <div id="flex">
             <button id="guardar" type="submit" name="guardar" v-if="salvar">Guardar</button>
@@ -17,16 +17,38 @@
 
 <script>
 import axios from "axios";
+import { mapActions, mapState } from "vuex";
 export default {
   data() {
     return{
+      pack: [],
       nombre: "",
       salvar: true,
       modificar: false,
     };
   },
+  computed:{
+    ...mapState('cargo',['cargo']),
+    ...mapState(['retorno2']),
+  },
 //metodos CRUD
   methods:{
+    ...mapActions('cargo',['consultarCargo','limpiarCargo']),
+    comparar() {
+      if (Array.isArray(this.pack)) {
+        const normalizarTexto = (texto) => texto.trim().toLowerCase().replace(/\s+/g, '');
+        
+        const found = this.pack.find(item =>
+          normalizarTexto(item.nombre) === normalizarTexto(this.nombre));
+          
+        if (found) {
+          alert('El nombre ya existe');
+        } else {
+          this.servicio();
+        }
+      }
+    },
+
     servicio(){
       if(this.salvar==true){
         this.guardar();
@@ -44,12 +66,23 @@ export default {
       .then((response)=>{
         console.log("Nombre del cargo registrado con exito", response.data);
         alert("El nombe del cargo es registrado con exito");
-        this.nombre = '';
-        this.$emit('escucharForm');
+        if(this.retorno2 == 'retorno'){
+          this.limpiarCargo();
+          this.consultarTD(response.data.codigo);
+          console.log(1);
+        } else{
+          this.nombre = '';
+          this.$emit('escucharForm');
+        }
       })
       .catch((error)=>{
         console.error("Error al registrar nombre del cargo:", error);
       });
+    },
+    async consultarTD(valor){
+      await this.consultarCargo(valor);
+      await this.$nextTick();
+      this.$router.push('personal');
     },
 
     consultar(value){
@@ -72,8 +105,14 @@ export default {
       })
       .then((response)=>{
         console.log("nombre del cargo actualizado con exito", response.data);
-        this.nombre = '';
-        this.$emit('escucharForm');
+        if(this.retorno2 == 'retorno'){
+          this.limpiarCargo();
+          this.consultarTD(response.data.codigo);
+          console.log(1);
+        } else{
+          this.nombre = '';
+          this.$emit('escucharForm');
+        }
         this.modificar= false;
         this.salvar= true;
       })
@@ -99,7 +138,13 @@ export default {
     },
     focusInput(){
     this.$refs.myInput.focus();
-  }
+    },
+    sended(value){
+      this.pack = value;
+    },
+    call(){
+      this.$emit('calling');
+    }
   },
   mounted() {
     this.focusInput();

@@ -53,7 +53,6 @@
                   </tr>
                 </td>
                 <td id="alibutton">
-                    <!--font-awesome-icon icon="edit" id="editar" @click="actualizar(item.rutina.codigo)"/-->
                     <font-awesome-icon icon="trash" id="eliminar" @click="verificar(item.rutina.codigo)"/>
                 </td>            
               </tr>      

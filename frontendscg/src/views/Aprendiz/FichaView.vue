@@ -37,7 +37,8 @@ export default{
         },
     },  
     methods:{
-        ...mapActions('ficha',['limpiarFicha','limpiarNumeroFi','limpiarFormacion','limpiarNombreFo']),
+        ...mapActions('formacion',['limpiarFormacion']),
+        ...mapActions('ficha',['limpiarFicha']),
         ...mapActions(['limpiarRetorno2','limpiarDatoact2']),
         
         cambiar(){
@@ -45,14 +46,14 @@ export default{
             this.listar=false;
         },
         irAformulario(){
-            this.cambiar();
             this.limpiarDatos();
-            this.$refs.componenteForm.cerrar();
+            this.cambiar();
+            this.$refs.componenteForm.cargarDatos();
         },
         salir(){
+            this.limpiarDatos();
             this.formulario=false;
             this.listar=true;
-            this.limpiarDatos();
             this.$refs.componente.obtenerFichas();
         },
         read(value){
@@ -72,10 +73,8 @@ export default{
             this.$refs.componenteForm.variar();
         },
         limpiarDatos(){
-            this.limpiarFicha();
-            this.limpiarNumeroFi();
             this.limpiarFormacion();
-            this.limpiarNombreFo();            
+            this.limpiarFicha();           
             this.limpiarDatoact2();
         }
     },

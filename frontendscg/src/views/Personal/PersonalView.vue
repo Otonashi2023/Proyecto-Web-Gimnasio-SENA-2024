@@ -42,11 +42,7 @@ export default{
         ...mapActions('cargo',['limpiarCargo']),
         ...mapActions('personal',['limpiarPersonal']),
         ...mapActions('usuario',['limpiarUsuario']),
-        ...mapActions([//'limpiarDato','limpiarDato2','limpiarDato3','limpiarNombre','limpiarTipoEjercicio',
-        //'limpiarMusculo','limpiarEjercicio',
-        'limpiarDatoact2','limpiarRetorno2',
-        //'limpiarDato7','actualizarDatoact2'
-        ]),
+        ...mapActions(['limpiarDatoact2','limpiarRetorno2']),
 
         cambiar(){
             this.formulario=true;
@@ -69,10 +65,7 @@ export default{
         update(value){
             this.cambiar();
             this.$refs.componenteForm.update(value);
-        },/*
-        tabla(){
-            this.$refs.componenteForm.cerrar();
-        },*/
+        },
         inData(){
             this.cambiar();
             this.limpiarRetorno2();
@@ -85,7 +78,6 @@ export default{
             this.limpiarPersonal();
             this.limpiarUsuario();
             this.limpiarDatoact2();
-            //this.$refs.componenteForm.cerrar()
         },
     }
 }

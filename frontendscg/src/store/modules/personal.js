@@ -36,6 +36,9 @@ const mutations = {
       ...data
     };
   },
+  clearCodigo(state) {
+    state.personal.codigo = null;
+  },
   setIdPersonal(state, data){
     state.idPersonal = data;
   }
@@ -87,6 +90,9 @@ const actions = {
   },
   addPersonal({commit}, data){
     commit('setPersonal', data);
+  },
+  limpiarCodigoPersonal({commit}){
+    commit('clearCodigo')
   },
   limpiarPersonal({commit}){
     commit('clearPersonal');

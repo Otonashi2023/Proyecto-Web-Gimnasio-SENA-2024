@@ -1,7 +1,7 @@
 <template>
   <div class="container2" id="form">
     <h1>Datos Personales</h1>
-    <form @submit.prevent="compararDatos()" id="scroll3">
+    <form @submit.prevent="compararDatos()" id="scroll">
       
       <div class="comp-form-group2">
         <div class="form-group">
@@ -14,7 +14,7 @@
         </div>
         <div class="form-group">
           <label for="">Tipo de documento: </label>
-          <input type="text" name="documento" id="input2" @click="callMetodoN" v-model="tipoDocumento.nombre" placeholder="haz click para ingresar el tipo de documento" requerid>
+          <input type="text" name="documento" id="input2" @click="callMetodoN" v-model="tipoDocumento.nombre" placeholder="haz click para ingresar el tipo de documento" readonly>
         </div>
         <div class="form-group">
           <label for="cedula">Numero de cedula: </label>
@@ -34,7 +34,7 @@
         </div>
         <div class="form-group">
           <label for="correo">Email:</label>
-          <input type="adrees" name="descanso" id="input2" v-model="persona.correo" placeholder="ingrese el correo electrónico" required>
+          <input type="email" name="descanso" id="input2" v-model="persona.correo" placeholder="ingrese el correo electrónico" required>
         </div>
         <div class="form-group">
           <label for="username">Username:</label>
@@ -46,7 +46,7 @@
         </div>
         <div class="form-group">
           <label for="cargo">Cargo:</label>
-          <input type="text" name="cargo" id="input2" @click="callMetodoC" v-model="cargo.nombre" placeholder="ingrese el cargo" required>
+          <input type="text" name="cargo" id="input2" @click="callMetodoC" v-model="cargo.nombre" placeholder="ingrese el cargo" readonly>
         </div>
       </div>
 
@@ -86,15 +86,20 @@ import { mapActions, mapState } from 'vuex';
     },
     methods:{
       ...mapActions('tipoDocumento',['consultarTipoDocumento']),
-      ...mapActions('persona',['guardarPersona','consultarPersona','actualizarPersona','addPersona']),
+      ...mapActions('persona',['guardarPersona','consultarPersona','actualizarPersona','addPersona', 'limpiarCodigoPersona']),
       ...mapActions('cargo',['consultarCargo']),
-      ...mapActions('personal',['guardarPersonal', 'consultarPersonal','actualizarPersonal','addPersonal','saveIdPersonal']),
-      ...mapActions('usuario',['guardarUsuario','consultarUsuario', 'actualizarUsuario','consultarAllUsuarios','addUsuario']),
+      ...mapActions('personal',['guardarPersonal', 'consultarPersonal','actualizarPersonal','addPersonal','saveIdPersonal','limpiarCodigoPersonal']),
+      ...mapActions('usuario',['guardarUsuario','consultarUsuario', 'actualizarUsuario','consultarAllUsuarios','addUsuario','limpiarCodigoUsuario']),
       ...mapActions(['actualizarRetorno2','actualizarDatoact2','limpiarDatoact2']),
 
       servicio(){
       if(this.salvar==true){
-        this.registrarPersonal();
+        if(this.tipoDocumento.codigo != null && this.cargo.codigo){
+          this.registrarPersonal();
+        }
+        else{
+          alert("hay campos vacios");
+        }  
       }
       else{
         this.verificar();
@@ -131,15 +136,22 @@ import { mapActions, mapState } from 'vuex';
       },
 
       async registrarPersonal(){
-        this.persona.codigo = null;
+        await this.limpiarCodigoPersona();
+        await this.limpiarCodigoPersonal();
+        await this.limpiarCodigoUsuario();
+        await this.$nextTick();
         try {
           this.datosPersona();
           await this.guardarPersona(this.data);
-         const personaId = this.persona.codigo;
+          await this.$nextTick();
+          const personaId = this.persona.codigo;
+          console.log('codigo persona para personal: ',personaId);
  
           this.datosPersonal(personaId);
+          console.log('dataPersonal: ', this.dataPersonal);
           await this.guardarPersonal(this.dataPersonal);
-         const personalId = this.personal.codigo;
+          const personalId = this.personal.codigo;
+          console.log('codigo personal para usuario: ',personalId);
   
           this.datosUsuario(personalId);
           await this.guardarUsuario(this.dataUsuario);
@@ -179,6 +191,7 @@ import { mapActions, mapState } from 'vuex';
           console.log('VERIFICANDO USUARIO: ', this.usuario);
           await this.$nextTick();
 
+          this.limpiarDatoact2();
           this.$emit('leave');
         } catch (error) {
           console.error("Error al guardar al personal:", error);
@@ -255,7 +268,7 @@ import { mapActions, mapState } from 'vuex';
         const cedula = typeof this.persona.cedula === 'number'
           ? this.persona.cedula
           : '';
-        const email = typeof this.persona.correo === 'string'
+        const correo = typeof this.persona.correo === 'string'
           ? this.persona.correo.trim().toLowerCase()
           : '';
         await this.consultarAllUsuarios();
@@ -274,11 +287,10 @@ import { mapActions, mapState } from 'vuex';
             const userEmail = typeof user.personal?.persona?.correo === 'string'
               ? user.personal.persona.correo.trim().toLowerCase()
               : '';
-              console.log('Cédula encontrada:', userCedula);
             return userUsername === username ||
               userPassword === password ||
               userCedula === cedula ||
-              userEmail === email;
+              userEmail === correo;
           });
 
           if (foundUser) {
@@ -286,14 +298,14 @@ import { mapActions, mapState } from 'vuex';
               console.log(`Username: "${foundUser.username}", Username buscado: "${username}"`);
               console.log(`Password: "${foundUser.password}", Password buscado: "${password}"`);
               console.log(`Cédula: "${foundUser.personal?.persona?.cedula}", Cédula buscada: "${cedula}"`);
-              console.log(`Correo: "${foundUser.personal?.persona?.correo}", Correo buscado: "${email}"`);
+              console.log(`Correo: "${foundUser.personal?.persona?.correo}", Correo buscado: "${correo}"`);
               if (foundUser.username === username) {
                 alert(`Username: "${foundUser.username}" ya existe`);
               } else if (foundUser.password === password) {
                 alert(`Password: "${foundUser.password}" ya existe`);
               } else if (foundUser.personal?.persona?.cedula === cedula) {
                 alert(`Cédula: "${foundUser.personal.persona.cedula}" ya existe`);
-              } else if (foundUser.personal?.persona?.correo === email) {
+              } else if (foundUser.personal?.persona?.correo === correo) {
                 alert(`Correo: "${foundUser.personal.persona.correo}" ya existe`);
               }
             } else{
@@ -317,6 +329,7 @@ import { mapActions, mapState } from 'vuex';
       },
       cerrar(){
         this.rotar();
+        this.limpiarDatoact2();
       },
       rotar(){
         this.modificar= false;
@@ -333,14 +346,14 @@ import { mapActions, mapState } from 'vuex';
       },
       async storageTemporal(){
         this.datosPersona();
-        console.log('AAAAAAQQQQQUIIIIIIII222222222222222222= ',this.data);
+        console.log('data: ',this.data);
 
         this.addPersona(this.data);
         this.datosPersonal();
-        console.log('AAAAAAQQQQQUIIIIIIII= ',this.dataPersonal);
+        console.log('dataPErsoan: ',this.dataPersonal);
         this.addPersonal(this.dataPersonal);
         this.datosUsuario();
-        console.log('ESTAESESTAESTAESESTAES!!!!', this.dataUsuario);
+        console.log('dataUsuario:', this.dataUsuario);
         this.addUsuario(this.dataUsuario);
       },
       callMetodoN(){

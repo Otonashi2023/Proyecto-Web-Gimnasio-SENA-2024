@@ -76,7 +76,7 @@ export default {
         console.log('DATOS VERSION: ', this.numero);
         console.log('1.existe:', existe);
         if(existe){
-          alert('este ejercicio ya existe');
+          alert('este rutina ya existe');
         }
         else{          
           this.servicio();

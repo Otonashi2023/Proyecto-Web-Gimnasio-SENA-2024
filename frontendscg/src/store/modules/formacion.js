@@ -41,6 +41,7 @@ const actions = {
     try {
       const response = await getFormacionApi(codigo);
       commit('setFormacion', response.data);
+
     } catch (error) {
       console.error("Error consultar formacion", error);
     }
@@ -82,6 +83,9 @@ const actions = {
     } catch (error) {
       console.error("Error eliminar formacion:", error);
     }
+  },
+  addFormacion({commit}, data){
+    commit('setFormacion', data);
   },
   limpiarFormacion({commit}){
     commit('clearFormacion');

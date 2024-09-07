@@ -10,7 +10,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr id="fila2" v-for="nombre in nombres" :key="nombre.codigo" @click="() => {callMetodoN(); consultarbyId(nombre.codigo); consultarTipoDocumento(nombre.codigo)}">
+          <tr id="fila2" v-for="nombre in nombres" :key="nombre.codigo" @click="() => {callMetodoN(nombre.codigo); consultarbyId(nombre.codigo);}">
             <td>{{ nombre.nombre }}</td>
             <td id="alibutton">
                 <font-awesome-icon icon="edit" id="editar" @click="actualizar(nombre.codigo)"/>
@@ -32,10 +32,10 @@ import { mapActions, mapState } from "vuex";
         codigo: "",
       }
     },
-    computed:{...mapState(['retorno2'])},
+    computed:{...mapState(['retorno','retorno2'])},
     methods: {
       ...mapActions('tipoDocumento',['consultarTipoDocumento']),
-      ...mapActions(['actualizarDato']),
+      ...mapActions(['actualizarDato4']),
 
       obtenerTipoDocumentos(){
         // Método para obtener los campos de la lista
@@ -69,7 +69,7 @@ import { mapActions, mapState } from "vuex";
 
       consultarbyId(value){
         if(this.codigo==null){
-          this.actualizarDato(value);
+          this.actualizarDato4(value);
           this.$emit('ById',value);
         }
       },
@@ -77,15 +77,29 @@ import { mapActions, mapState } from "vuex";
         this.codigo=value;
         this.$emit('change',this.codigo);
       },
-      callMetodoN(){
-        if(this.retorno2=='retorno'){
+      async callMetodoN(value){
+        if(this.retorno=='retorno'){
           if(this.codigo==null){
+            await this.consultarTipoDocumento(value);
+            await this.$nextTick();
+            console.log('retorno1');
+            this.$router.push('aprendiz');
+          }
+        }
+        else if(this.retorno2=='retorno'){
+          if(this.codigo==null){
+            await this.consultarTipoDocumento(value);
+            await this.$nextTick();
+            console.log('retorno2');
             this.$router.push('personal');
           }
-        }     
+        }    
       },
       limpiarId(){
         this.codigo=null;
+      },
+      sender(){
+        this.$emit('send',this.nombres);
       }
     },
     mounted(){

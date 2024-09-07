@@ -22,6 +22,9 @@ const mutations = {
   setAprendices(state, data){
     state.aprendices = data;
   },
+  clearCodigo(state){
+    state.aprendiz.codigo = null;
+  },
   clearAprendiz(state) {
     state.aprendiz = {
         codigo: null,
@@ -80,15 +83,35 @@ const actions = {
       commit('setAprendiz', response.data);
     } catch (error) {
       console.error("Error actualizar Aprendiz:", error);
+      if (error.response) {
+        // El servidor respondió con un código de estado fuera del rango 2xx
+        console.error("Error response data:", error.response.data);
+        console.error("Error response status:", error.response.status);
+        console.error("Error response headers:", error.response.headers);
+      } else if (error.request) {
+        // La solicitud se hizo pero no se recibió respuesta
+        console.error("Error request:", error.request);
+      } else {
+        // Algo pasó al configurar la solicitud que provocó un error
+        console.error("Error message:", error.message);
+      }
+      console.error("Error config:", error.config);
     }
   },
   async eliminarAprendiz({ commit }, codigo) {
     try {
+      console.log('codigo para eliminar: ',codigo);
       await deleteAprendizApi(codigo);
       commit('clearAprendiz');
     } catch (error) {
       console.error("Error eliminar Aprendiz:", error);
     }
+  },
+  addAprendiz({commit}, data){
+    commit('setAprendiz', data);
+  },
+  limpiarCodigoAprendiz({commit}){
+    commit('clearCodigo');
   },
   limpiarAprendiz({commit}){
     commit('clearAprendiz');

@@ -33,6 +33,9 @@ const mutations = {
     setPerimetrosAll(state, data){
         state.perimetrosAll =data;
     },
+    clearCodigo(state){
+      state.perimetros.codigo = null;
+    },
     clearPerimetros(state){
         state.perimetros = {
             codigo: null,
@@ -73,9 +76,12 @@ const actions = {
       },
     async guardarPerimetros({commit}, data){
         try{
-            const response = await createPerimetrosApi(data);
-            commit('setPerimetros', response.data);
-            alert("los perimetros son registrados con exito");
+          console.log('DATA ANTES DE IR A LA API:',data);
+          const response = await createPerimetrosApi(data);
+          commit('setPerimetros', response.data);
+          alert("Los datos fueron registrados con éxito");
+          console.log('datos perimetricos despues del action: ', state.fichaAntropo);
+          console.log('response: ', response.data);
         } catch (error) {
             console.error("Error guardar Perimetros:", error);
             if (error.response) {
@@ -108,6 +114,12 @@ const actions = {
         } catch (error) {
           console.error("Error eliminar Perimetros:", error);
         }
+      },
+      addPerimetros({commit}, data){
+        commit('setPerimetros', data);
+      },
+      limpiarCodigoPerimetros({commit}){
+        commit('clearCodigo');
       },
       limpiarPerimetros({commit}){
         commit('clearPerimetros');              

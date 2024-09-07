@@ -41,8 +41,8 @@ import { mapActions, mapState } from "vuex";
       ...mapState('variables',['datos2']),
       ...mapState(['retorno3','retorno2','dato9','plan'])},
     methods: {
-      ...mapActions('variables',['actionDatos2','limpiarRutina','limpiarRutinas','limpiarArrayR','actionActiveM']),
-      ...mapActions(['actualizarDato5','actualizarDato9','registrarPlan']),
+      ...mapActions('variables',['actionDatos2','limpiarRutinas','limpiarArrayR','actionActiveM']),
+      ...mapActions(['actualizarDato5','actualizarDato9','registrarPlan','limpiarRutina']),
 
       obtenerPlanes(){
         // Método para obtener los campos de la lista

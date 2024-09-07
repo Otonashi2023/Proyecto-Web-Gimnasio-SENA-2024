@@ -36,11 +36,8 @@ export default {
     ...mapState(['user']),
   },
   methods:{
-    ...mapActions('asistencia',['limpiarAsistencias']),
-    ...mapActions('aprendiz',['limpiarAprendices']),
-    ...mapActions('usuario',['limpiarUsuarios']),
-
     ...mapActions(['resetVisibleIn','resetVisibleOut','limpiarRetorno','limpiarRetorno2','limpiarRetorno3','limpiarDatoact1','limpiarDatoact2','limpiarDato7','limpiarDato6']),
+    
     logout(){
         this.$store.dispatch('logout');
         this.$router.push('/login');
@@ -55,9 +52,6 @@ export default {
         this.limpiarDatoact2();
         this.limpiarDato6();
         this.limpiarDato7();
-        this.limpiarAsistencias();
-        this.limpiarAprendices();
-        this.limpiarUsuarios();
       },
   }
 }

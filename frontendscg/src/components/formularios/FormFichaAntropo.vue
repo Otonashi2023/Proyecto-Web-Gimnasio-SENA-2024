@@ -1,20 +1,8 @@
 <template>
     <div class="container2" id="form">
       <h1>Ficha antropométrica</h1>
-      <form @submit.prevent="registrarFichaAntropo" id="scroll4">
+      <form @submit.prevent="comparar" id="scroll">
         <div class="comp-form-group">
-          <div class="form-group">
-            <label for="numControl">Numero de control: </label>
-            <input type="number" name="numControl" id="input2" v-model="numControl" placeholder="ingrese el numero" required>
-          </div>
-          <div class="form-group">
-            <label for="fecha">Fecha de toma: </label>
-            <input type="date" name="fecha" id="input2" v-model="fecha" requerid>
-          </div>
-          <div class="form-group">
-            <label for="descanso">Genero: </label>
-            <input type="text" name="genero" id="input2" v-model="genero" placeholder="ingrese el genero" readonly disabled>
-            </div>
           <div class="form-group">
             <label for="altura">Altura: </label>
             <input type="number" step="0.01" @input="result" name="altura" id="input2" v-model="altura" placeholder="ingrese la altura" required>
@@ -25,14 +13,28 @@
           </div>
           <div class="form-group">
             <label for="imc">IMC:</label>
-            <input type="number" step="0.01"  name="imc" id="input2" v-model="imc" placeholder="has click para calcular" readonly>
+            <input type="number" step="0.01"  name="imc" id="input2" v-model="imc" placeholder="ingresar altura y peso" readonly>
           </div>
+          <div class="form-group">
+            <label for="numControl">Numero de control: </label>
+            <input type="number" name="numControl" id="input2" v-model="numControl" placeholder="ingrese altura y peso" readonly>
+          </div>
+          <div class="form-group">
+            <label for="fecha">Fecha de toma: </label>
+            <input type="date" name="fecha" id="input2" v-model="fecha" required>
+          </div>
+          <div class="form-group">
+            <label for="descanso">Genero: </label>
+            <input type="text" name="genero" @click="callMetodoG" id="input2" v-model="vgenero" placeholder="ingrese el genero" readonly>
+            </div>
           <div>
             <div class="form-group">
               <label for="evaluador">Evaluador: </label>
-              <input type="text" @click="callMetodoM" name="evaluador" id="input2" v-model="personal" placeholder="nombre del evaluador" readonly disabled>
+              <input type="text" @click="callMetodoP" name="evaluador" id="input2" v-model="vpersonal" placeholder="nombre del evaluador" readonly>
             </div>
           </div>
+          <div></div>
+          <div><br><br><span>Estado: </span> <span :style="styleObject">{{ estado }}</span></div>
         </div>
 
         <h1>Perimetros</h1>
@@ -107,246 +109,363 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from "vuex";
-import axios from "axios";
-export default {
-  data() {
+import { mapActions, mapState } from 'vuex';
+
+export default{
+  data(){
     return{
-      imc:null,
+      numControl: null,
+      fecha: null,
+      vgenero: '',
+      altura: null,
+      peso: null,
+      imc: null,
+      vpersonal: '',
+
+      cabeza: null,
+      cuello: null,
+      brazoRelax: null,
+      brazoTenso: null,
+      antebrazo: null,
+      muñeca: null,
+      torax: null,
+      cintura: null,
+      cadera: null,
+      musloMax: null,
+      musloMin: null,
+      pantorrillaMax: null,
+      pantorrillaMin: null,
+
       salvar: true,
       modificar: false,
-    };
-  },
 
+      colorStyle: '' ,
+      valor: null,
+    }
+  },
   computed:{
-    ...mapState('fichaAntropometrica',['fichaAntropo']),
-    ...mapState('perimetros',['perimetros']),
-
-    ...mapState(['dato','dato2','dato3','nombre','tipoEjercicio','musculo','retorno','datoact2','dato7']),...mapGetters(['getNombre','getTipoEjercicio','getMusculo']),
-    ...mapGetters('datosEjercicio',['getSeries','getRepeticiones','getDescanso']),
+    ...mapState('aprendiz',['aprendiz']),
+    ...mapState('personal',['personal']),
+    ...mapState('genero',['genero']),
+    ...mapState('fichaAntropometrica',['fichaAntropo','fichaAntropoAll','estado']),
+    ...mapState('perimetros',['perimetros','perimetrosAll']),
+    ...mapState(['datoact1']),
   },
-//metodos CRUD
   methods:{
-    ...mapActions('fichaAntropometrica',['guardarFichaAntropo']),
-    ...mapActions('perimetros',['guardarPerimetros']),
+    ...mapActions('aprendiz',['consultarAprendiz']),
+    ...mapActions('personal',['consultarPersonal']),
+    ...mapActions('genero',['consultarGenero']),
+    ...mapActions('fichaAntropometrica',['guardarFichaAntropo','consultarFichaAntropo','consultarFichaAntropoAll','addFichaantropo',
+      'limpiarCodigoFichaantropo','actualizarFichaAntropo','addEstado','limpiarEstado']),
+    ...mapActions('perimetros',['guardarPerimetros','consultarPerimetros','consultarPerimetrosAll','addPerimetros','limpiarCodigoPerimetros',
+      'actualizarPerimetros']),
+    ...mapActions(['actualizarRetorno3','actualizarDatoact1','limpiarDatoact1']),
 
-    ...mapActions(['actualizarDato7','actualizarRetorno2','actualizarDato','actualizarDato2','actualizarDato3','registrarNombre',
-    'registrarTipoEjercicio','registrarMusculo','limpiarDatoact2','actualizarDatoact2','registrarEjercicio']),
-    ...mapActions('datosEjercicio',['actualizarSeries','actualizarRepeticiones','actualizarDescanso']),
+    cargarDatos(){
+      this.numControl = this.fichaAntropo.numControl;
+      this.fecha = this.fichaAntropo.fecha;
+      this.vgenero = this.genero.nombre;
+      this.altura = this.fichaAntropo.altura;
+      this.peso = this.fichaAntropo.peso;
+      this.imc = this.fichaAntropo.imc;
+      this.vpersonal = this.personal?.persona?.nombres;
+
+      this.cabeza = this.perimetros?.cabeza;
+      this.cuello = this.perimetros?.cuello;
+      this.brazoRelax = this.perimetros?.brazoRelax;
+      this.brazoTenso = this.perimetros?.brazoTenso;
+      this.antebrazo = this.perimetros?.antebrazo;
+      this.muñeca = this.perimetros?.muñeca;
+      this.torax = this.perimetros?.torax;
+      this.cintura = this.perimetros?.cintura;
+      this.cadera = this.perimetros?.cadera;
+      this.musloMax = this.perimetros?.musloMax;
+      this.musloMin = this.perimetros?.musloMin;
+      this.pantorrillaMax = this.perimetros?.pantorrillaMax;
+      this.pantorrillaMin = this.perimetros?.pantorrillaMin;
+      this.evaluacion();
+    },
+
+    datosAntropometricos(){
+      if(this.fecha == null){
+        this.formattedDate = null;
+      } else{
+        let date = new Date(this.fecha);
+      this. formattedDate = date.toISOString().split('T')[0];
+      console.log('DATE:', this.formattedDate);
+      }
+      this.data = {
+        codigo: this.fichaAntropo?.codigo,
+        numControl: this.numControl,
+        fecha: this.formattedDate,
+        altura: this.altura,
+        peso: this.peso,
+        imc: this.imc,
+        personal: this.personal?.codigo,
+        genero: this.genero?.codigo,
+        aprendiz: this.aprendiz?.codigo,
+      };
+    },
+    datosPerimetricos(idFichaAntropo){
+      console.log('ID Ficha Antropo: ', idFichaAntropo);
+      this.dataPerimetros = {
+        codigo: this.perimetros?.codigo,
+        cabeza: this.cabeza,
+        cuello: this.cuello,
+        brazoRelax: this.brazoRelax,
+        brazoTenso: this.brazoTenso,
+        antebrazo: this.antebrazo,
+        muñeca: this.muñeca,
+        torax: this.torax,
+        cintura: this.cintura,
+        cadera: this.cadera,
+        musloMax: this.musloMax,
+        musloMin: this.musloMin,
+        pantorrillaMax: this.pantorrillaMax,
+        pantorrillaMin: this.pantorrillaMin,
+        fichaantropo: idFichaAntropo,
+      };
+      console.log('ESTA EL ID?: ',this.perimetros);
+    },
 
     result(){
+      console.log('actualizar: ',this.datoact1);
+      if(this.datoact1 == null){
+        this.numeroMaximo();
+        this.setCurrentDate();
+        this.fecha = this.currentDate;
+      }
       if(this.peso > 0 && this.altura > 0){
-        this.imc = this.peso/(this.altura*this.altura);
+        this.imc = (this.peso/(this.altura*this.altura)).toFixed(2);
         console.log('imc: ', this.imc);
+        this.evaluacion();
+      } else{
+        this.imc =null;
+        this.evaluacion();
       }
     },
-    
-    async registrarFichaAntropo(){
-      try {
-        let dataInput = this.fecha;
-        let date = new Date(dataInput);
-        let formattedDate = date.toISOString().split('T')[0];
 
-        const data ={
-          numControl: this.numControl,
-          fecha: formattedDate,
-          altura: this.altura,
-          peso: this.peso,
-          imc: this.imc,
-          personal: 1,
-          genero: 1,
-          aprendiz: 1,
-        };
-        await this.guardarFichaAntropo(data);
-        await this.$nextTick();
-        const fichaAntropoId = this.fichaAntropo.codigo;
-        console.log('Codigo ficha:',this.fichaAntropo.codigo);
-        console.log('Codigo ficha:', fichaAntropoId);
-
-        const dataPerimetros = {
-          cabeza: this.cabeza,
-          cuello: this.cuello,
-          brazoRelax: this.brazoRelax,
-          brazoTenso: this.brazoTenso,
-          antebrazo: this.antebrazo,
-          muñeca: this.muñeca,
-          torax: this.torax,
-          cintura: this.cintura,
-          cadera: this.cadera,
-          musloMax: this.musloMax,
-          musloMin: this.musloMin,
-          pantorrillaMax: this.pantorrillaMax,
-          pantorrillaMin: this.pantorrillaMin,
-          fichaantropo: fichaAntropoId,
-        };
-        console.log("ficha antropometrica",this.fichaAntropo);
-        console.log('PERIMETROS', dataPerimetros);
-        await this.guardarPerimetros(dataPerimetros);
-        await this.$nextTick();
-        console.log('perimetros', this.perimetros);
-        this.$router.push('aprendizPlan');        
-      } catch (error) {
-        console.error("Error al guardar aprendiz:", error);
-      }
+    setCurrentDate() {
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      this.currentDate = `${year}-${month}-${day}`;
     },
-    
+
+    numeroMaximo(){
+      const aprendizFiltrados = this.fichaAntropoAll
+        .filter(item => item.aprendiz.codigo === this.aprendiz.codigo);
+
+      const numeros = aprendizFiltrados
+        .filter(item => item.numControl !== null && item.numControl !== undefined)
+        .map(item => item.numControl);
+
+      if (numeros.length > 0) {
+        this.maxNumero = Math.max(...numeros);
+        this.numControl = this.maxNumero + 1;
+      } else {
+        this.numControl = 1;
+      }
+
+      console.log('Longitud de numeros: ', numeros.length);
+      console.log('Numero de control: ', this.numControl);
+    },
+    date(value){
+      let date = new Date(value);
+      this. formattedDate = date.toISOString().split('T')[0];
+      console.log('date', this.formattedDate);
+    },
     servicio(){
       if(this.salvar==true){
-        if(this.dato!=null && this.dato2!=null && this.dato3!=null){
-          this.guardar();
+        if(this.genero.codigo != null && this.personal.codigo != null){
+          this.registrarFichaAntropometrica();
         }
         else{
           alert("hay campos vacios");
-        } 
+        }  
       }
-      else {
-        this.actualizar();       
+      else{
+        this.modificarFichaAntropometrica();
       }
     },
 
-    guardar(){
-      axios
-      .post('http://localhost:8080/api/ejercicio',{
-        nombre: this.dato,
-        tipoEjercicio: this.dato2,
-        musculo: this.dato3,
-        series: this.series,
-        repeticiones: this.repeticiones,
-        descanso: this.descanso,
-      })
-      .then((response)=>{
-        console.log("Ejercicio registrado con exito", response.data);
-        alert("El ejercicio es registrado con exito");
-        this.$emit('leave');
-        if(this.retorno=='retorno'){
-          this.actualizarDato7(response.data.codigo);
-          this.antesderoutear();
-          this.$router.push('rutinaEjercicio');
-        }           
-      })
-      .catch((error)=>{
-        console.error("Error al registrar ejercicio:", error);
-      });
-    },
+    comparar(){
+      const aprendizFiltrados = this.fichaAntropoAll
+        .filter(item => item.aprendiz.codigo === this.aprendiz.codigo);
 
-    consultar(value){
-      this.codigo=value;
-      axios
-        .get('http://localhost:8080/api/ejercicio/'+this.codigo)
-        .then((response)=>{
-              //actualiza los campos del formulario con los datos consultados
-          this.nombre = response.data.nombre.nombre;
-          this.tipoEjercicio = response.data.tipoEjercicio.nombre;
-          this.musculo = response.data.musculo.nombre;
-          this.series = response.data.series;
-          this.repeticiones = response.data.repeticiones;
-          this.descanso = response.data.descanso;
-          this.actualizarDato(response.data.nombre.codigo);
-          this.actualizarDato2(response.data.tipoEjercicio.codigo);
-          this.actualizarDato3(response.data.musculo.codigo);
-          if(this.habilitar==1){
-            this.registrarEjercicio(response.data.nombre.nombre);
-          }
-        })
-        .catch((error) =>{
-          console.error("Error al consultar ejercicio: ", error);
-        });
-    },
+      const found = aprendizFiltrados.some(item => item.numControl === this.numControl);
 
-    actualizar(){
-      this.codigo=this.datoact2;
-      
-      axios
-        .put('http://localhost:8080/api/ejercicio/actualizar/'+this.codigo,{
-          nombre: this.dato,
-          tipoEjercicio: this.dato2,
-          musculo: this.dato3,
-          series: this.series,
-          repeticiones: this.repeticiones,
-          descanso: this.descanso,        
-      })
-      .then((response)=>{
-        console.log("Ejercicio actualizado con exito", response.data);
-        this.$emit('leave');
-        if(this.retorno=='retorno'){
-          this.actualizarDato7(this.codigo);
-          this.antesderoutear();
-          this.$router.push('rutinaEjercicio');
+      if(!found){
+        this.servicio();
+      } else{
+        alert('actualizar:'+this.datoact1);
+        if(this.datoact1 != null){
+          this.servicio();
+        } else{
+          alert('Esta Ficha Antropométrica ya existe');
         }
-
-      })
-      .catch((error)=>{
-        console.error("Error al actualizar el ejercicio", error);
-      });
+      }
     },
-    
-    read(value){
-      this.limpiarDatoact2();
-      this.consultar(value);
-      this.rotar();
+
+    async registrarFichaAntropometrica(){
+      await this.limpiarCodigoFichaantropo();
+      await this.limpiarCodigoPerimetros();
+      await this.$nextTick();
+
+      try{
+        this.datosAntropometricos();
+        await this.guardarFichaAntropo(this.data);
+        await this.$nextTick();
+        console.log('FICHAANTROPO: ',this.fichaAntropo);
+        const idFichaAntropo = this.fichaAntropo.codigo;
+        console.log('idFichaantropo: ',idFichaAntropo);
+
+        this.datosPerimetricos(idFichaAntropo)
+        console.log('DATA PERIMETROS: ',this.dataPerimetros);
+        await this.guardarPerimetros(this.dataPerimetros);
+        await this.$nextTick();
+        console.log('perimetros antropometricos: ', this.perimetros);
+
+        this.$emit('leave');
+      }catch (error) {
+        console.error("Error al guardar la ficha Antropometrica:", error);
+      }
+    },
+
+    async modificarFichaAntropometrica(){
+      try{
+        this.datosAntropometricos();
+        const idFichaAntropo = this.fichaAntropo?.codigo;
+        await this.actualizarFichaAntropo({codigo: idFichaAntropo, data: this.data});
+        await this.$nextTick();
+        console.log('FICHAANTROPO: ',this.fichaAntropo);
+        console.log('idFichaantropo: ',idFichaAntropo);
+
+        this.datosPerimetricos(idFichaAntropo)
+        console.log('DATA PERIMETROS: ',this.dataPerimetros);
+        const idPerimetros = this.perimetros?.codigo;
+        console.log('ID_PERIMETROS: ',this.perimetros);
+        await this.actualizarPerimetros({codigo: idPerimetros, data: this.dataPerimetros});
+        await this.$nextTick();
+        this.limpiarDatoact1();
+        await this.$nextTick();
+        console.log('perimetros antropometricos: ', this.perimetros);
+
+        this.salir();
+      }catch (error) {
+        console.error("Error al actualizar la ficha Antropometrica:", error);
+      }
+    },
+    salir(){
+      if(this.datoact1 == null){
+        console.log('actualizar: ',this.datoact1);
+        this.$emit('leave');
+      }
+    },
+
+    async read(value){
+      await this.consultarPerimetrosAll();
+      console.log('PERIMETROS ALL: ', this.perimetrosAll);
+      console.log('VALUE: ', value);
+      const idPerimetros = this.perimetrosAll.filter(item => item.fichaantropo.codigo === value).map(item => item.codigo);
+      console.log('idPerimetros: ', idPerimetros);
+      await this.consultarPerimetros(idPerimetros);
+      console.log('perimetros: ', this.perimetros);
+      await this.consultarFichaAntropo(value);
+      await this.consultarPersonal(this.fichaAntropo.personal.codigo);
+      await this.consultarGenero(this.fichaAntropo.genero.codigo);
+      await this.$nextTick();
+      this.cargarDatos();
     },
     update(value){
-      this.consultar(value);
-      this.actualizarDatoact2(value);
+      this.actualizarDatoact1(value);
       this.variar();
     },
-    clear(){
-      this.nombre="";
-      this.tipoEjercicio="";
-      this.musculo="";
-      this.series="";
-      this.repeticiones="";
-      this.descanso="";
-    },
     cerrar(){
-      this.clear();
-      this.rotar();
-      this.limpiarDatoact2();
-    },
-    rotar(){
-      this.modificar= false;
-      this.salvar= true;
+      this.salvar = true;
+      this.modificar = false;
+      this.numeroMaximo();
+      this.limpiarDatoact1();
     },
     variar(){
-      if(this.datoact2!=null){
-        this.modificar=true;
-        this.salvar=false;
+      if(this.datoact1 != null){
+        this.modificar = true;
+        this.salvar = false;
       }
-      this.nombre=this.getNombre;
-      this.tipoEjercicio=this.getTipoEjercicio;
-      this.musculo=this.getMusculo;
-      this.series=this.getSeries;
-      this.repeticiones=this.getRepeticiones;
-      this.descanso=this.getDescanso;
     },
-    antesderoutear(){
-      this.habilitar=1;
-      this.consultar(this.dato7);
-    },
-    datos(){
-      this.registrarNombre(this.nombre);
-      this.registrarTipoEjercicio(this.tipoEjercicio);
-      this.registrarMusculo(this.musculo);
-      this.actualizarSeries(this.series);
-      this.actualizarRepeticiones(this.repeticiones);
-      this.actualizarDescanso(this.descanso);
+    evaluacion(value){
+      if(value){
+        this.valor = value;
+      } else{
+        this.valor = this.imc;
+      }
+      const indice = this.valor;
+
+      if(indice == null){
+        this.limpiarEstado();
+      }
+      else if(indice < 18.50  ){
+        this.addEstado('Bajo Peso');
+        this.styleObject = {
+          color: 'blue',
+          fontWeight: '700'
+        }
+      }
+      else if(indice >= 18.50 && indice < 25 ){
+        this.addEstado('Peso Normal');
+        this.styleObject = {
+          color: 'green',
+          fontWeight: '700'
+        } 
+      }
+      else if(indice >= 25 && indice < 30 ){
+        this.addEstado('Sobrepeso');
+        this.styleObject = {
+          color: 'orange',
+          fontWeight: '700'
+        } 
+      }
+      else if(indice >= 30 && indice < 40 ){
+        this.addEstado('Obesidad');
+        this.styleObject = {
+          color: 'red',
+          fontWeight: '700'
+        }
+      }
+      else if(indice > 40 ){
+        this.addEstado('Obesidad grave');
+        this.styleObject = {
+          color: 'darkred',
+          fontWeight: '700'
+        }
+      }
     },
 
-    callMetodoN(){
-      this.datos();
-      this.actualizarRetorno2('retorno');
-      this.$router.push('nombreEjercicio');
+    storageTemporal(){
+      this.datosAntropometricos(); 
+      this.addFichaantropo(this.data);
+      console.log('el data es: ', this.data);
+      this.datosPerimetricos()
+      this.addPerimetros(this.dataPerimetros);
+      console.log('el data Perimetros es: ', this.dataPerimetros)
     },
-    callMetodoT(){
-      this.datos();
-      this.actualizarRetorno2('retorno');
-      this.$router.push('tipoEjercicio');
+
+    callMetodoG(){
+      console.log('verificando:', this.fecha);    
+      this.storageTemporal();
+      this.actualizarRetorno3('retorno');
+      this.$router.push('genero');
     },
-    callMetodoM(){
-      this.datos();
-      this.actualizarRetorno2('retorno');
-      this.$router.push('musculo');
+    callMetodoP(){
+      this.storageTemporal();
+      this.actualizarRetorno3('retorno');
+      this.$router.push('personal');
     },
   },
+  mounted(){
+    this.cargarDatos();
+    this.limpiarEstado();
+  }
 }
 </script>

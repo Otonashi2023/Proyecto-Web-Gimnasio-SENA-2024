@@ -101,7 +101,7 @@ import { mapActions, mapState } from "vuex";
           if(this.codigo==null){
             this.limpiarEjercicios();
             this.actionActiveM(true);
-            this.$router.push('RutinaEjercicio');
+            this.$router.push('rutinaEjercicio');
           }
         }
         else if(this.retorno=='retorno'){

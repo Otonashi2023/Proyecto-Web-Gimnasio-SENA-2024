@@ -12,7 +12,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr id="fila2" v-for="(plan, index) in finalData" :key="index" @click = consultarbyId(plan.plan.codigo)>
+      <tr id="fila2" v-for="(plan, index) in finalData" :key="index" @click ="callMetodoP(plan.plan.codigo)">
         <td>{{ plan.plan.tipoPlan.nombre }}_(<span style="color: #EA0234; font-weight: 600;">{{ plan.plan.meses }}</span>)</td>
         <td>
             <tr v-for="(rutina, i) in plan.rutinas" :key="i">
@@ -40,7 +40,7 @@
             </tr>
         </td>
         <td id="alibutton">
-          <!--font-awesome-icon icon="edit" id="editar" @click="actualizar(item.rutina.codigo)"/-->
+          <font-awesome-icon icon="edit" id="editar" @click.stop="consultarbyId(plan.plan.codigo)"/>
           <font-awesome-icon icon="trash" id="eliminar" @click.stop="removeAllByNombre(plan.plan.codigo)"/>
         </td> 
       </tr>
@@ -65,9 +65,10 @@
     },
     computed:{
       ...mapState('variables',['groupFilter2','datos3']),
-      ...mapState(['retorno3'])},
+      ...mapState(['retorno3','retorno4'])},
   
     methods: {
+      ...mapActions('aprendizPlan',['agregarPlan']),
       ...mapActions('variables',['limpiarRutinas','actionDatos3','actionGroupFilter2','limpiarDatos3']),
       ...mapActions(['limpiarDatoact1']),
 
@@ -79,10 +80,7 @@
           this.actionDatos3(data);
           console.log('DATOS3:',this.datos3);
           if (Array.isArray(data)) {
-            this.originalData = data; // Guardar los datos originales
-            //const groupedData = this.groupPlansByRutinas(data);
-            //console.log('MIRAR ATENTAMENTE: ', groupedData);
-            // Ahora obtenemos los ejercicios para cada rutina
+            this.originalData = data;
             return axios.get("http://localhost:8080/api/rutinaejercicio/listar");
           } else {
             throw new Error('La respuesta de la API no es un array');
@@ -135,52 +133,7 @@
 
       return Object.values(combinedData);
     },
-      /*obtenerPlanRutinas(){
-        // Método para obtener los campos de la lista
-        axios.get("http://localhost:8080/api/planrutina/listar")
-        .then((response)=>{
-          const data= response.data;
-          if (Array.isArray(data)) {
-            const jsonString=JSON.stringify(data,null,2);
-            console.log('%c'+ jsonString, 'color:yellow; font-weigth:bold;');
-            this.originalData = data; // Guardar los datos originales
-            this.finalData = this.groupDataByName(data);
-            console.log('Datos agrupados:', this.finalData);
-          } else {
-            console.error('La respuesta de la API no es un array:', data);
-          }
-          this.codigo=null;
-        })
-        .catch((error)=>{
-          console.error("Error al obtener plan_rutina: ", error);
-        })
-      },
-      groupDataByName(data) {
-      const groupedData = data.reduce((acc, item) => {
-        const key = `${item.plan.tipoPlan.nombre}_${item.plan.numero}`;
-        if (!acc[key]) {
-          acc[key] = { plan: item.plan, rutinas: [] };
-        }
-        acc[key].rutinas.push(item.rutina);
-        return acc;
-      }, {});
-      return Object.values(groupedData);
-    },*/
 
-      /*eliminar(value){
-        this.codigo= value;
-      axios
-        .delete('http://localhost:8080/api/planrutina/'+this.codigo)
-        .then(()=>{
-          console.log("plan_rutina eliminado con exito");
-          this.codigo=null;
-          this.$emit('escuchartable');
-          this.obtenerPlanRutinas();                   
-        })
-        .catch((error)=>{
-          console.log("Error al eliminar plan_rutina", error);
-        });
-      },*/
       removeAllByNombre(nombreCodigo) {
       // Primero, obtén los códigos de las rutinas que pertenecen al plan seleccionado
         const codigosToDelete = this.originalData
@@ -213,19 +166,23 @@
         });
       },
 
-
       consultarbyId(value){
         this.limpiarRutinas();
         if(this.codigo==null){
           this.$emit('ById',value,this.finalData);
         }
       },
-      /*actualizar(value){
-        this.codigo=value;
-        this.$emit('change',this.codigo);
-      },*/
       limpiarId(){
         this.codigo=null;
+      },
+      callMetodoP(value){
+        if(this.retorno4 == 'retorno'){
+          if(this.codigo == null){
+            const planFiltrado = this.datos3.find(item => item.plan.codigo === value);
+            this.agregarPlan(planFiltrado);
+            this.$router.push('aprendizPlan');
+          }
+        }
       },
       formulario(){
         if(this.retorno3=='retorno'){

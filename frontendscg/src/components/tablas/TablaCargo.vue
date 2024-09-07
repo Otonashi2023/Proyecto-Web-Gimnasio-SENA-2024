@@ -10,7 +10,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr id="fila2" v-for="nombre in nombres" :key="nombre.codigo" @click="() => {callMetodoN(); consultarbyId(nombre.codigo); readCargo(nombre.codigo); /*personalModificado(nombre)*/}">
+          <tr id="fila2" v-for="nombre in nombres" :key="nombre.codigo" @click="() => {callMetodoN(nombre.codigo); consultarbyId(nombre.codigo);}">
             <td>{{ nombre.nombre }}</td>
             <td id="alibutton">
                 <font-awesome-icon icon="edit" id="editar" @click="actualizar(nombre.codigo)"/>
@@ -20,7 +20,6 @@
         </tbody>
       </table>
     </div>
-    <p>{{ personal }}</p>
 </template>
 <script>
 import axios from "axios";
@@ -34,14 +33,11 @@ import { mapActions, mapState } from "vuex";
       }
     },
     computed:{
-      ...mapState('persona',['persona']),
-      ...mapState('personal',['personal','idPersonal']),
-      ...mapState('usuario',['usuario']),
-      ...mapState(['retorno2','datoact2'])},
+      ...mapState(['retorno2'])
+    },
     methods: {
       ...mapActions('cargo',['consultarCargo']),
-      ...mapActions('personal',['altPersonal','consultarPersonal']),
-      ...mapActions(['actualizarDato']),
+      ...mapActions(['actualizarDato4']),
 
       obtenerCargos(){
         // Método para obtener los campos de la lista
@@ -76,7 +72,7 @@ import { mapActions, mapState } from "vuex";
       consultarbyId(value){
         console.log('Nombre del cargo', value);
         if(this.codigo==null){
-          this.actualizarDato(value);
+          this.actualizarDato4(value);
           this.$emit('ById',value);
         }
       },
@@ -88,23 +84,22 @@ import { mapActions, mapState } from "vuex";
       async readCargo(value){
         await this.consultarCargo(value);
         await this.$nextTick();
-      },/*
-      async personalModificado(value){
-        const persona = value;
-        console.log('PERSONAXD',persona);
-        await this.altPersonal(value);
-        await this.altPersonal(persona);
-        console.log('Personal por extension',this.personal);
-      },*/
-      callMetodoN(){
+      },
+
+      async callMetodoN(value){
         if(this.retorno2=='retorno'){
           if(this.codigo==null){
+            await this.consultarCargo(value);
+            await this.$nextTick();
             this.$router.push('personal');
           }
         }     
       },
       limpiarId(){
         this.codigo=null;
+      },
+      sender(){
+        this.$emit('send',this.nombres);
       }
     },
     mounted(){

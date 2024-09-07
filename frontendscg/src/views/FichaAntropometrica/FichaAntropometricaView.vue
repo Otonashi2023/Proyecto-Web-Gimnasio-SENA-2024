@@ -4,12 +4,13 @@
             <div id="up">
                 <h1 id="alitext">Aprendiz</h1>
                 <div id="alibutton">
+                    <router-link to="aprendizPlan" style="color:orangered;margin-right: 40px; font-weight: 700;">Ir a planes</router-link>
                     <font-awesome-icon :icon="['fas', 'address-book']" id="agregar" v-if="listar" @click="irAformulario()"/>
                     <font-awesome-icon icon="circle-xmark" id="cerrar2" v-if="formulario" @click="salir"/>
                 </div>
             </div>
             <div v-show="formulario"><FormFichaAntropo @leave="salir" ref="componenteForm"/></div>
-            <div v-show="listar"><TablaFichaAntropo ref="componente" @ById="read" @change="update" @escuchartable="tabla" @goForm="inData"/></div>
+            <div v-show="listar"><TablaFichaAntropo ref="componente" @ById="read" @change="update" @goForm="inData" @irAform="irAform"/></div>
         </div>
     </div>
 </template>
@@ -27,8 +28,8 @@ export default{
     },
     data(){
         return{
-            formulario:true,
-            listar:false,
+            formulario:false,
+            listar:true,
         }
     },
     computed:{
@@ -37,51 +38,50 @@ export default{
             },
     },
     methods:{
-        ...mapActions(['limpiarDato','limpiarDato2','limpiarDato3','limpiarNombre','limpiarTipoEjercicio',
-        'limpiarMusculo','limpiarEjercicio','limpiarDatoact2','limpiarRetorno2','limpiarDato7','actualizarDatoact2']),
+        ...mapActions('genero',['limpiarGenero']),
+        ...mapActions('personal',['limpiarPersonal']),
+        ...mapActions('fichaAntropometrica',['limpiarFichaAntropo']),
+        ...mapActions('perimetros',['limpiarPerimetros']),
+        ...mapActions(['limpiarDatoact1','limpiarRetorno3']),
 
-        cambiar(){
-            this.formulario=true;
-            this.listar=false;
-        },
         irAformulario(){
-            this.cambiar();
             this.limpiarDatos();
-            this.$refs.componenteForm.clear();
+            this.cambiar();
+            this.$refs.componenteForm.cerrar();
+            this.$refs.componenteForm.cargarDatos();
         },
         salir(){
             this.formulario=false;
             this.listar=true;
-            this.limpiarDatos();
-            this.$refs.componente.consultarFichaAntropoAll();
+            this.$refs.componenteForm.cerrar();
+            this.$refs.componente.filtrarAprendiz();
         },
         read(value){
             this.cambiar();
             this.$refs.componenteForm.read(value);
         },
         update(value){
-            this.cambiar();
             this.$refs.componenteForm.update(value);
-        },
-        tabla(){
-            this.$refs.componenteForm.cerrar();
         },
         inData(){
             this.cambiar();
-            this.limpiarRetorno2();
+            this.limpiarRetorno3();
             this.$refs.componenteForm.variar();
         },
+        irAform(){
+            this.limpiarDatos();
+            this.cambiar();
+        },
         limpiarDatos(){
-            this.limpiarDato();
-            this.limpiarDato2();
-            this.limpiarDato3();
-            this.limpiarNombre();
-            this.limpiarTipoEjercicio();
-            this.limpiarMusculo();
-            this.limpiarDato7();
-            this.limpiarEjercicio();
-            this.limpiarDatoact2();
-            this.$refs.componenteForm.cerrar()
+            this.limpiarGenero(); 
+            this.limpiarPersonal();
+            this.limpiarFichaAntropo();
+            this.limpiarPerimetros();
+            this.limpiarDatoact1();
+        },
+        cambiar(){
+            this.formulario=true;
+            this.listar=false;
         },
     }
 }

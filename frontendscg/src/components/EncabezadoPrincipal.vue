@@ -7,7 +7,7 @@
         <!--span class="material-icons-sharp">notifications</span-->
         <img src="@/assets/Foto1.jpeg" alt="Imagen perfil">
         <div style="display:grid; text-align: right">
-            <span id="usuario">{{ nombre }}</span>
+            <span id="usuario">{{ nombre }} {{ apellido }}</span>
             <span id="rol">{{ rol }}</span> 
         </div>
     </div>
@@ -21,6 +21,7 @@ export default{
         return{
             query:"",
             nombre: '',
+            apellido: '',
             rol: '',
         }
     },
@@ -35,8 +36,6 @@ export default{
             this.limpiarUsuario();
             const username = localStorage.getItem('username').trim();
             const password = localStorage.getItem('password').trim();
-            console.log('USERNAME FROM LOCALSTORAGE:', username);
-            console.log('PASSWORD FROM LOCALSTORAGE:', password);
             await this.consultarAllUsuarios();
             console.log('USUARIOS:', this.usuarios);
             await this.$nextTick();
@@ -45,16 +44,17 @@ export default{
                 const foundUser = this.usuarios.find(user =>
                 user.username.trim() === username &&
                 user.password.trim() === password);
-                console.log('FOUNDUSER: ', foundUser); // Usa 'foundUser' en lugar de 'this.foundUser'
+                console.log('FOUNDUSER: ', foundUser);
         
-                if (foundUser) { // Asegúrate de que 'foundUser' no es undefined
+                if (foundUser) {
                     const idUsuario = foundUser.codigo;
                     console.log('hay dato?:', idUsuario);
                     await this.consultarUsuario(idUsuario);
                     await this.$nextTick();
 
-                    this.nombre = this.usuario.personal.persona.nombres;
-                    this.rol = this.usuario.personal.cargo.nombre;
+                    this.nombre = this.usuario.personal?.persona.nombres.split(' ')[0];
+                    this.apellido = this.usuario.personal?.persona.apellidos.split(' ')[0];
+                    this.rol = this.usuario.personal?.cargo.nombre;
                     console.log('Usuario ; ',this.nombre,' rol: ',this.rol);
                 } else {
                     console.error('Usuario no encontrado.');

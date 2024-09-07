@@ -32,6 +32,9 @@ const mutations = {
       personal: null,
     };
   },
+  clearCodigo(state){
+    state.usuario.codigo = null;
+  },
   clearUsuarios(state){
     state.usuarios = []
   }
@@ -81,6 +84,9 @@ const actions = {
   },
   addUsuario({commit}, data){
     commit('setUsuario', data);
+  },
+  limpiarCodigoUsuario({commit}){
+    commit('clearCodigo');
   },
   limpiarUsuario({commit}){
     commit('clearUsuario');

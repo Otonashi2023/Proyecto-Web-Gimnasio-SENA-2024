@@ -83,7 +83,7 @@ const actions = {
       console.error("Error eliminar genero:", error);
     }
   },
-  limpiarAprendiz({commit}){
+  limpiarGenero({commit}){
     commit('clearGenero');
   }
 };
