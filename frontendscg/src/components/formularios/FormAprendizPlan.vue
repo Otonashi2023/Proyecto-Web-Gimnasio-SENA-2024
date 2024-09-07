@@ -78,9 +78,10 @@ export default {
         // Si no supera el año, solo ajusta el mes
         date.setMonth(mesTotal);
       }
-
-      this.finaliza = date.toISOString().split('T')[0];
-      console.log('Fecha: ', this.finaliza);
+      if(this.finaliza != null){
+        this.finaliza = date.toISOString().split('T')[0];
+        console.log('Fecha: ', this.finaliza);
+      }
     },
     getNombreAp(){
       const nombre = (this.aprendiz?.persona?.nombres).split(' ')[0];

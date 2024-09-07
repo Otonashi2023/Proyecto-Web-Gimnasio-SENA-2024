@@ -24,7 +24,7 @@ public class FichaAntropo {
 	private BigInteger codigo;
 	
 	@Column (name="num_control", nullable = false)
-	private int numControl;
+	private BigInteger numControl;
 	
 	@Column (name="fecha_toma", nullable = false)
 	private LocalDate fecha;
@@ -62,7 +62,7 @@ public class FichaAntropo {
 		this.codigo = codigo;
 	}
 	
-	public FichaAntropo(int numControl, LocalDate fecha, float altura, float peso, float imc, Personal personal,
+	public FichaAntropo(BigInteger numControl, LocalDate fecha, float altura, float peso, float imc, Personal personal,
 			Genero genero, Aprendiz aprendiz, Perimetros perimetros) {
 		super();
 		this.numControl = numControl;
@@ -76,7 +76,7 @@ public class FichaAntropo {
 		this.perimetros = perimetros;
 	}
 	
-	public FichaAntropo(BigInteger codigo, int numControl, LocalDate fecha, float altura, float peso, float imc,
+	public FichaAntropo(BigInteger codigo, BigInteger numControl, LocalDate fecha, float altura, float peso, float imc,
 			Personal personal, Genero genero, Aprendiz aprendiz, Perimetros perimetros) {
 		super();
 		this.codigo = codigo;
@@ -99,11 +99,11 @@ public class FichaAntropo {
 		this.codigo = codigo;
 	}
 
-	public int getNumControl() {
+	public BigInteger getNumControl() {
 		return numControl;
 	}
 
-	public void setNumControl(int numControl) {
+	public void setNumControl(BigInteger numControl) {
 		this.numControl = numControl;
 	}
 

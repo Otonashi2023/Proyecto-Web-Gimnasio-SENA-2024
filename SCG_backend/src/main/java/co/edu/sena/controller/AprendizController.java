@@ -47,8 +47,9 @@ public class AprendizController {
 	
 	@DeleteMapping("/{id}")
 	public void eliminar(@PathVariable BigInteger id) {
-		
+		System.out.println("Eliminando aprendiz con ID: " + id);
 		aprendizService.deleteById(id);
+	    System.out.println("Aprendiz eliminado");
 	}
 	
 	@PutMapping("/actualizar/{id}")
